@@ -5,7 +5,9 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
 using VibeApp.API.Infrastructure.Data;
+using VibeApp.API.Shared.Extensions;
 using VibeApp.API.Shared.Middleware;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +95,12 @@ try
 
     // Configure AutoMapper
     builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+    // Register application behaviors (MediatR pipeline)
+    builder.Services.AddApplicationBehaviors();
+
+    // Register repositories
+    builder.Services.AddRepositories();
 
     // Configure CORS
     builder.Services.AddCors(options =>

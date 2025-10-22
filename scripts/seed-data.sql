@@ -1,0 +1,2 @@
+-- Seed data SQL
+-- TODO: Implement database seeding

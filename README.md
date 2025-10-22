@@ -30,7 +30,7 @@ See `docs/architecture/feature-structure.md` for detailed information.
 
 ## Tech Stack
 
-- .NET 8.0
+- .NET 9.0
 - ASP.NET Core Web API
 - Entity Framework Core
 - MediatR (CQRS)

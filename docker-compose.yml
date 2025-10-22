@@ -1,48 +1,66 @@
 version: '3.8'
 
 services:
-  # SQL Server Database
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: vibeapp-sqlserver
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: vibeapp-db
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=YourStrong@Passw0rd
-      - MSSQL_PID=Developer
+      - POSTGRES_USER=vibeapp
+      - POSTGRES_PASSWORD=vibeapp123
+      - POSTGRES_DB=vibeapp_db
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - sqlserver_data:/var/opt/mssql
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong@Passw0rd" -C -Q "SELECT 1" || exit 1
+      test: ["CMD-SHELL", "pg_isready -U vibeapp"]
       interval: 10s
-      timeout: 3s
-      retries: 10
-      start_period: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - vibeapp-network
 
-  # API Application
-  api:
+  # Backend API
+  backend:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: vibeapp-api
+      dockerfile: Dockerfile.backend
+    container_name: vibeapp-backend
     ports:
-      - "5000:8080"
-      - "5001:8081"
+      - "8000:8000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8080;https://+:8081
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=VibeAppDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;
+      - DATABASE_URL=postgresql://vibeapp:vibeapp123@db:5432/vibeapp_db
+      - DEBUG=True
+      - ENVIRONMENT=development
     depends_on:
-      sqlserver:
+      db:
         condition: service_healthy
+    volumes:
+      - ./backend:/app
+    networks:
+      - vibeapp-network
+
+  # Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: vibeapp-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     networks:
       - vibeapp-network
 
 volumes:
-  sqlserver_data:
+  postgres_data:
     driver: local
 
 networks:

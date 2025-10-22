@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using VibeApp.API.Features.Vibes;
 using VibeApp.API.Shared.Common;
 
 namespace VibeApp.API.Infrastructure.Data;
@@ -12,10 +13,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
     }
 
-    // DbSets for entities will be added here as features are implemented
-    // Example:
-    // public DbSet<Vibe> Vibes => Set<Vibe>();
-    // public DbSet<User> Users => Set<User>();
+    public DbSet<Vibe> Vibes => Set<Vibe>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

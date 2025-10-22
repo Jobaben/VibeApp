@@ -32,11 +32,13 @@ public class VibesController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] object model)
+    public async Task<IActionResult> Create([FromBody] CreateVibeCommand command)
     {
-        // TODO: Implement Create vibe
-        _logger.LogInformation("Create vibe called");
-        return Ok(new { message = "Create vibe - Not yet implemented" });
+        _logger.LogInformation("Creating vibe for user {UserId}", command.UserId);
+
+        var result = await Mediator.Send(command);
+
+        return HandleResult(result);
     }
 
     [HttpPut("{id}")]

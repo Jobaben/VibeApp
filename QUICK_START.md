@@ -1,112 +1,170 @@
-# Quick Start Guide - Avanza Stock Finder
+# Quick Start Guide - Local Development
 
-This guide will help you get the application running locally.
+Get the Avanza Stock Finder running locally with Python and Node.js (no Docker required).
 
 ---
 
 ## 📋 Prerequisites
 
-- **Docker** & **Docker Compose** installed
-  - Docker Desktop (Mac/Windows): https://www.docker.com/products/docker-desktop
-  - Docker Engine (Linux): https://docs.docker.com/engine/install/
+- **Python 3.11+** ([Download](https://www.python.org/downloads/))
+- **Node.js 18+** ([Download](https://nodejs.org/))
+- **npm** (comes with Node.js)
 - **Git** (to clone the repository)
-- **8GB RAM minimum** (for all services)
+
+### Verify Installation
+
+```bash
+python3 --version   # Should be 3.11 or higher
+node --version      # Should be 18 or higher
+npm --version       # Should be 9 or higher
+```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Setup (Automated)
 
-### 1. Navigate to Project Directory
-
-```bash
-cd /path/to/VibeApp
-```
-
-### 2. Clean Up Old Containers (if any)
+### Option 1: One-Command Setup
 
 ```bash
-# Stop and remove old containers
-docker compose down -v
-
-# Or if using older docker-compose
-docker-compose down -v
+# From project root
+./setup.sh
 ```
 
-### 3. Build and Start Services
+This will set up both backend and frontend automatically.
+
+### Option 2: Manual Setup
+
+If the automated script doesn't work, follow the manual steps below.
+
+---
+
+## 🐍 Backend Setup (Python/FastAPI)
+
+### 1. Navigate to Backend Directory
 
 ```bash
-# Build and start all services
-docker compose up -d --build
-
-# Monitor the logs
-docker compose logs -f
+cd backend
 ```
 
-**Expected Services:**
-- `avanza-stock-finder-db` - PostgreSQL database (port 5432)
-- `avanza-stock-finder-redis` - Redis cache (port 6379)
-- `avanza-stock-finder-backend` - FastAPI backend (port 8000)
-- `avanza-stock-finder-frontend` - React frontend (port 3000)
-
-### 4. Wait for Services to be Healthy
+### 2. Create Virtual Environment
 
 ```bash
-# Check service status
-docker compose ps
+# Create venv
+python3 -m venv venv
 
-# All services should show "healthy" status
-# This usually takes 30-60 seconds
+# Activate it
+# On macOS/Linux:
+source venv/bin/activate
+# On Windows:
+venv\Scripts\activate
 ```
 
-**Troubleshooting:** If services fail to start, check logs:
+### 3. Install Dependencies
+
 ```bash
-docker compose logs backend
-docker compose logs db
-docker compose logs redis
-docker compose logs frontend
+pip install --upgrade pip
+pip install -r requirements.txt
 ```
 
-### 5. Verify Services
+### 4. Create Environment File
 
-#### Test Backend API
+```bash
+# Create .env file in backend directory
+cat > .env << EOF
+DATABASE_URL=sqlite:///./stockfinder.db
+DEBUG=True
+ENVIRONMENT=development
+REDIS_ENABLED=False
+ENABLE_AI_ENDPOINTS=True
+EOF
+```
+
+Or manually create `backend/.env` with the content above.
+
+### 5. Initialize Database
+
+```bash
+# Still in backend directory with venv activated
+python -c "from app.infrastructure.database import Base, engine; Base.metadata.create_all(bind=engine)"
+```
+
+### 6. Run Backend
+
+```bash
+# From backend directory
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Backend should now be running at:**
+- API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
+- Health Check: http://localhost:8000/health
+
+---
+
+## ⚛️ Frontend Setup (React/Vite)
+
+### 1. Navigate to Frontend Directory
+
+```bash
+# From project root
+cd frontend
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Create Environment File
+
+```bash
+# Create .env file in frontend directory
+echo "VITE_API_URL=http://localhost:8000/api" > .env
+```
+
+Or manually create `frontend/.env`:
+```
+VITE_API_URL=http://localhost:8000/api
+```
+
+### 4. Run Frontend
+
+```bash
+# From frontend directory
+npm run dev
+```
+
+**Frontend should now be running at:**
+- App: http://localhost:3000
+
+---
+
+## ✅ Verify Everything Works
+
+### Test Backend
 
 ```bash
 # Health check
 curl http://localhost:8000/health
+# Expected: {"status":"healthy"}
 
-# Expected response:
-# {"status": "healthy"}
-```
-
-#### Test AI Endpoints
-
-```bash
-# AI health check
+# AI endpoints
 curl http://localhost:8000/api/ai/health
-
-# Expected response:
-# {
-#   "status": "healthy",
-#   "service": "AI API",
-#   "endpoints_available": [...],
-#   "message": "AI endpoints are ready (implementations in progress)"
-# }
+# Expected: {"status":"healthy","service":"AI API",...}
 ```
 
-#### Test Frontend
+### Test Frontend
 
 Open browser and navigate to:
-- **Frontend:** http://localhost:3000
-- **Backend API Docs:** http://localhost:8000/docs
-- **Alternative API Docs:** http://localhost:8000/redoc
+- http://localhost:3000 - Should see "Avanza Stock Finder - Coming Soon"
 
-You should see the "Avanza Stock Finder - Coming Soon" page.
-
-### 6. Test Python AI Client
+### Test AI Client (Python)
 
 ```bash
-# Enter backend container
-docker compose exec backend python
+# From backend directory with venv activated
+python
 
 # In Python REPL:
 >>> from app.ai_client import get_client
@@ -119,260 +177,293 @@ docker compose exec backend python
 
 ---
 
-## 🧪 Common Commands
+## 🔄 Running After Initial Setup
 
-### View Logs
+After initial setup, you just need to start both services.
 
-```bash
-# All services
-docker compose logs -f
-
-# Specific service
-docker compose logs -f backend
-docker compose logs -f db
-docker compose logs -f redis
-docker compose logs -f frontend
-```
-
-### Restart Services
+### Start Backend
 
 ```bash
-# Restart all
-docker compose restart
+# Option 1: Use script
+./run_backend.sh
 
-# Restart specific service
-docker compose restart backend
+# Option 2: Manual
+cd backend
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### Stop Services
+### Start Frontend
 
 ```bash
-# Stop but keep data
-docker compose stop
+# Option 1: Use script
+./run_frontend.sh
 
-# Stop and remove containers (keeps volumes)
-docker compose down
-
-# Stop and remove everything including data
-docker compose down -v
+# Option 2: Manual
+cd frontend
+npm run dev
 ```
 
-### Rebuild After Code Changes
-
-```bash
-# Backend changes
-docker compose up -d --build backend
-
-# Frontend changes
-docker compose up -d --build frontend
-
-# Rebuild everything
-docker compose up -d --build
-```
-
-### Enter Container Shell
-
-```bash
-# Backend
-docker compose exec backend bash
-
-# Database
-docker compose exec db psql -U stockfinder -d stockfinder_db
-
-# Redis
-docker compose exec redis redis-cli
-```
-
----
-
-## 🔍 Verification Checklist
-
-After starting services, verify:
-
-- [ ] **Database** is accessible: `docker compose exec db pg_isready -U stockfinder`
-- [ ] **Redis** is accessible: `docker compose exec redis redis-cli ping` (should return "PONG")
-- [ ] **Backend** is accessible: `curl http://localhost:8000/health`
-- [ ] **AI Endpoints** are accessible: `curl http://localhost:8000/api/ai/health`
-- [ ] **Frontend** loads in browser: http://localhost:3000
-- [ ] **API Docs** load in browser: http://localhost:8000/docs
-- [ ] **Python Client** works: See step 6 above
-
----
-
-## 🐛 Troubleshooting
-
-### Port Already in Use
-
-If you see errors like "port 5432 already in use":
-
-```bash
-# Find what's using the port
-lsof -i :5432  # Mac/Linux
-netstat -ano | findstr :5432  # Windows
-
-# Stop the conflicting service or change ports in docker-compose.yml
-```
-
-### Database Connection Failed
-
-```bash
-# Check if database is ready
-docker compose logs db
-
-# Wait for: "database system is ready to accept connections"
-
-# Test connection
-docker compose exec db psql -U stockfinder -d stockfinder_db -c "SELECT 1;"
-```
-
-### Backend Won't Start
-
-```bash
-# Check logs
-docker compose logs backend
-
-# Common issues:
-# 1. Database not ready -> Wait longer, check db logs
-# 2. Python errors -> Check if requirements.txt changed, rebuild
-# 3. Port in use -> Change port in docker-compose.yml
-```
-
-### Frontend Won't Build
-
-```bash
-# Check logs
-docker compose logs frontend
-
-# Common issues:
-# 1. Node modules issue -> Remove node_modules, rebuild
-# 2. Vite errors -> Check frontend code syntax
-# 3. Environment variables -> Check .env file
-```
-
-### Out of Memory
-
-If services crash due to memory:
-
-```bash
-# Increase Docker memory limit (Docker Desktop)
-# Settings > Resources > Memory > 8GB+
-
-# Or run services separately
-docker compose up -d db redis backend
-# Frontend can run locally: cd frontend && npm run dev
-```
+**Tip:** Run backend and frontend in separate terminal windows/tabs.
 
 ---
 
 ## 🔧 Development Workflow
 
-### Making Backend Changes
+### Backend Changes
 
-1. Edit code in `/backend/app/`
-2. Changes auto-reload (if DEBUG=True)
-3. No need to restart unless:
-   - Changed requirements.txt → `docker compose up -d --build backend`
-   - Changed Dockerfile → `docker compose up -d --build backend`
+When you modify backend code:
+- FastAPI auto-reloads (if `--reload` flag is used)
+- Changes appear immediately
+- Check terminal for errors
 
-### Making Frontend Changes
+### Frontend Changes
 
-1. Edit code in `/frontend/src/`
-2. Changes auto-reload via Vite HMR
-3. Browser refreshes automatically
+When you modify frontend code:
+- Vite HMR (Hot Module Replacement) auto-updates
+- Browser refreshes automatically
+- Check browser console for errors
 
-### Database Migrations
+### Database Changes
+
+SQLite database is stored at `backend/stockfinder.db`
 
 ```bash
-# Create a new migration
-docker compose exec backend alembic revision --autogenerate -m "Description"
+# View database (requires sqlite3)
+sqlite3 backend/stockfinder.db
 
-# Apply migrations
-docker compose exec backend alembic upgrade head
-
-# Rollback
-docker compose exec backend alembic downgrade -1
+# In sqlite3:
+.tables                  # List tables
+.schema stocks          # View table schema
+SELECT * FROM stocks;   # Query data
+.quit                   # Exit
 ```
 
-### Running Tests
+### Install New Python Package
 
 ```bash
-# Backend tests
-docker compose exec backend pytest
+cd backend
+source venv/bin/activate
+pip install package-name
+pip freeze > requirements.txt  # Update requirements
+```
+
+### Install New Node Package
+
+```bash
+cd frontend
+npm install package-name
+# package.json and package-lock.json are updated automatically
+```
+
+---
+
+## 🧪 Testing
+
+### Backend Tests
+
+```bash
+cd backend
+source venv/bin/activate
+pytest
 
 # With coverage
-docker compose exec backend pytest --cov=app --cov-report=html
+pytest --cov=app --cov-report=html
+```
 
-# Frontend tests (when added)
-docker compose exec frontend npm test
+### Frontend Tests
+
+```bash
+cd frontend
+npm test
 ```
 
 ---
 
-## 📊 Database Access
+## 🐛 Troubleshooting
 
-### Using psql (PostgreSQL CLI)
+### Backend Won't Start
 
+**Issue:** `ModuleNotFoundError`
 ```bash
-# Connect to database
-docker compose exec db psql -U stockfinder -d stockfinder_db
+# Make sure venv is activated
+source venv/bin/activate  # or venv\Scripts\activate on Windows
 
-# In psql:
-\dt                    # List tables
-\d stocks             # Describe stocks table
-SELECT * FROM stocks LIMIT 10;
-\q                    # Quit
+# Reinstall dependencies
+pip install -r requirements.txt
 ```
 
-### Using Redis CLI
-
+**Issue:** `Database locked`
 ```bash
-# Connect to Redis
-docker compose exec redis redis-cli
+# Close any other processes using the database
+# Delete the database and reinitialize
+rm backend/stockfinder.db
+cd backend
+python -c "from app.infrastructure.database import Base, engine; Base.metadata.create_all(bind=engine)"
+```
 
-# In redis-cli:
-PING                  # Should return PONG
-KEYS *               # List all keys
-GET some_key         # Get value
-EXIT                 # Quit
+**Issue:** Port 8000 already in use
+```bash
+# Find and kill the process
+# macOS/Linux:
+lsof -ti:8000 | xargs kill -9
+
+# Windows:
+netstat -ano | findstr :8000
+taskkill /PID <PID> /F
+
+# Or change port in uvicorn command
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8001
+```
+
+### Frontend Won't Start
+
+**Issue:** `Cannot find module`
+```bash
+# Delete node_modules and reinstall
+rm -rf node_modules package-lock.json
+npm install
+```
+
+**Issue:** Port 3000 already in use
+```bash
+# Vite will automatically try ports 3001, 3002, etc.
+# Or specify a port
+npm run dev -- --port 3001
+```
+
+**Issue:** API calls failing (CORS errors)
+```bash
+# Make sure backend is running
+curl http://localhost:8000/health
+
+# Check CORS settings in backend/app/config.py
+# Should include http://localhost:3000 in CORS_ORIGINS
+```
+
+### Python Version Issues
+
+If you have multiple Python versions:
+```bash
+# Use specific version
+python3.11 -m venv venv
+
+# Or use pyenv
+pyenv install 3.11.7
+pyenv local 3.11.7
+```
+
+### Node Version Issues
+
+If you have multiple Node versions:
+```bash
+# Use nvm (Node Version Manager)
+nvm install 18
+nvm use 18
 ```
 
 ---
 
-## 🌐 Access Points Summary
+## 🌐 Access Points
 
 | Service | URL | Description |
 |---------|-----|-------------|
 | Frontend | http://localhost:3000 | React web application |
 | Backend API | http://localhost:8000 | FastAPI REST API |
 | API Docs (Swagger) | http://localhost:8000/docs | Interactive API documentation |
-| API Docs (ReDoc) | http://localhost:8000/redoc | Alternative API documentation |
-| PostgreSQL | localhost:5432 | Database (user: stockfinder, db: stockfinder_db) |
-| Redis | localhost:6379 | Cache server |
+| API Docs (ReDoc) | http://localhost:8000/redoc | Alternative API docs |
+| Health Check | http://localhost:8000/health | Backend health status |
+| AI Health | http://localhost:8000/api/ai/health | AI endpoints status |
+
+---
+
+## 📊 Database
+
+### SQLite (Default)
+
+- **Location:** `backend/stockfinder.db`
+- **Type:** File-based database
+- **Pros:** No setup required, portable
+- **Cons:** Single user, limited concurrency
+
+### Using PostgreSQL (Optional)
+
+If you want to use PostgreSQL instead:
+
+1. Install PostgreSQL locally
+2. Create database:
+   ```bash
+   createdb stockfinder_db
+   ```
+3. Update `backend/.env`:
+   ```
+   DATABASE_URL=postgresql://username:password@localhost:5432/stockfinder_db
+   ```
+4. Restart backend
 
 ---
 
 ## 📚 Next Steps
 
-Once services are running:
+Once everything is running:
 
-1. **Read AI_USAGE.md** - Learn how to use the AI client
-2. **Read PROJECT_PLAN.md** - Understand the full architecture
-3. **Explore API Docs** - http://localhost:8000/docs
-4. **Test AI Client** - Follow AI_USAGE.md examples
-5. **Review Code** - Explore `/backend/app/` and `/frontend/src/`
+1. **Explore API Docs** - http://localhost:8000/docs
+2. **Read AI_USAGE.md** - Learn how to use the AI client
+3. **Read PROJECT_PLAN.md** - Understand the architecture
+4. **Start Phase 1** - Integrate Avanza API and add stock data
+
+---
+
+## 🎯 Useful Commands
+
+```bash
+# Setup everything
+./setup.sh
+
+# Run backend
+./run_backend.sh
+
+# Run frontend
+./run_frontend.sh
+
+# Backend with custom port
+cd backend && source venv/bin/activate
+python -m uvicorn main:app --reload --port 8001
+
+# Frontend with custom port
+cd frontend && npm run dev -- --port 3001
+
+# View backend logs (if using script)
+cd backend && python -m uvicorn main:app --reload 2>&1 | tee backend.log
+
+# Python REPL with AI client
+cd backend && source venv/bin/activate && python
+>>> from app.ai_client import get_client
+>>> client = get_client()
+```
 
 ---
 
 ## 🆘 Need Help?
 
-- Check **AI_USAGE.md** for AI client examples
-- Check **PROJECT_PLAN.md** for architecture details
-- View logs: `docker compose logs -f`
-- Restart services: `docker compose restart`
-- Clean slate: `docker compose down -v && docker compose up -d --build`
+- **Documentation:** See `AI_USAGE.md` and `PROJECT_PLAN.md`
+- **API Reference:** http://localhost:8000/docs (when running)
+- **Issues:** Check terminal output for error messages
+- **Database:** View with `sqlite3 backend/stockfinder.db`
+
+---
+
+## 🎉 You're Ready!
+
+Your local development environment is set up. You can now:
+- ✅ Modify backend code in `backend/app/`
+- ✅ Modify frontend code in `frontend/src/`
+- ✅ Use the AI client for stock analysis
+- ✅ Test API endpoints via http://localhost:8000/docs
+
+**Next:** Proceed with Phase 1 to integrate Avanza API and add real stock data!
 
 ---
 
 **Last Updated:** 2025-10-23
-**Phase:** 0 - AI Infrastructure Complete
-**Next Phase:** 1 - Data Foundation (Avanza Integration)
+**Status:** Phase 0 Complete - Ready for Development

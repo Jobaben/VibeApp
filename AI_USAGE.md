@@ -27,10 +27,14 @@ All responses are structured for easy consumption by AI/LLMs with:
 
 ```bash
 # From project root
-docker-compose up -d
 
-# Wait for services to be healthy (30-60 seconds)
-docker-compose ps
+# Start backend (Terminal 1)
+./run_backend.sh
+
+# Start frontend (Terminal 2)
+./run_frontend.sh
+
+# Or see QUICK_START.md for detailed setup instructions
 ```
 
 ### 2. Verify API is Running
@@ -442,18 +446,22 @@ curl -X POST "http://localhost:8000/api/ai/run-custom-screener" \
 ### Run Tests
 
 ```bash
-# From backend container
-docker-compose exec backend pytest
+# From backend directory with venv activated
+cd backend
+source venv/bin/activate
+pytest
 
 # With coverage
-docker-compose exec backend pytest --cov=app --cov-report=html
+pytest --cov=app --cov-report=html
 ```
 
 ### Interactive Testing (Python REPL)
 
 ```bash
-# Enter backend container
-docker-compose exec backend python
+# From backend directory
+cd backend
+source venv/bin/activate
+python
 
 # In Python REPL
 >>> from app.ai_client import get_client
@@ -526,9 +534,9 @@ import requests
 response = requests.get("http://localhost:8000/health")
 print(response.json())
 
-# If connection refused, check Docker
-# docker-compose ps
-# docker-compose logs backend
+# If connection refused, make sure backend is running
+# Check terminal where backend is running for errors
+# Or restart: ./run_backend.sh
 ```
 
 ### Issue: Empty results from queries
@@ -546,11 +554,13 @@ print(health.get("message"))  # Will indicate if still in development
 ### Issue: Import errors
 
 ```bash
-# Make sure you're in the backend container or have backend in PYTHONPATH
-docker-compose exec backend python -c "from app.ai_client import get_client; print('OK')"
+# Make sure you're in backend directory with venv activated
+cd backend
+source venv/bin/activate
+python -c "from app.ai_client import get_client; print('OK')"
 
-# Or set PYTHONPATH
-export PYTHONPATH=/home/user/VibeApp/backend:$PYTHONPATH
+# Or set PYTHONPATH if running from elsewhere
+export PYTHONPATH=/path/to/VibeApp/backend:$PYTHONPATH
 ```
 
 ---

@@ -1,6 +1,7 @@
 """Application configuration."""
 from pydantic_settings import BaseSettings
 from typing import List
+import os
 
 
 class Settings(BaseSettings):
@@ -13,10 +14,13 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
 
     # Database
-    DATABASE_URL: str = "postgresql://stockfinder:stockfinder123@db:5432/stockfinder_db"
+    # Default to SQLite for local development (no PostgreSQL required)
+    # Set DATABASE_URL env var to use PostgreSQL: postgresql://user:pass@localhost:5432/dbname
+    DATABASE_URL: str = "sqlite:///./stockfinder.db"
 
-    # Redis
-    REDIS_URL: str = "redis://redis:6379/0"
+    # Redis (optional - only needed for caching in production)
+    REDIS_URL: str = "redis://localhost:6379/0"
+    REDIS_ENABLED: bool = False  # Set to True if Redis is available
 
     # AI Features
     ENABLE_AI_ENDPOINTS: bool = True

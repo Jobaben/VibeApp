@@ -4,49 +4,77 @@ services:
   # PostgreSQL Database
   db:
     image: postgres:16-alpine
-    container_name: vibeapp-db
+    container_name: avanza-stock-finder-db
     environment:
-      - POSTGRES_USER=vibeapp
-      - POSTGRES_PASSWORD=vibeapp123
-      - POSTGRES_DB=vibeapp_db
+      - POSTGRES_USER=stockfinder
+      - POSTGRES_PASSWORD=stockfinder123
+      - POSTGRES_DB=stockfinder_db
     ports:
-      - "5432:5432"
+      - "5432:5432"  # Exposed for AI direct access if needed
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U vibeapp"]
+      test: ["CMD-SHELL", "pg_isready -U stockfinder"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - vibeapp-network
+      - stock-finder-network
+
+  # Redis Cache (for future use with Celery and caching)
+  redis:
+    image: redis:7-alpine
+    container_name: avanza-stock-finder-redis
+    ports:
+      - "6379:6379"  # Exposed for AI direct access if needed
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - stock-finder-network
 
   # Backend API
   backend:
     build:
       context: .
       dockerfile: Dockerfile.backend
-    container_name: vibeapp-backend
+    container_name: avanza-stock-finder-backend
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://vibeapp:vibeapp123@db:5432/vibeapp_db
+      - DATABASE_URL=postgresql://stockfinder:stockfinder123@db:5432/stockfinder_db
+      - REDIS_URL=redis://redis:6379/0
       - DEBUG=True
       - ENVIRONMENT=development
+      - ENABLE_AI_ENDPOINTS=true
+      - CORS_ORIGINS=["http://localhost:3000"]
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - ./backend:/app
+      - ./data:/app/data  # Persistent data for analysis
     networks:
-      - vibeapp-network
+      - stock-finder-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   # Frontend
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
-    container_name: vibeapp-frontend
+    container_name: avanza-stock-finder-frontend
     ports:
       - "3000:3000"
     environment:
@@ -57,12 +85,14 @@ services:
       - ./frontend:/app
       - /app/node_modules
     networks:
-      - vibeapp-network
+      - stock-finder-network
 
 volumes:
   postgres_data:
     driver: local
+  redis_data:
+    driver: local
 
 networks:
-  vibeapp-network:
+  stock-finder-network:
     driver: bridge

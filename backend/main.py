@@ -2,17 +2,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.features.vibes.router import router as vibes_router
 from app.infrastructure.database import Base, engine
+from app.features.ai.router import router as ai_router
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
 # Create FastAPI app
 app = FastAPI(
-    title=settings.APP_NAME,
+    title="Avanza Stock Finder",
     version=settings.APP_VERSION,
-    debug=settings.DEBUG
+    debug=settings.DEBUG,
+    description="AI-powered stock analysis platform for Avanza Bank"
 )
 
 # Configure CORS
@@ -25,16 +26,17 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(vibes_router, prefix="/api")
+app.include_router(ai_router)
 
 
 @app.get("/")
 async def root():
     """Root endpoint."""
     return {
-        "name": settings.APP_NAME,
+        "name": "Avanza Stock Finder",
         "version": settings.APP_VERSION,
-        "status": "running"
+        "status": "running",
+        "description": "AI-powered stock analysis platform"
     }
 
 

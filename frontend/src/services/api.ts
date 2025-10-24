@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { Stock, StockListResponse, StockSearchParams, StockSearchQuery } from '../types/stock';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
@@ -35,3 +36,36 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// Stock API endpoints
+export const stockApi = {
+  // Get paginated list of stocks
+  getStocks: async (params?: StockSearchParams): Promise<StockListResponse> => {
+    const response = await apiClient.get<StockListResponse>('/stocks/', { params });
+    return response.data;
+  },
+
+  // Search stocks by ticker or name
+  searchStocks: async (query: StockSearchQuery): Promise<Stock[]> => {
+    const response = await apiClient.get<Stock[]>('/stocks/search', { params: query });
+    return response.data;
+  },
+
+  // Get stock by ticker
+  getStockByTicker: async (ticker: string): Promise<Stock> => {
+    const response = await apiClient.get<Stock>(`/stocks/${ticker}`);
+    return response.data;
+  },
+
+  // Get all available sectors
+  getSectors: async (): Promise<string[]> => {
+    const response = await apiClient.get<string[]>('/stocks/sectors');
+    return response.data;
+  },
+
+  // Get top-scored stocks (for Phase 3)
+  getTopStocks: async (limit: number = 20): Promise<Stock[]> => {
+    const response = await apiClient.get<Stock[]>('/stocks/top', { params: { limit } });
+    return response.data;
+  },
+};

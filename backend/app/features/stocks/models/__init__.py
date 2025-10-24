@@ -8,6 +8,7 @@ from sqlalchemy import (
     Column, Integer, String, Numeric, DateTime, Date,
     ForeignKey, Enum as SQLEnum, Index, BigInteger
 )
+from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import relationship
 
 from app.infrastructure.database.session import Base
@@ -80,7 +81,7 @@ class StockPrice(BaseEntity):
 
     __tablename__ = "stock_prices"
 
-    stock_id = Column(Integer, ForeignKey("stocks.id", ondelete="CASCADE"), nullable=False)
+    stock_id = Column(PGUUID(as_uuid=True), ForeignKey("stocks.id", ondelete="CASCADE"), nullable=False)
     date = Column(Date, nullable=False)
 
     # OHLCV data
@@ -109,7 +110,7 @@ class StockFundamental(BaseEntity):
 
     __tablename__ = "stock_fundamentals"
 
-    stock_id = Column(Integer, ForeignKey("stocks.id", ondelete="CASCADE"), nullable=False, unique=True)
+    stock_id = Column(PGUUID(as_uuid=True), ForeignKey("stocks.id", ondelete="CASCADE"), nullable=False, unique=True)
 
     # Valuation metrics
     pe_ratio = Column(Numeric(10, 2), nullable=True)
@@ -154,7 +155,7 @@ class StockScore(BaseEntity):
 
     __tablename__ = "stock_scores"
 
-    stock_id = Column(Integer, ForeignKey("stocks.id", ondelete="CASCADE"), nullable=False, unique=True)
+    stock_id = Column(PGUUID(as_uuid=True), ForeignKey("stocks.id", ondelete="CASCADE"), nullable=False, unique=True)
 
     # Overall score (0-100)
     total_score = Column(Numeric(5, 2), nullable=False, default=0)
@@ -232,8 +233,8 @@ class WatchlistItem(BaseEntity):
 
     __tablename__ = "watchlist_items"
 
-    watchlist_id = Column(Integer, ForeignKey("watchlists.id", ondelete="CASCADE"), nullable=False)
-    stock_id = Column(Integer, ForeignKey("stocks.id", ondelete="CASCADE"), nullable=False)
+    watchlist_id = Column(PGUUID(as_uuid=True), ForeignKey("watchlists.id", ondelete="CASCADE"), nullable=False)
+    stock_id = Column(PGUUID(as_uuid=True), ForeignKey("stocks.id", ondelete="CASCADE"), nullable=False)
 
     # User notes (optional)
     notes = Column(String(500), nullable=True)

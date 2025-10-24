@@ -159,13 +159,15 @@ async def get_stock(
     repo = get_stock_repository(db)
 
     # Try to find by ticker
-    stock = repo.get_with_full_data(repo.get_by_ticker(ticker).id) if repo.get_by_ticker(ticker) else None
-
-    if not stock:
+    stock_basic = repo.get_by_ticker(ticker)
+    if not stock_basic:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Stock with ticker '{ticker}' not found"
         )
+
+    # Load full data with relationships
+    stock = repo.get_with_full_data(stock_basic.id)
 
     return stock
 

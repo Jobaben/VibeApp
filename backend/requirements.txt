@@ -15,15 +15,16 @@ hiredis==2.3.2
 # Data Analysis & Stock Analysis
 pandas==2.2.0
 numpy==1.26.3
-pandas-ta==0.3.14b0
+# pandas-ta>=0.3.14b  # TODO: Add when needed for technical indicators (Phase 3)
 scipy==1.12.0
 scikit-learn==1.4.0
 
 # HTTP Client for AI and Avanza
 requests==2.31.0
 
-# Avanza API (unofficial)
-# avanza==1.0.0  # TODO: Add when available
+# Stock Data APIs
+yfinance>=0.2.38  # Yahoo Finance for real stock data
+avanza-api>=15.0.0  # Avanza API (unofficial) - https://github.com/Qluxzz/avanza
 
 # Background Jobs (for Phase 6)
 # celery==5.3.4  # TODO: Uncomment when implementing background jobs

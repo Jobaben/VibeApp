@@ -22,8 +22,9 @@ scikit-learn==1.4.0
 # HTTP Client for AI and Avanza
 requests==2.31.0
 
-# Avanza API (unofficial) - https://github.com/Qluxzz/avanza
-avanza-api>=15.0.0
+# Stock Data APIs
+yfinance>=0.2.38  # Yahoo Finance for real stock data
+avanza-api>=15.0.0  # Avanza API (unofficial) - https://github.com/Qluxzz/avanza
 
 # Background Jobs (for Phase 6)
 # celery==5.3.4  # TODO: Uncomment when implementing background jobs

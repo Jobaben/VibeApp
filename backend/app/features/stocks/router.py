@@ -14,7 +14,7 @@ from app.features.stocks.schemas import (
     StockImportRequest,
     StockImportResponse,
 )
-from app.features.integrations.avanza import AvanzaClient, get_avanza_client
+from app.features.integrations.yahoo_finance_client import get_yahoo_finance_client, YahooFinanceClient
 
 router = APIRouter(prefix="/api/stocks", tags=["stocks"])
 
@@ -202,54 +202,66 @@ async def get_stock_by_id(
 
 
 @router.post("/import", response_model=StockImportResponse)
-async def import_stocks_from_avanza(
+async def import_stocks_from_yahoo_finance(
     request: StockImportRequest,
     db: Session = Depends(get_db),
-    avanza: AvanzaClient = Depends(get_avanza_client)
+    yahoo_client: YahooFinanceClient = Depends(get_yahoo_finance_client)
 ):
     """
-    Import stocks from Avanza API.
+    Import stocks from Yahoo Finance API.
 
-    This endpoint fetches stocks from Avanza and imports them into the database.
-    For MVP, it uses mock data. In production, it should authenticate with Avanza.
+    This endpoint fetches real stock data from Yahoo Finance and imports them into the database.
+    Fetches popular Swedish stocks from Stockholm Exchange.
 
     Args:
         request: Import request parameters
         db: Database session
-        avanza: Avanza client
+        yahoo_client: Yahoo Finance client
 
     Returns:
         Import result with count of imported and skipped stocks
     """
     repo = get_stock_repository(db)
 
-    # Fetch stocks from Avanza
-    avanza_stocks = avanza.get_stock_list(
-        instrument_type=request.instrument_type.value,
-        limit=request.limit
-    )
+    # Get popular stock symbols (US stocks work reliably with Yahoo Finance)
+    symbols = yahoo_client.get_popular_stocks()[:request.limit]
 
-    if not avanza_stocks:
+    if not symbols:
         return StockImportResponse(
             success=False,
             imported_count=0,
             skipped_count=0,
-            message="No stocks fetched from Avanza. Check authentication or network."
+            message="No stock symbols available."
+        )
+
+    # Fetch quotes for all symbols
+    quotes = yahoo_client.get_multiple_quotes(symbols)
+
+    if not quotes:
+        return StockImportResponse(
+            success=False,
+            imported_count=0,
+            skipped_count=0,
+            message="Failed to fetch stock data from Yahoo Finance. Check network connection."
         )
 
     imported_count = 0
     skipped_count = 0
+    errors = []
 
-    for stock_data in avanza_stocks:
-        # Check if stock already exists
-        existing = repo.get_by_ticker(stock_data.get("ticker"))
-
-        if existing:
-            skipped_count += 1
-            continue
-
-        # Create new stock
+    for quote in quotes:
         try:
+            # Format data for our database
+            stock_data = yahoo_client.format_stock_for_db(quote)
+
+            # Check if stock already exists
+            existing = repo.get_by_ticker(stock_data.get("ticker"))
+
+            if existing:
+                skipped_count += 1
+                continue
+
+            # Create new stock
             stock = Stock(
                 ticker=stock_data.get("ticker"),
                 name=stock_data.get("name"),
@@ -257,20 +269,28 @@ async def import_stocks_from_avanza(
                 instrument_type=InstrumentType(stock_data.get("instrument_type", "STOCK")),
                 sector=stock_data.get("sector"),
                 industry=stock_data.get("industry"),
+                market_cap=stock_data.get("market_cap"),
                 currency=stock_data.get("currency", "SEK"),
                 exchange=stock_data.get("exchange"),
             )
             repo.create(stock)
             imported_count += 1
+
         except Exception as e:
-            print(f"Error importing stock {stock_data.get('ticker')}: {e}")
+            error_msg = f"Error importing stock {quote.get('symbol', 'unknown')}: {str(e)}"
+            print(error_msg)
+            errors.append(error_msg)
             skipped_count += 1
+
+    message = f"Successfully imported {imported_count} stocks from Yahoo Finance, skipped {skipped_count}."
+    if errors:
+        message += f" {len(errors)} errors occurred."
 
     return StockImportResponse(
         success=True,
         imported_count=imported_count,
         skipped_count=skipped_count,
-        message=f"Successfully imported {imported_count} stocks, skipped {skipped_count} existing."
+        message=message
     )
 
 

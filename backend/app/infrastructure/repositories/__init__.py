@@ -1,4 +1,3 @@
-"""Repository package."""
-from app.infrastructure.repositories.vibe_repository import VibeRepository
+"""Repository package for data access layer."""
 
-__all__ = ["VibeRepository"]
+__all__ = []

@@ -1,1 +1,1 @@
-"""VibeApp backend application."""
+"""Avanza Stock Finder backend application."""

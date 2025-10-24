@@ -43,6 +43,14 @@ class Settings(BaseSettings):
     AVANZA_PASSWORD: str = ""
     AVANZA_TOTP_SECRET: str = ""
 
+    # Stock Data API
+    # Set USE_REAL_STOCK_API=true to try Yahoo Finance (may be blocked)
+    # Default is false to use reliable mock data for development/AI usage
+    USE_REAL_STOCK_API: bool = False
+
+    # If true, uses mock data even if USE_REAL_STOCK_API is true (override for testing)
+    FORCE_MOCK_DATA: bool = False
+
     class Config:
         env_file = ".env"
         case_sensitive = True

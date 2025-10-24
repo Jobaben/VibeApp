@@ -5,6 +5,7 @@ from datetime import datetime
 import requests
 import time
 
+from app.config import settings
 from app.features.integrations.mock_stock_data import get_mock_stock_data
 
 logger = logging.getLogger(__name__)
@@ -80,7 +81,10 @@ class YahooFinanceClient:
         """
         Get quotes for multiple symbols at once.
 
-        Falls back to mock data if Yahoo Finance blocks the request.
+        Behavior based on configuration:
+        - If FORCE_MOCK_DATA=true: Always use mock data
+        - If USE_REAL_STOCK_API=false: Use mock data (default for AI/automated use)
+        - If USE_REAL_STOCK_API=true: Try Yahoo Finance, fallback to mock on errors
 
         Args:
             symbols: List of stock ticker symbols
@@ -88,6 +92,17 @@ class YahooFinanceClient:
         Returns:
             List of quote dictionaries
         """
+        # Check if we should use mock data immediately
+        if settings.FORCE_MOCK_DATA:
+            logger.info("FORCE_MOCK_DATA is enabled - using mock stock data")
+            return self._get_mock_quotes(symbols)
+
+        if not settings.USE_REAL_STOCK_API:
+            logger.info("USE_REAL_STOCK_API is disabled - using mock stock data (safe for automated use)")
+            return self._get_mock_quotes(symbols)
+
+        # Try to fetch from Yahoo Finance
+        logger.info("USE_REAL_STOCK_API is enabled - attempting to fetch from Yahoo Finance...")
         try:
             self._rate_limit()
             # Yahoo Finance allows comma-separated symbols
@@ -103,24 +118,37 @@ class YahooFinanceClient:
             if 'quoteResponse' in data and 'result' in data['quoteResponse']:
                 results = data['quoteResponse']['result']
                 if results:
-                    logger.info(f"Successfully fetched {len(results)} quotes from Yahoo Finance")
+                    logger.info(f"✅ Successfully fetched {len(results)} quotes from Yahoo Finance!")
                     return results
 
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 403:
-                logger.warning(f"Yahoo Finance blocked request (403). Using mock data instead.")
+                logger.warning(f"⚠️  Yahoo Finance blocked request (403). Falling back to mock data.")
+                logger.info("Tip: Yahoo Finance may block automated requests. Mock data works reliably.")
             else:
                 logger.error(f"HTTP error fetching quotes: {e}")
         except Exception as e:
-            logger.error(f"Error fetching quotes for {symbols}: {e}")
+            logger.error(f"Error fetching quotes from Yahoo Finance: {e}")
 
         # Fallback to mock data
-        logger.info("Using enhanced mock stock data (Yahoo Finance unavailable)")
+        logger.info("Using enhanced mock stock data as fallback")
+        return self._get_mock_quotes(symbols)
+
+    def _get_mock_quotes(self, symbols: List[str]) -> List[Dict[str, Any]]:
+        """
+        Get mock stock quotes.
+
+        Args:
+            symbols: List of stock ticker symbols to filter
+
+        Returns:
+            List of mock stock data
+        """
         mock_data = get_mock_stock_data()
         # Filter to requested symbols if specific symbols were requested
         if symbols:
             mock_data = [stock for stock in mock_data if stock['symbol'] in symbols]
-        return mock_data[:len(symbols)]
+        return mock_data[:len(symbols)] if symbols else mock_data
 
     def get_chart_data(
         self,

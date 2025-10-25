@@ -15,6 +15,7 @@ from datetime import datetime
 def get_mock_stock_data() -> List[Dict[str, Any]]:
     """
     Get realistic mock stock data for development.
+    Includes comprehensive fundamental metrics for testing screener strategies.
 
     Returns:
         List of stock dictionaries with complete information
@@ -32,6 +33,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NASDAQ",
             "fullExchangeName": "NasdaqGS",
             "quoteType": "EQUITY",
+            # Fundamentals - Quality Compounder
+            "pe_ratio": 28.5,
+            "ev_ebitda": 22.3,
+            "peg_ratio": 2.1,
+            "pb_ratio": 45.2,
+            "ps_ratio": 7.3,
+            "roic": 55.8,  # Excellent
+            "roe": 147.4,  # Exceptional
+            "gross_margin": 43.8,
+            "operating_margin": 29.8,
+            "net_margin": 25.3,
+            "debt_equity": 1.73,
+            "current_ratio": 0.98,
+            "fcf_yield": 3.8,
+            "interest_coverage": 28.5,
+            "revenue_growth": 8.2,
+            "earnings_growth": 13.5,
+            "dividend_yield": 0.52,
+            "payout_ratio": 15.8,
         },
         {
             "symbol": "MSFT",
@@ -45,6 +65,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NASDAQ",
             "fullExchangeName": "NasdaqGS",
             "quoteType": "EQUITY",
+            # Fundamentals - Quality Compounder
+            "pe_ratio": 32.4,
+            "ev_ebitda": 24.1,
+            "peg_ratio": 1.8,
+            "pb_ratio": 12.3,
+            "ps_ratio": 11.2,
+            "roic": 48.2,
+            "roe": 42.8,
+            "gross_margin": 68.4,
+            "operating_margin": 42.1,
+            "net_margin": 34.2,
+            "debt_equity": 0.28,
+            "current_ratio": 1.77,
+            "fcf_yield": 3.2,
+            "interest_coverage": 42.3,
+            "revenue_growth": 12.5,
+            "earnings_growth": 18.2,
+            "dividend_yield": 0.78,
+            "payout_ratio": 25.4,
         },
         {
             "symbol": "GOOGL",
@@ -58,6 +97,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NASDAQ",
             "fullExchangeName": "NasdaqGS",
             "quoteType": "EQUITY",
+            # Fundamentals - Quality Compounder
+            "pe_ratio": 25.8,
+            "ev_ebitda": 16.2,
+            "peg_ratio": 1.5,
+            "pb_ratio": 6.8,
+            "ps_ratio": 5.2,
+            "roic": 28.5,
+            "roe": 24.3,
+            "gross_margin": 56.9,
+            "operating_margin": 28.4,
+            "net_margin": 23.6,
+            "debt_equity": 0.12,
+            "current_ratio": 2.54,
+            "fcf_yield": 4.2,
+            "interest_coverage": 85.2,
+            "revenue_growth": 9.8,
+            "earnings_growth": 17.2,
+            "dividend_yield": 0.0,
+            "payout_ratio": 0.0,
         },
         {
             "symbol": "AMZN",
@@ -71,6 +129,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NASDAQ",
             "fullExchangeName": "NasdaqGS",
             "quoteType": "EQUITY",
+            # Fundamentals - Growth Stock
+            "pe_ratio": 52.3,
+            "ev_ebitda": 28.4,
+            "peg_ratio": 1.2,
+            "pb_ratio": 8.4,
+            "ps_ratio": 2.8,
+            "roic": 14.2,
+            "roe": 18.6,
+            "gross_margin": 47.2,
+            "operating_margin": 5.8,
+            "net_margin": 4.2,
+            "debt_equity": 0.52,
+            "current_ratio": 1.03,
+            "fcf_yield": 2.8,
+            "interest_coverage": 8.5,
+            "revenue_growth": 38.2,  # Explosive Growth
+            "earnings_growth": 42.8,
+            "dividend_yield": 0.0,
+            "payout_ratio": 0.0,
         },
         {
             "symbol": "TSLA",
@@ -84,6 +161,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NASDAQ",
             "fullExchangeName": "NasdaqGS",
             "quoteType": "EQUITY",
+            # Fundamentals - Explosive Growth
+            "pe_ratio": 68.4,
+            "ev_ebitda": 42.3,
+            "peg_ratio": 1.4,
+            "pb_ratio": 14.2,
+            "ps_ratio": 8.5,
+            "roic": 18.4,
+            "roe": 28.5,
+            "gross_margin": 25.6,
+            "operating_margin": 16.8,
+            "net_margin": 13.2,
+            "debt_equity": 0.18,
+            "current_ratio": 1.52,
+            "fcf_yield": 1.8,
+            "interest_coverage": 15.2,
+            "revenue_growth": 51.4,  # Explosive
+            "earnings_growth": 48.2,
+            "dividend_yield": 0.0,
+            "payout_ratio": 0.0,
         },
         {
             "symbol": "META",
@@ -97,6 +193,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NASDAQ",
             "fullExchangeName": "NasdaqGS",
             "quoteType": "EQUITY",
+            # Fundamentals - Value + Growth Hybrid
+            "pe_ratio": 24.2,
+            "ev_ebitda": 12.8,
+            "peg_ratio": 0.9,  # Undervalued!
+            "pb_ratio": 5.4,
+            "ps_ratio": 6.8,
+            "roic": 23.4,
+            "roe": 28.2,
+            "gross_margin": 80.8,
+            "operating_margin": 35.2,
+            "net_margin": 29.4,
+            "debt_equity": 0.08,
+            "current_ratio": 2.85,
+            "fcf_yield": 5.2,
+            "interest_coverage": 125.4,
+            "revenue_growth": 23.4,
+            "earnings_growth": 26.8,
+            "dividend_yield": 0.0,
+            "payout_ratio": 0.0,
         },
         {
             "symbol": "NVDA",
@@ -110,6 +225,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NASDAQ",
             "fullExchangeName": "NasdaqGS",
             "quoteType": "EQUITY",
+            # Fundamentals - Explosive Growth
+            "pe_ratio": 95.2,
+            "ev_ebitda": 52.4,
+            "peg_ratio": 1.3,
+            "pb_ratio": 38.5,
+            "ps_ratio": 28.4,
+            "roic": 35.8,
+            "roe": 52.4,
+            "gross_margin": 64.2,
+            "operating_margin": 32.5,
+            "net_margin": 28.8,
+            "debt_equity": 0.35,
+            "current_ratio": 3.42,
+            "fcf_yield": 1.2,
+            "interest_coverage": 45.2,
+            "revenue_growth": 126.5,  # Explosive!
+            "earnings_growth": 73.2,
+            "dividend_yield": 0.04,
+            "payout_ratio": 4.2,
         },
         {
             "symbol": "JPM",
@@ -123,6 +257,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NYSE",
             "fullExchangeName": "New York Stock Exchange",
             "quoteType": "EQUITY",
+            # Fundamentals - Value Gem + Dividend
+            "pe_ratio": 10.8,  # Low P/E
+            "ev_ebitda": 8.2,
+            "peg_ratio": 1.1,
+            "pb_ratio": 1.5,
+            "ps_ratio": 3.2,
+            "roic": 17.4,  # Good
+            "roe": 15.8,
+            "gross_margin": None,  # Banks don't have traditional margins
+            "operating_margin": 38.2,
+            "net_margin": 31.4,
+            "debt_equity": 0.42,  # Low
+            "current_ratio": None,  # Not applicable for banks
+            "fcf_yield": 6.8,
+            "interest_coverage": 12.5,
+            "revenue_growth": 8.4,
+            "earnings_growth": 9.8,
+            "dividend_yield": 2.54,
+            "payout_ratio": 27.8,
         },
         {
             "symbol": "V",
@@ -136,6 +289,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NYSE",
             "fullExchangeName": "New York Stock Exchange",
             "quoteType": "EQUITY",
+            # Fundamentals - Quality Compounder
+            "pe_ratio": 31.2,
+            "ev_ebitda": 23.4,
+            "peg_ratio": 2.3,
+            "pb_ratio": 14.8,
+            "ps_ratio": 16.2,
+            "roic": 42.5,  # Excellent
+            "roe": 38.4,
+            "gross_margin": 98.2,  # Near perfect
+            "operating_margin": 67.4,
+            "net_margin": 51.2,
+            "debt_equity": 0.58,
+            "current_ratio": 1.38,
+            "fcf_yield": 3.5,
+            "interest_coverage": 38.5,
+            "revenue_growth": 10.2,
+            "earnings_growth": 13.6,
+            "dividend_yield": 0.72,
+            "payout_ratio": 22.4,
         },
         {
             "symbol": "WMT",
@@ -149,6 +321,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NYSE",
             "fullExchangeName": "New York Stock Exchange",
             "quoteType": "EQUITY",
+            # Fundamentals - Dividend King candidate
+            "pe_ratio": 28.4,
+            "ev_ebitda": 12.5,
+            "peg_ratio": 4.2,
+            "pb_ratio": 5.2,
+            "ps_ratio": 0.78,
+            "roic": 14.2,
+            "roe": 19.8,
+            "gross_margin": 24.8,
+            "operating_margin": 4.2,
+            "net_margin": 2.8,
+            "debt_equity": 0.65,
+            "current_ratio": 0.82,
+            "fcf_yield": 2.4,
+            "interest_coverage": 8.2,
+            "revenue_growth": 6.8,
+            "earnings_growth": 6.7,
+            "dividend_yield": 1.42,
+            "payout_ratio": 40.2,
         },
         {
             "symbol": "DIS",
@@ -162,6 +353,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NYSE",
             "fullExchangeName": "New York Stock Exchange",
             "quoteType": "EQUITY",
+            # Fundamentals - Turnaround / Deep Value candidate
+            "pe_ratio": 42.8,
+            "ev_ebitda": 18.2,
+            "peg_ratio": 3.2,
+            "pb_ratio": 1.8,
+            "ps_ratio": 2.2,
+            "roic": 5.4,
+            "roe": 4.2,
+            "gross_margin": 32.4,
+            "operating_margin": 8.2,
+            "net_margin": 2.8,
+            "debt_equity": 0.52,
+            "current_ratio": 0.92,
+            "fcf_yield": 3.8,
+            "interest_coverage": 5.2,
+            "revenue_growth": 3.8,
+            "earnings_growth": 13.4,
+            "dividend_yield": 0.0,  # Suspended dividend
+            "payout_ratio": 0.0,
         },
         {
             "symbol": "NFLX",
@@ -175,6 +385,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NASDAQ",
             "fullExchangeName": "NasdaqGS",
             "quoteType": "EQUITY",
+            # Fundamentals - Growth
+            "pe_ratio": 38.5,
+            "ev_ebitda": 22.4,
+            "peg_ratio": 1.8,
+            "pb_ratio": 12.4,
+            "ps_ratio": 7.8,
+            "roic": 16.2,
+            "roe": 24.8,
+            "gross_margin": 42.8,
+            "operating_margin": 18.6,
+            "net_margin": 15.4,
+            "debt_equity": 0.88,
+            "current_ratio": 1.15,
+            "fcf_yield": 4.2,
+            "interest_coverage": 12.4,
+            "revenue_growth": 12.8,
+            "earnings_growth": 21.4,
+            "dividend_yield": 0.0,
+            "payout_ratio": 0.0,
         },
         {
             "symbol": "INTC",
@@ -188,6 +417,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NASDAQ",
             "fullExchangeName": "NasdaqGS",
             "quoteType": "EQUITY",
+            # Fundamentals - Deep Value + Dividend
+            "pe_ratio": 12.4,
+            "ev_ebitda": 7.8,
+            "peg_ratio": -2.4,  # Negative growth
+            "pb_ratio": 1.2,  # Deep value!
+            "ps_ratio": 2.8,
+            "roic": 8.2,
+            "roe": 9.4,
+            "gross_margin": 42.5,
+            "operating_margin": 12.4,
+            "net_margin": 8.2,
+            "debt_equity": 0.38,
+            "current_ratio": 1.52,
+            "fcf_yield": 5.8,  # Good FCF
+            "interest_coverage": 8.5,
+            "revenue_growth": -8.2,  # Declining
+            "earnings_growth": -25.4,
+            "dividend_yield": 1.85,
+            "payout_ratio": 23.2,
         },
         {
             "symbol": "CSCO",
@@ -201,6 +449,25 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NASDAQ",
             "fullExchangeName": "NasdaqGS",
             "quoteType": "EQUITY",
+            # Fundamentals - Dividend King + Value
+            "pe_ratio": 14.2,  # Low
+            "ev_ebitda": 10.4,
+            "peg_ratio": 1.6,
+            "pb_ratio": 4.5,
+            "ps_ratio": 3.8,
+            "roic": 18.4,  # Good
+            "roe": 22.4,
+            "gross_margin": 63.2,
+            "operating_margin": 26.8,
+            "net_margin": 21.4,
+            "debt_equity": 0.22,  # Low debt
+            "current_ratio": 2.15,
+            "fcf_yield": 6.2,
+            "interest_coverage": 28.4,
+            "revenue_growth": 4.2,
+            "earnings_growth": 8.9,
+            "dividend_yield": 3.18,  # Good dividend
+            "payout_ratio": 45.2,
         },
         {
             "symbol": "PFE",
@@ -214,5 +481,24 @@ def get_mock_stock_data() -> List[Dict[str, Any]]:
             "exchange": "NYSE",
             "fullExchangeName": "New York Stock Exchange",
             "quoteType": "EQUITY",
+            # Fundamentals - High Dividend King
+            "pe_ratio": 8.5,  # Very low
+            "ev_ebitda": 6.2,
+            "peg_ratio": -1.8,
+            "pb_ratio": 1.4,
+            "ps_ratio": 2.8,
+            "roic": 12.4,
+            "roe": 14.2,
+            "gross_margin": 68.4,
+            "operating_margin": 24.2,
+            "net_margin": 18.5,
+            "debt_equity": 0.48,
+            "current_ratio": 1.38,
+            "fcf_yield": 8.2,  # Excellent
+            "interest_coverage": 15.2,
+            "revenue_growth": -42.5,  # Post-COVID decline
+            "earnings_growth": -45.2,
+            "dividend_yield": 5.82,  # Excellent dividend!
+            "payout_ratio": 49.5,
         },
     ]

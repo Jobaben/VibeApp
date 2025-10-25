@@ -186,6 +186,67 @@ class StockImportResponse(BaseModel):
     message: str
 
 
+# Screener schemas
+class ScreenerCriteria(BaseModel):
+    """Custom screener criteria for filtering stocks."""
+    # Valuation filters
+    pe_min: Optional[Decimal] = Field(None, description="Minimum P/E ratio")
+    pe_max: Optional[Decimal] = Field(None, description="Maximum P/E ratio")
+    peg_min: Optional[Decimal] = Field(None, description="Minimum PEG ratio")
+    peg_max: Optional[Decimal] = Field(None, description="Maximum PEG ratio")
+    pb_min: Optional[Decimal] = Field(None, description="Minimum P/B ratio")
+    pb_max: Optional[Decimal] = Field(None, description="Maximum P/B ratio")
+
+    # Profitability filters
+    roic_min: Optional[Decimal] = Field(None, description="Minimum ROIC %")
+    roic_max: Optional[Decimal] = Field(None, description="Maximum ROIC %")
+    roe_min: Optional[Decimal] = Field(None, description="Minimum ROE %")
+    roe_max: Optional[Decimal] = Field(None, description="Maximum ROE %")
+    net_margin_min: Optional[Decimal] = Field(None, description="Minimum net margin %")
+    net_margin_max: Optional[Decimal] = Field(None, description="Maximum net margin %")
+
+    # Financial health filters
+    debt_equity_min: Optional[Decimal] = Field(None, description="Minimum debt/equity ratio")
+    debt_equity_max: Optional[Decimal] = Field(None, description="Maximum debt/equity ratio")
+    current_ratio_min: Optional[Decimal] = Field(None, description="Minimum current ratio")
+    fcf_yield_min: Optional[Decimal] = Field(None, description="Minimum FCF yield %")
+
+    # Growth filters
+    revenue_growth_min: Optional[Decimal] = Field(None, description="Minimum revenue growth %")
+    earnings_growth_min: Optional[Decimal] = Field(None, description="Minimum earnings growth %")
+
+    # Dividend filters
+    dividend_yield_min: Optional[Decimal] = Field(None, description="Minimum dividend yield %")
+    dividend_yield_max: Optional[Decimal] = Field(None, description="Maximum dividend yield %")
+    payout_ratio_min: Optional[Decimal] = Field(None, description="Minimum payout ratio %")
+    payout_ratio_max: Optional[Decimal] = Field(None, description="Maximum payout ratio %")
+
+    # Market filters
+    market_cap_min: Optional[Decimal] = Field(None, description="Minimum market cap")
+    market_cap_max: Optional[Decimal] = Field(None, description="Maximum market cap")
+    sector: Optional[str] = Field(None, description="Filter by sector")
+
+    # Sorting
+    sort_by: Optional[str] = Field(default="total_score", description="Field to sort by")
+    sort_order: Optional[str] = Field(default="desc", description="Sort order: asc or desc")
+    limit: int = Field(default=50, le=200, description="Maximum number of results")
+
+
+class ScreenerResult(StockDetailResponse):
+    """Enhanced stock response for screener results with additional context."""
+    match_score: Optional[int] = Field(None, description="How well it matches criteria (0-100)")
+    strengths: List[str] = Field(default_factory=list, description="Key strengths")
+    weaknesses: List[str] = Field(default_factory=list, description="Key weaknesses")
+
+
+class ScreenerResponse(BaseModel):
+    """Response from screener operation."""
+    results: List[ScreenerResult]
+    criteria: str = Field(..., description="Description of applied criteria")
+    total_matches: int
+    strategy_name: Optional[str] = Field(None, description="Name of pre-built strategy if applicable")
+
+
 # Export all schemas
 __all__ = [
     "StockBase",
@@ -206,4 +267,7 @@ __all__ = [
     "StockSearchResponse",
     "StockImportRequest",
     "StockImportResponse",
+    "ScreenerCriteria",
+    "ScreenerResult",
+    "ScreenerResponse",
 ]

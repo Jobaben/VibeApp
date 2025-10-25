@@ -17,6 +17,7 @@ from app.features.stocks.schemas import (
     ScreenerResponse,
 )
 from app.features.stocks.services import ScreenerService
+from app.features.stocks.services.sector_service import SectorService
 from app.features.integrations.yahoo_finance_client import get_yahoo_finance_client, YahooFinanceClient
 
 router = APIRouter(prefix="/api/stocks", tags=["stocks"])
@@ -481,3 +482,268 @@ async def explosive_growth_strategy(
     """
     screener = ScreenerService(db)
     return screener.explosive_growth_strategy(limit=limit)
+
+
+# ========================
+# Scoring & Leaderboard Endpoints
+# ========================
+
+@router.post("/scores/calculate", status_code=status.HTTP_200_OK)
+async def calculate_all_scores(
+    db: Session = Depends(get_db)
+):
+    """
+    Calculate scores for all stocks.
+
+    This endpoint:
+    1. Calculates sector averages for all sectors
+    2. Calculates scores for all stocks based on their fundamentals
+    3. Saves scores to database for fast retrieval
+
+    Use this after importing new stocks or updating fundamentals.
+
+    Args:
+        db: Database session
+
+    Returns:
+        Result with count of scored stocks
+    """
+    sector_service = SectorService(db)
+
+    # First, calculate and cache sector averages
+    sector_benchmarks = sector_service.calculate_and_cache_sector_averages()
+
+    # Then, calculate scores for all stocks
+    scored_count = sector_service.calculate_scores_for_all_stocks()
+
+    return {
+        "success": True,
+        "scored_count": scored_count,
+        "sectors_analyzed": len(sector_benchmarks),
+        "message": f"Successfully calculated scores for {scored_count} stocks across {len(sector_benchmarks)} sectors."
+    }
+
+
+@router.get("/{ticker}/score-breakdown")
+async def get_score_breakdown(
+    ticker: str,
+    db: Session = Depends(get_db)
+):
+    """
+    Get detailed score breakdown with explanations for a stock.
+
+    This endpoint provides:
+    - Total score (0-100) and component scores
+    - Buy/Sell signal
+    - Strengths and weaknesses
+    - Detailed reasoning
+    - Component-level scoring details
+
+    Args:
+        ticker: Stock ticker symbol
+        db: Database session
+
+    Returns:
+        Detailed score breakdown with explanations
+
+    Raises:
+        HTTPException: 404 if stock not found or no fundamentals available
+    """
+    from app.features.stocks.services.scoring_service import ScoringService
+
+    repo = get_stock_repository(db)
+
+    # Get stock with fundamentals
+    stock = repo.get_by_ticker(ticker)
+    if not stock:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Stock with ticker '{ticker}' not found"
+        )
+
+    stock_full = repo.get_with_full_data(stock.id)
+
+    if not stock_full.fundamentals:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No fundamental data available for '{ticker}'"
+        )
+
+    # Get sector benchmarks and all fundamentals for scoring
+    sector_service = SectorService(db)
+    sector_benchmarks = sector_service.get_cached_sector_benchmarks()
+
+    all_fundamentals = db.query(StockFundamental).join(Stock).all()
+
+    # Calculate score
+    scoring_service = ScoringService(all_fundamentals, sector_benchmarks)
+    breakdown = scoring_service.calculate_score(stock_full.fundamentals, stock_full.sector)
+
+    return {
+        "ticker": stock_full.ticker,
+        "name": stock_full.name,
+        "sector": stock_full.sector,
+        "total_score": breakdown.total_score,
+        "signal": breakdown.signal.value,
+        "component_scores": {
+            "value": breakdown.value_score,
+            "quality": breakdown.quality_score,
+            "momentum": breakdown.momentum_score,
+            "health": breakdown.health_score,
+        },
+        "strengths": breakdown.strengths,
+        "weaknesses": breakdown.weaknesses,
+        "reasoning": breakdown.reasoning,
+    }
+
+
+@router.get("/leaderboard/top")
+async def get_leaderboard(
+    limit: int = Query(default=20, le=100, description="Number of top stocks"),
+    sector: Optional[str] = Query(default=None, description="Filter by sector"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get top-scoring stocks (leaderboard).
+
+    Returns stocks ranked by total score in descending order.
+    Optionally filter by sector to see sector leaders.
+
+    Args:
+        limit: Number of top stocks to return
+        sector: Optional sector filter
+        db: Database session
+
+    Returns:
+        List of top-scoring stocks with their scores
+    """
+    from app.features.stocks.models import StockScore
+
+    query = (
+        db.query(Stock, StockScore)
+        .join(StockScore, Stock.id == StockScore.stock_id)
+        .order_by(StockScore.total_score.desc())
+    )
+
+    if sector:
+        query = query.filter(Stock.sector == sector)
+
+    results = query.limit(limit).all()
+
+    return [
+        {
+            "ticker": stock.ticker,
+            "name": stock.name,
+            "sector": stock.sector,
+            "total_score": float(score.total_score),
+            "signal": score.signal.value,
+            "value_score": float(score.value_score),
+            "quality_score": float(score.quality_score),
+            "momentum_score": float(score.momentum_score),
+            "health_score": float(score.health_score),
+        }
+        for stock, score in results
+    ]
+
+
+@router.get("/leaderboard/by-signal/{signal}")
+async def get_stocks_by_signal(
+    signal: str,
+    limit: int = Query(default=50, le=200, description="Maximum number of results"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get all stocks with a specific signal (STRONG_BUY, BUY, HOLD, SELL, STRONG_SELL).
+
+    Args:
+        signal: Signal type (STRONG_BUY, BUY, HOLD, SELL, STRONG_SELL)
+        limit: Maximum number of results
+        db: Database session
+
+    Returns:
+        List of stocks with the specified signal
+
+    Raises:
+        HTTPException: 400 if invalid signal
+    """
+    from app.features.stocks.models import StockScore, Signal
+
+    # Validate signal
+    try:
+        signal_enum = Signal(signal.upper())
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid signal. Must be one of: {', '.join([s.value for s in Signal])}"
+        )
+
+    results = (
+        db.query(Stock, StockScore)
+        .join(StockScore, Stock.id == StockScore.stock_id)
+        .filter(StockScore.signal == signal_enum)
+        .order_by(StockScore.total_score.desc())
+        .limit(limit)
+        .all()
+    )
+
+    return [
+        {
+            "ticker": stock.ticker,
+            "name": stock.name,
+            "sector": stock.sector,
+            "total_score": float(score.total_score),
+            "signal": score.signal.value,
+            "value_score": float(score.value_score),
+            "quality_score": float(score.quality_score),
+            "momentum_score": float(score.momentum_score),
+            "health_score": float(score.health_score),
+        }
+        for stock, score in results
+    ]
+
+
+@router.get("/leaderboard/sectors")
+async def get_sector_leaderboards(
+    limit_per_sector: int = Query(default=5, le=20, description="Top stocks per sector"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get top stocks for each sector.
+
+    Returns a dictionary with sector names as keys and top stocks as values.
+
+    Args:
+        limit_per_sector: Number of top stocks to return per sector
+        db: Database session
+
+    Returns:
+        Dictionary of sector leaderboards
+    """
+    repo = get_stock_repository(db)
+    sectors = repo.get_all_sectors()
+
+    sector_leaderboards = {}
+
+    for sector in sectors:
+        from app.features.stocks.models import StockScore
+
+        results = (
+            db.query(Stock, StockScore)
+            .join(StockScore, Stock.id == StockScore.stock_id)
+            .filter(Stock.sector == sector)
+            .order_by(StockScore.total_score.desc())
+            .limit(limit_per_sector)
+            .all()
+        )
+
+        sector_leaderboards[sector] = [
+            {
+                "ticker": stock.ticker,
+                "name": stock.name,
+                "total_score": float(score.total_score),
+                "signal": score.signal.value,
+            }
+            for stock, score in results
+        ]
+
+    return sector_leaderboards

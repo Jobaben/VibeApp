@@ -15,45 +15,7 @@ from app.features.stocks.models import (
     Signal
 )
 from app.features.integrations.mock_stock_data import get_mock_stock_data
-
-
-def calculate_mock_score(fundamentals_data: dict) -> dict:
-    """
-    Calculate simple mock scores based on fundamentals.
-    This is a placeholder - Phase 3 will implement proper scoring algorithm.
-    """
-    score = 50  # Base score
-
-    # Add points for good metrics
-    if fundamentals_data.get("roic") and fundamentals_data["roic"] > 20:
-        score += 10
-    if fundamentals_data.get("pe_ratio") and fundamentals_data["pe_ratio"] < 15:
-        score += 10
-    if fundamentals_data.get("debt_equity") and fundamentals_data["debt_equity"] < 0.5:
-        score += 10
-    if fundamentals_data.get("revenue_growth") and fundamentals_data["revenue_growth"] > 20:
-        score += 10
-
-    # Determine signal
-    if score >= 90:
-        signal = Signal.STRONG_BUY
-    elif score >= 75:
-        signal = Signal.BUY
-    elif score >= 50:
-        signal = Signal.HOLD
-    elif score >= 25:
-        signal = Signal.SELL
-    else:
-        signal = Signal.STRONG_SELL
-
-    return {
-        "total_score": Decimal(str(score)),
-        "value_score": Decimal(str(score * 0.25)),
-        "quality_score": Decimal(str(score * 0.25)),
-        "momentum_score": Decimal(str(score * 0.25)),
-        "health_score": Decimal(str(score * 0.25)),
-        "signal": signal
-    }
+from app.features.stocks.services.sector_service import SectorService
 
 
 def seed_stocks():
@@ -65,6 +27,8 @@ def seed_stocks():
         mock_stocks = get_mock_stock_data()
 
         print(f"Seeding {len(mock_stocks)} stocks with fundamentals...\n")
+
+        stocks_added = 0
 
         for stock_data in mock_stocks:
             # Check if stock already exists
@@ -116,26 +80,37 @@ def seed_stocks():
                     payout_ratio=Decimal(str(stock_data["payout_ratio"])) if stock_data.get("payout_ratio") else None,
                 )
                 db.add(fundamentals)
-
-                # Create mock scores based on fundamentals
-                score_data = calculate_mock_score(stock_data)
-                score = StockScore(
-                    stock_id=stock.id,
-                    total_score=score_data["total_score"],
-                    value_score=score_data["value_score"],
-                    quality_score=score_data["quality_score"],
-                    momentum_score=score_data["momentum_score"],
-                    health_score=score_data["health_score"],
-                    signal=score_data["signal"],
-                )
-                db.add(score)
-
-                print(f"  ✅ Added {stock.ticker} - {stock.name} (Score: {score_data['total_score']}, Signal: {score_data['signal'].value})")
+                print(f"  ✅ Added {stock.ticker} - {stock.name}")
+                stocks_added += 1
             else:
                 print(f"  ✅ Added {stock.ticker} - {stock.name} (no fundamentals)")
+                stocks_added += 1
 
         db.commit()
-        print(f"\n✅ Successfully seeded {len(mock_stocks)} stocks with fundamentals!")
+        print(f"\n✅ Successfully seeded {stocks_added} stocks with fundamentals!")
+
+        # Now calculate scores using the real scoring engine
+        if stocks_added > 0:
+            print("\n🧮 Calculating scores using the scoring engine...")
+            sector_service = SectorService(db)
+
+            # Calculate sector averages
+            print("  📊 Calculating sector averages...")
+            sector_benchmarks = sector_service.calculate_and_cache_sector_averages()
+            print(f"  ✅ Calculated averages for {len(sector_benchmarks)} sectors")
+
+            # Calculate scores for all stocks
+            print("  🎯 Calculating stock scores...")
+            scored_count = sector_service.calculate_scores_for_all_stocks()
+            print(f"  ✅ Scored {scored_count} stocks")
+
+            # Show sample scores
+            print("\n  📋 Sample scores:")
+            sample_stocks = db.query(Stock, StockScore).join(StockScore).order_by(StockScore.total_score.desc()).limit(5).all()
+            for stock, score in sample_stocks:
+                print(f"    {stock.ticker:6} - Score: {float(score.total_score):5.1f}/100 | Signal: {score.signal.value:12} | {stock.name[:40]}")
+
+        print(f"\n✅ Successfully seeded database with scored stocks!")
 
     except Exception as e:
         print(f"❌ Error seeding database: {e}")

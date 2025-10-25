@@ -1,5 +1,12 @@
 import axios from 'axios';
-import type { Stock, StockListResponse, StockSearchParams, StockSearchQuery } from '../types/stock';
+import type {
+  Stock,
+  StockListResponse,
+  StockSearchParams,
+  StockSearchQuery,
+  ScreenerCriteria,
+  ScreenerResponse
+} from '../types/stock';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
@@ -66,6 +73,39 @@ export const stockApi = {
   // Get top-scored stocks (for Phase 3)
   getTopStocks: async (limit: number = 20): Promise<Stock[]> => {
     const response = await apiClient.get<Stock[]>('/stocks/top', { params: { limit } });
+    return response.data;
+  },
+
+  // Screener endpoints - Phase 2
+  // Custom screener with criteria
+  customScreener: async (criteria: ScreenerCriteria): Promise<ScreenerResponse> => {
+    const response = await apiClient.post<ScreenerResponse>('/stocks/screener/custom', criteria);
+    return response.data;
+  },
+
+  // Pre-built strategies
+  valueGemsStrategy: async (limit: number = 50): Promise<ScreenerResponse> => {
+    const response = await apiClient.get<ScreenerResponse>('/stocks/screener/strategies/value-gems', { params: { limit } });
+    return response.data;
+  },
+
+  qualityCompoundersStrategy: async (limit: number = 50): Promise<ScreenerResponse> => {
+    const response = await apiClient.get<ScreenerResponse>('/stocks/screener/strategies/quality-compounders', { params: { limit } });
+    return response.data;
+  },
+
+  dividendKingsStrategy: async (limit: number = 50): Promise<ScreenerResponse> => {
+    const response = await apiClient.get<ScreenerResponse>('/stocks/screener/strategies/dividend-kings', { params: { limit } });
+    return response.data;
+  },
+
+  deepValueStrategy: async (limit: number = 50): Promise<ScreenerResponse> => {
+    const response = await apiClient.get<ScreenerResponse>('/stocks/screener/strategies/deep-value', { params: { limit } });
+    return response.data;
+  },
+
+  explosiveGrowthStrategy: async (limit: number = 50): Promise<ScreenerResponse> => {
+    const response = await apiClient.get<ScreenerResponse>('/stocks/screener/strategies/explosive-growth', { params: { limit } });
     return response.data;
   },
 };

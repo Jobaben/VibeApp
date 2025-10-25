@@ -13,7 +13,10 @@ from app.features.stocks.schemas import (
     StockSearchResponse,
     StockImportRequest,
     StockImportResponse,
+    ScreenerCriteria,
+    ScreenerResponse,
 )
+from app.features.stocks.services import ScreenerService
 from app.features.integrations.yahoo_finance_client import get_yahoo_finance_client, YahooFinanceClient
 
 router = APIRouter(prefix="/api/stocks", tags=["stocks"])
@@ -322,3 +325,159 @@ async def delete_stock(
 
     repo.delete(stock.id)
     return None
+
+
+# ========================
+# Stock Screener Endpoints
+# ========================
+
+@router.post("/screener/custom", response_model=ScreenerResponse)
+async def custom_screener(
+    criteria: ScreenerCriteria,
+    db: Session = Depends(get_db)
+):
+    """
+    Screen stocks with custom criteria.
+
+    Filter stocks based on custom valuation, profitability, financial health,
+    growth, and dividend metrics.
+
+    Args:
+        criteria: Custom screening criteria
+        db: Database session
+
+    Returns:
+        Screener results with matching stocks
+    """
+    screener = ScreenerService(db)
+    return screener.screen_stocks(criteria)
+
+
+@router.get("/screener/strategies/value-gems", response_model=ScreenerResponse)
+async def value_gems_strategy(
+    limit: int = Query(default=50, le=200, description="Maximum number of results"),
+    db: Session = Depends(get_db)
+):
+    """
+    Value Gems Strategy: Low P/E + High ROIC + Low Debt 💎
+
+    Find undervalued quality companies with:
+    - P/E < 15 (undervalued)
+    - ROIC > 15% (high quality capital allocation)
+    - Debt/Equity < 0.5 (financially healthy)
+
+    Target: Long-term value investing
+
+    Args:
+        limit: Maximum number of results
+        db: Database session
+
+    Returns:
+        Screener results with Value Gems stocks
+    """
+    screener = ScreenerService(db)
+    return screener.value_gems_strategy(limit=limit)
+
+
+@router.get("/screener/strategies/quality-compounders", response_model=ScreenerResponse)
+async def quality_compounders_strategy(
+    limit: int = Query(default=50, le=200, description="Maximum number of results"),
+    db: Session = Depends(get_db)
+):
+    """
+    Quality Compounders Strategy: High ROIC + High Margins + Growing Revenue 🚀
+
+    Find exceptional wealth-building companies with:
+    - ROIC > 20% (exceptional capital efficiency)
+    - Net Margin > 15% (highly profitable)
+    - Revenue Growth > 0% (growing business)
+
+    Target: Long-term wealth compounding
+
+    Args:
+        limit: Maximum number of results
+        db: Database session
+
+    Returns:
+        Screener results with Quality Compounder stocks
+    """
+    screener = ScreenerService(db)
+    return screener.quality_compounders_strategy(limit=limit)
+
+
+@router.get("/screener/strategies/dividend-kings", response_model=ScreenerResponse)
+async def dividend_kings_strategy(
+    limit: int = Query(default=50, le=200, description="Maximum number of results"),
+    db: Session = Depends(get_db)
+):
+    """
+    Dividend Kings Strategy: High Yield + Sustainable Payout 👑
+
+    Find reliable income stocks with:
+    - Dividend Yield > 3% (good income)
+    - Payout Ratio < 70% (sustainable dividends)
+    - Debt/Equity < 1.0 (healthy balance sheet)
+
+    Target: Income generation + stability
+
+    Args:
+        limit: Maximum number of results
+        db: Database session
+
+    Returns:
+        Screener results with Dividend King stocks
+    """
+    screener = ScreenerService(db)
+    return screener.dividend_kings_strategy(limit=limit)
+
+
+@router.get("/screener/strategies/deep-value", response_model=ScreenerResponse)
+async def deep_value_strategy(
+    limit: int = Query(default=50, le=200, description="Maximum number of results"),
+    db: Session = Depends(get_db)
+):
+    """
+    Deep Value Strategy: Low P/B + Positive FCF + Not Overleveraged 🔍
+
+    Find distressed turnaround opportunities with:
+    - P/B < 2.0 (trading near or below book value)
+    - FCF Yield > 3% (positive cash generation)
+    - Debt/Equity < 1.0 (manageable leverage)
+
+    Target: Contrarian value investing
+
+    Args:
+        limit: Maximum number of results
+        db: Database session
+
+    Returns:
+        Screener results with Deep Value stocks
+    """
+    screener = ScreenerService(db)
+    return screener.deep_value_strategy(limit=limit)
+
+
+@router.get("/screener/strategies/explosive-growth", response_model=ScreenerResponse)
+async def explosive_growth_strategy(
+    limit: int = Query(default=50, le=200, description="Maximum number of results"),
+    db: Session = Depends(get_db)
+):
+    """
+    Explosive Growth Strategy: High Revenue Growth + Low PEG ⚡
+
+    Find high-growth companies at reasonable valuations with:
+    - Revenue Growth > 30% (explosive growth)
+    - PEG < 2.0 (not overvalued relative to growth)
+    - Net Margin > 0% (profitable or near profitability)
+
+    Target: Growth at a reasonable price (GARP)
+
+    Args:
+        limit: Maximum number of results
+        db: Database session
+
+    Returns:
+        Screener results with Explosive Growth stocks
+    """
+    screener = ScreenerService(db)
+    return screener.explosive_growth_strategy(limit=limit)

@@ -70,10 +70,11 @@ export function StockSearch({ onSearch, placeholder = 'Search stocks by ticker o
 
   return (
     <div className="relative w-full">
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+      <div className="relative group">
+        {/* Search Icon */}
+        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
           <svg
-            className="h-5 w-5 text-gray-400"
+            className="h-5 w-5 text-gray-400 group-focus-within:text-cyan-400 transition-colors"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -86,17 +87,24 @@ export function StockSearch({ onSearch, placeholder = 'Search stocks by ticker o
             />
           </svg>
         </div>
+
+        {/* Input */}
         <input
           type="text"
           value={query}
           onChange={handleInputChange}
           placeholder={placeholder}
-          className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          className="block w-full pl-12 pr-12 py-4 bg-gray-800/50 border border-white/10 rounded-xl
+            text-white placeholder-gray-500
+            focus:bg-gray-800/70 focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50
+            backdrop-blur-sm transition-all duration-200"
         />
+
+        {/* Clear Button */}
         {query && (
           <button
             onClick={handleClear}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-red-400 transition-colors"
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -108,52 +116,80 @@ export function StockSearch({ onSearch, placeholder = 'Search stocks by ticker o
             </svg>
           </button>
         )}
+
+        {/* Loading Spinner */}
         {isSearching && (
-          <div className="absolute inset-y-0 right-10 pr-3 flex items-center">
-            <div className="animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+          <div className="absolute inset-y-0 right-12 pr-3 flex items-center">
+            <div className="animate-spin h-5 w-5 border-2 border-cyan-500 border-t-transparent rounded-full"></div>
           </div>
         )}
       </div>
 
       {/* Error message */}
       {error && (
-        <div className="mt-2 text-sm text-red-600">
+        <div className="mt-2 text-sm text-red-400 flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-lg">
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+          </svg>
           {error}
         </div>
       )}
 
       {/* Search results dropdown */}
       {showDropdown && searchResults.length > 0 && (
-        <div className="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 max-h-96 overflow-y-auto">
-          <div className="py-2">
-            {searchResults.map((stock) => (
+        <div className="absolute z-20 mt-2 w-full bg-gray-800/95 backdrop-blur-xl rounded-2xl border border-white/10
+          shadow-2xl shadow-black/50 max-h-96 overflow-hidden">
+          <div className="py-2 max-h-96 overflow-y-auto">
+            {searchResults.map((stock, index) => (
               <button
                 key={stock.id}
                 onClick={() => handleSelectStock(stock)}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                className="w-full px-4 py-3 text-left hover:bg-white/5 transition-all duration-200
+                  border-b border-white/5 last:border-b-0 group"
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <div className="font-semibold text-gray-900">{stock.ticker}</div>
-                    <div className="text-sm text-gray-600 mt-1">{stock.name}</div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="font-bold text-white text-base group-hover:text-cyan-400 transition-colors">
+                        {stock.ticker}
+                      </div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+                    </div>
+                    <div className="text-sm text-gray-300">{stock.name}</div>
                     {stock.sector && (
-                      <div className="text-xs text-gray-500 mt-1">{stock.sector}</div>
+                      <div className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                        </svg>
+                        {stock.sector}
+                      </div>
                     )}
                   </div>
-                  <span className="ml-3 px-2 py-1 text-xs font-medium rounded bg-blue-50 text-blue-700">
+                  <span className="ml-3 px-3 py-1 text-xs font-semibold rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30">
                     {stock.instrument_type}
                   </span>
                 </div>
               </button>
             ))}
           </div>
+
+          {/* Results count */}
+          <div className="px-4 py-2 bg-gray-900/50 border-t border-white/10 text-xs text-gray-400 flex items-center justify-between">
+            <span>{searchResults.length} result{searchResults.length !== 1 ? 's' : ''} found</span>
+            <span className="text-cyan-400">Press Enter to view all</span>
+          </div>
         </div>
       )}
 
       {/* No results message */}
       {showDropdown && searchResults.length === 0 && query.trim() && !isSearching && (
-        <div className="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 py-4 px-4 text-center text-gray-500">
-          No stocks found matching "{query}"
+        <div className="absolute z-20 mt-2 w-full bg-gray-800/95 backdrop-blur-xl rounded-2xl border border-white/10
+          shadow-2xl shadow-black/50 py-8 px-4 text-center">
+          <svg className="w-12 h-12 mx-auto text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-gray-400">No stocks found matching</p>
+          <p className="text-white font-semibold mt-1">"{query}"</p>
         </div>
       )}
     </div>

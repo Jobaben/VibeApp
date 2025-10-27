@@ -2,9 +2,15 @@ name: CI
 
 on:
   push:
-    branches: [ main, master, develop, claude/* ]
+    branches: [ main, master, develop ]
   pull_request:
     branches: [ main, master, develop ]
+    types: [ opened, synchronize, reopened ]
+
+# Prevent duplicate runs for PR pushes
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   backend-tests:

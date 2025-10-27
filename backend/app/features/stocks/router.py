@@ -1,11 +1,14 @@
 """Stock API endpoints."""
+import logging
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.infrastructure.database.session import get_db
+
+logger = logging.getLogger(__name__)
 from app.infrastructure.repositories import get_stock_repository, StockRepository
-from app.features.stocks.models import Stock, InstrumentType
+from app.features.stocks.models import Stock, InstrumentType, StockFundamental
 from app.features.stocks.schemas import (
     StockListResponse,
     StockDetailResponse,
@@ -18,6 +21,7 @@ from app.features.stocks.schemas import (
 )
 from app.features.stocks.services import ScreenerService
 from app.features.stocks.services.sector_service import SectorService
+from app.features.stocks.services.price_data_service import get_price_data_service, PriceDataService
 from app.features.integrations.yahoo_finance_client import get_yahoo_finance_client, YahooFinanceClient
 
 router = APIRouter(prefix="/api/stocks", tags=["stocks"])
@@ -527,7 +531,9 @@ async def calculate_all_scores(
 @router.get("/{ticker}/score-breakdown")
 async def get_score_breakdown(
     ticker: str,
-    db: Session = Depends(get_db)
+    include_momentum: bool = Query(default=True, description="Include real momentum scoring (requires price data)"),
+    db: Session = Depends(get_db),
+    price_service: PriceDataService = Depends(get_price_data_service)
 ):
     """
     Get detailed score breakdown with explanations for a stock.
@@ -538,10 +544,13 @@ async def get_score_breakdown(
     - Strengths and weaknesses
     - Detailed reasoning
     - Component-level scoring details
+    - (Phase 4) Real momentum scoring based on technical indicators
 
     Args:
         ticker: Stock ticker symbol
+        include_momentum: Whether to fetch price data and calculate real momentum score
         db: Database session
+        price_service: Price data service
 
     Returns:
         Detailed score breakdown with explanations
@@ -575,9 +584,24 @@ async def get_score_breakdown(
 
     all_fundamentals = db.query(StockFundamental).join(Stock).all()
 
-    # Calculate score
+    # Fetch technical indicators for momentum scoring (Phase 4)
+    technical_indicators = None
+    if include_momentum:
+        try:
+            df = price_service.fetch_historical_prices(ticker, period="1y")
+            if df is not None and not df.empty:
+                df = price_service.calculate_technical_indicators(df)
+                technical_indicators = price_service.get_latest_indicators(df)
+        except Exception as e:
+            logger.warning(f"Could not fetch price data for {ticker}: {e}")
+
+    # Calculate score with optional momentum indicators
     scoring_service = ScoringService(all_fundamentals, sector_benchmarks)
-    breakdown = scoring_service.calculate_score(stock_full.fundamentals, stock_full.sector)
+    breakdown = scoring_service.calculate_score(
+        stock_full.fundamentals,
+        stock_full.sector,
+        technical_indicators=technical_indicators
+    )
 
     return {
         "ticker": stock_full.ticker,
@@ -594,6 +618,7 @@ async def get_score_breakdown(
         "strengths": breakdown.strengths,
         "weaknesses": breakdown.weaknesses,
         "reasoning": breakdown.reasoning,
+        "has_momentum_data": technical_indicators is not None,
     }
 
 
@@ -747,3 +772,201 @@ async def get_sector_leaderboards(
         ]
 
     return sector_leaderboards
+
+
+# ========================
+# Phase 4: Historical Price Data & Technical Indicators
+# ========================
+
+@router.get("/{ticker}/prices/historical")
+async def get_historical_prices(
+    ticker: str,
+    period: str = Query(default="1y", description="Time period (1mo, 3mo, 6mo, 1y, 2y, 5y)"),
+    include_indicators: bool = Query(default=True, description="Include technical indicators"),
+    db: Session = Depends(get_db),
+    price_service: PriceDataService = Depends(get_price_data_service)
+):
+    """
+    Get historical price data for a stock with optional technical indicators.
+
+    This endpoint fetches OHLCV (Open, High, Low, Close, Volume) data and optionally
+    calculates technical indicators like RSI, moving averages, and volume trends.
+
+    Args:
+        ticker: Stock ticker symbol
+        period: Time period for historical data
+        include_indicators: Whether to calculate and include technical indicators
+        db: Database session
+        price_service: Price data service
+
+    Returns:
+        Historical price data with optional indicators
+
+    Raises:
+        HTTPException: 404 if stock not found
+    """
+    repo = get_stock_repository(db)
+
+    # Verify stock exists
+    stock = repo.get_by_ticker(ticker)
+    if not stock:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Stock with ticker '{ticker}' not found"
+        )
+
+    # Fetch historical prices
+    df = price_service.fetch_historical_prices(ticker, period=period)
+
+    if df is None or df.empty:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Unable to fetch price data for '{ticker}'"
+        )
+
+    # Calculate technical indicators if requested
+    if include_indicators:
+        df = price_service.calculate_technical_indicators(df)
+
+    # Convert DataFrame to JSON-friendly format
+    result = {
+        "ticker": ticker,
+        "period": period,
+        "record_count": len(df),
+        "data": df.to_dict(orient='records')
+    }
+
+    return result
+
+
+@router.get("/{ticker}/indicators/latest")
+async def get_latest_indicators(
+    ticker: str,
+    period: str = Query(default="1y", description="Time period for calculation"),
+    db: Session = Depends(get_db),
+    price_service: PriceDataService = Depends(get_price_data_service)
+):
+    """
+    Get latest technical indicators for a stock.
+
+    Returns the most recent values for:
+    - Current price
+    - 50-day and 200-day moving averages
+    - RSI (14-day)
+    - Volume metrics
+    - Price vs MA ratios
+
+    Args:
+        ticker: Stock ticker symbol
+        period: Time period for historical data (affects MA calculations)
+        db: Database session
+        price_service: Price data service
+
+    Returns:
+        Latest technical indicator values
+
+    Raises:
+        HTTPException: 404 if stock not found
+    """
+    repo = get_stock_repository(db)
+
+    # Verify stock exists
+    stock = repo.get_by_ticker(ticker)
+    if not stock:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Stock with ticker '{ticker}' not found"
+        )
+
+    # Fetch and calculate indicators
+    df = price_service.fetch_historical_prices(ticker, period=period)
+
+    if df is None or df.empty:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Unable to fetch price data for '{ticker}'"
+        )
+
+    df = price_service.calculate_technical_indicators(df)
+    indicators = price_service.get_latest_indicators(df)
+
+    return {
+        "ticker": ticker,
+        "as_of_date": df.iloc[-1]['date'].isoformat() if not df.empty else None,
+        "indicators": indicators
+    }
+
+
+@router.get("/{ticker}/momentum-score")
+async def get_momentum_score(
+    ticker: str,
+    period: str = Query(default="1y", description="Time period for calculation"),
+    db: Session = Depends(get_db),
+    price_service: PriceDataService = Depends(get_price_data_service)
+):
+    """
+    Calculate and return detailed momentum score for a stock.
+
+    This endpoint:
+    1. Fetches historical price data
+    2. Calculates technical indicators
+    3. Computes momentum score (0-25 points) based on:
+       - Price vs 50-day MA (7 pts)
+       - Price vs 200-day MA (7 pts)
+       - RSI (6 pts)
+       - Volume trend (5 pts)
+
+    Args:
+        ticker: Stock ticker symbol
+        period: Time period for historical data
+        db: Database session
+        price_service: Price data service
+
+    Returns:
+        Detailed momentum score breakdown
+
+    Raises:
+        HTTPException: 404 if stock not found
+    """
+    from app.features.stocks.services.momentum_service import get_momentum_service
+
+    repo = get_stock_repository(db)
+
+    # Verify stock exists
+    stock = repo.get_by_ticker(ticker)
+    if not stock:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Stock with ticker '{ticker}' not found"
+        )
+
+    # Fetch and calculate indicators
+    df = price_service.fetch_historical_prices(ticker, period=period)
+
+    if df is None or df.empty:
+        return {
+            "ticker": ticker,
+            "momentum_score": 12.5,
+            "signal": "NEUTRAL",
+            "message": "No price data available - using neutral score",
+            "components": []
+        }
+
+    df = price_service.calculate_technical_indicators(df)
+    indicators = price_service.get_latest_indicators(df)
+
+    # Calculate momentum score
+    momentum_service = get_momentum_service()
+    score, details = momentum_service.calculate_momentum_score(indicators)
+    signal = momentum_service.get_momentum_signal(score)
+    explanation = momentum_service.explain_momentum_score(details)
+
+    return {
+        "ticker": ticker,
+        "as_of_date": df.iloc[-1]['date'].isoformat() if not df.empty else None,
+        "momentum_score": round(score, 2),
+        "signal": signal,
+        "explanation": explanation,
+        "components": details.components,
+        "indicators": details.indicators
+    }

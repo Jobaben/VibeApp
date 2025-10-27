@@ -15,7 +15,7 @@ hiredis==2.3.2
 # Data Analysis & Stock Analysis
 pandas==2.2.0
 numpy==1.26.3
-# pandas-ta>=0.3.14b  # TODO: Add when needed for technical indicators (Phase 3)
+# pandas-ta>=0.3.14b  # Requires Python 3.12+ - Using manual calculations instead
 scipy==1.12.0
 scikit-learn==1.4.0
 

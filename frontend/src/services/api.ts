@@ -15,7 +15,7 @@ import type {
   Signal
 } from '../types/stock';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8000/api';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -152,9 +152,11 @@ export const stockApi = {
 
   // Get leaderboard (top scoring stocks)
   getLeaderboard: async (limit: number = 20, sector?: string): Promise<LeaderboardStock[]> => {
-    const response = await apiClient.get<LeaderboardStock[]>('/stocks/leaderboard/top', {
-      params: { limit, sector }
-    });
+    const params: { limit: number; sector?: string } = { limit };
+    if (sector) {
+      params.sector = sector;
+    }
+    const response = await apiClient.get<LeaderboardStock[]>('/stocks/leaderboard/top', { params });
     return response.data;
   },
 

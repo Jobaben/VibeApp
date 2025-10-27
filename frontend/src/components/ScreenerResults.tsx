@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import type { ScreenerResponse, ScreenerResult, Signal } from '../types/stock';
+import type { ScreenerResponse, Signal } from '../types/stock';
 
 interface ScreenerResultsProps {
   response: ScreenerResponse;

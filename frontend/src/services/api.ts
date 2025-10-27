@@ -5,7 +5,14 @@ import type {
   StockSearchParams,
   StockSearchQuery,
   ScreenerCriteria,
-  ScreenerResponse
+  ScreenerResponse,
+  HistoricalPricesResponse,
+  LatestIndicatorsResponse,
+  MomentumScoreResponse,
+  ScoreBreakdownResponse,
+  LeaderboardStock,
+  SectorLeaderboard,
+  Signal
 } from '../types/stock';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
@@ -106,6 +113,70 @@ export const stockApi = {
 
   explosiveGrowthStrategy: async (limit: number = 50): Promise<ScreenerResponse> => {
     const response = await apiClient.get<ScreenerResponse>('/stocks/screener/strategies/explosive-growth', { params: { limit } });
+    return response.data;
+  },
+
+  // Phase 4: Historical Price Data & Technical Indicators
+
+  // Get historical prices with technical indicators
+  getHistoricalPrices: async (ticker: string, period: string = '1y', includeIndicators: boolean = true): Promise<HistoricalPricesResponse> => {
+    const response = await apiClient.get<HistoricalPricesResponse>(`/stocks/${ticker}/prices/historical`, {
+      params: { period, include_indicators: includeIndicators }
+    });
+    return response.data;
+  },
+
+  // Get latest technical indicators
+  getLatestIndicators: async (ticker: string, period: string = '1y'): Promise<LatestIndicatorsResponse> => {
+    const response = await apiClient.get<LatestIndicatorsResponse>(`/stocks/${ticker}/indicators/latest`, {
+      params: { period }
+    });
+    return response.data;
+  },
+
+  // Get momentum score breakdown
+  getMomentumScore: async (ticker: string, period: string = '1y'): Promise<MomentumScoreResponse> => {
+    const response = await apiClient.get<MomentumScoreResponse>(`/stocks/${ticker}/momentum-score`, {
+      params: { period }
+    });
+    return response.data;
+  },
+
+  // Get detailed score breakdown with explanations
+  getScoreBreakdown: async (ticker: string, includeMomentum: boolean = true): Promise<ScoreBreakdownResponse> => {
+    const response = await apiClient.get<ScoreBreakdownResponse>(`/stocks/${ticker}/score-breakdown`, {
+      params: { include_momentum: includeMomentum }
+    });
+    return response.data;
+  },
+
+  // Get leaderboard (top scoring stocks)
+  getLeaderboard: async (limit: number = 20, sector?: string): Promise<LeaderboardStock[]> => {
+    const response = await apiClient.get<LeaderboardStock[]>('/stocks/leaderboard/top', {
+      params: { limit, sector }
+    });
+    return response.data;
+  },
+
+  // Get stocks by signal (STRONG_BUY, BUY, HOLD, SELL, STRONG_SELL)
+  getStocksBySignal: async (signal: Signal, limit: number = 50): Promise<LeaderboardStock[]> => {
+    const response = await apiClient.get<LeaderboardStock[]>(`/stocks/leaderboard/by-signal/${signal}`, {
+      params: { limit }
+    });
+    return response.data;
+  },
+
+  // Get sector leaderboards (top stocks per sector)
+  getSectorLeaderboards: async (limitPerSector: number = 5): Promise<SectorLeaderboard> => {
+    const response = await apiClient.get<SectorLeaderboard>('/stocks/leaderboard/sectors', {
+      params: { limit_per_sector: limitPerSector }
+    });
+    return response.data;
+  },
+
+  // Calculate scores for all stocks (admin/refresh operation)
+  calculateAllScores: async (): Promise<{ success: boolean; scored_count: number; message: string }> => {
+    const response = await apiClient.post('/stocks/scores/calculate');
     return response.data;
   },
 };

@@ -140,7 +140,7 @@ export function StockSearch({ onSearch, placeholder = 'Search stocks by ticker o
         <div className="absolute z-20 mt-2 w-full bg-gray-800/95 backdrop-blur-xl rounded-2xl border border-white/10
           shadow-2xl shadow-black/50 max-h-96 overflow-hidden">
           <div className="py-2 max-h-96 overflow-y-auto">
-            {searchResults.map((stock, index) => (
+            {searchResults.map((stock) => (
               <button
                 key={stock.id}
                 onClick={() => handleSelectStock(stock)}

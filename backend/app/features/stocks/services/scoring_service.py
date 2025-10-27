@@ -4,7 +4,7 @@ Stock scoring service implementing the multi-factor scoring methodology.
 This module calculates a 0-100 score for stocks based on four equal-weighted factors:
 1. Value Score (0-25): Valuation metrics (P/E, EV/EBITDA, PEG, P/B)
 2. Quality Score (0-25): Profitability metrics (ROIC, ROE, margins, FCF)
-3. Momentum Score (0-25): Price trends (deferred to Phase 4 - defaults to neutral)
+3. Momentum Score (0-25): Price trends (RSI, moving averages, volume) - Phase 4
 4. Financial Health Score (0-25): Balance sheet strength (debt, liquidity, coverage)
 
 See /backend/SCORING_METHODOLOGY.md for detailed methodology and validation.
@@ -17,6 +17,7 @@ from dataclasses import dataclass
 import statistics
 
 from app.features.stocks.models import StockFundamental, Signal
+from app.features.stocks.services.momentum_service import get_momentum_service
 
 
 @dataclass
@@ -96,6 +97,7 @@ class ScoringService:
         self,
         fundamentals: StockFundamental,
         sector: Optional[str] = None,
+        technical_indicators: Optional[Dict[str, float]] = None,
     ) -> ScoreBreakdown:
         """
         Calculate total score and breakdown for a stock.
@@ -103,6 +105,8 @@ class ScoringService:
         Args:
             fundamentals: Stock fundamental metrics
             sector: Stock's sector for comparison
+            technical_indicators: Technical indicators (RSI, MAs, volume) for momentum scoring.
+                                If None, defaults to neutral momentum score.
 
         Returns:
             ScoreBreakdown with total score, component scores, and explanations
@@ -115,13 +119,23 @@ class ScoringService:
         quality_score, quality_details = self._calculate_quality_score(fundamentals, sector_bench)
         health_score, health_details = self._calculate_health_score(fundamentals, sector)
 
-        # Momentum score defaults to neutral (12.5/25) until Phase 4
-        momentum_score = 12.5
-        momentum_details = {
-            "score": momentum_score,
-            "components": [],
-            "note": "Momentum scoring will be implemented in Phase 4 with historical price data"
-        }
+        # Momentum score - use real calculation if indicators available, otherwise neutral
+        if technical_indicators:
+            momentum_service = get_momentum_service()
+            momentum_score, momentum_calc = momentum_service.calculate_momentum_score(technical_indicators)
+            momentum_details = {
+                "score": momentum_score,
+                "components": momentum_calc.components,
+                "indicators": momentum_calc.indicators,
+            }
+        else:
+            # Default to neutral if no price data available yet
+            momentum_score = 12.5
+            momentum_details = {
+                "score": momentum_score,
+                "components": [],
+                "note": "No price data available - using neutral momentum score"
+            }
 
         # Calculate total score
         total_score = value_score + quality_score + momentum_score + health_score

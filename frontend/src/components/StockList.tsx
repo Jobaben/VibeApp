@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { stockApi } from '../services/api';
 import type { Stock, StockListResponse } from '../types/stock';
 import { StockCard } from './StockCard';
@@ -6,6 +7,7 @@ import { StockSearch } from './StockSearch';
 import { SectorFilter } from './SectorFilter';
 
 export function StockList() {
+  const navigate = useNavigate();
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,11 +76,9 @@ export function StockList() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Handle stock click (for future detail page navigation)
+  // Handle stock click - navigate to detail page
   const handleStockClick = (stock: Stock) => {
-    console.log('Stock clicked:', stock);
-    // TODO: Navigate to stock detail page in Phase 4
-    alert(`Stock detail page for ${stock.ticker} - Coming in Phase 4!`);
+    navigate(`/stock/${stock.ticker}`);
   };
 
   return (

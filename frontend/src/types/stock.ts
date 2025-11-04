@@ -256,3 +256,18 @@ export interface LeaderboardStock {
 export interface SectorLeaderboard {
   [sector: string]: LeaderboardStock[];
 }
+
+// Phase 5: Watchlist types
+export interface Watchlist {
+  id: string;
+  name: string;
+  description?: string;
+  tickers: string[];  // Array of stock tickers
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WatchlistStock extends Stock {
+  scores?: StockScore;
+  addedAt?: string;
+}

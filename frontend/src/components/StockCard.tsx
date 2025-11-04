@@ -1,4 +1,5 @@
 import type { Stock } from '../types/stock';
+import AddToWatchlistButton from './AddToWatchlistButton';
 
 interface StockCardProps {
   stock: Stock;
@@ -61,9 +62,12 @@ export function StockCard({ stock, onClick }: StockCardProps) {
           </div>
           <p className="text-sm text-gray-300 line-clamp-2 leading-relaxed">{stock.name}</p>
         </div>
-        <span className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30 backdrop-blur-sm">
-          {stock.instrument_type}
-        </span>
+        <div className="flex items-center gap-2">
+          <AddToWatchlistButton ticker={stock.ticker} />
+          <span className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30 backdrop-blur-sm">
+            {stock.instrument_type}
+          </span>
+        </div>
       </div>
 
       {/* Sector & Industry */}

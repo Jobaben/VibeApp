@@ -7,6 +7,7 @@ import RSIChart from '../components/RSIChart';
 import VolumeChart from '../components/VolumeChart';
 import ScoreBreakdown from '../components/ScoreBreakdown';
 import AddToWatchlistButton from '../components/AddToWatchlistButton';
+import ScoreChangeIndicator from '../components/ScoreChangeIndicator';
 
 type Tab = 'overview' | 'charts' | 'fundamentals' | 'score';
 
@@ -112,21 +113,24 @@ export default function StockDetail() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-4xl font-bold text-white">{stock.name}</h1>
-                <p className="text-gray-400 mt-1 flex items-center gap-3">
+                <div className="mt-2 flex items-center gap-3">
                   <span className="text-2xl font-mono text-cyan-400">{stock.ticker}</span>
                   {stock.sector && (
                     <>
                       <span className="text-gray-600">•</span>
-                      <span className="text-sm">{stock.sector}</span>
+                      <span className="text-sm text-gray-400">{stock.sector}</span>
                     </>
                   )}
                   {stock.exchange && (
                     <>
                       <span className="text-gray-600">•</span>
-                      <span className="text-sm">{stock.exchange}</span>
+                      <span className="text-sm text-gray-400">{stock.exchange}</span>
                     </>
                   )}
-                </p>
+                </div>
+                <div className="mt-3">
+                  <ScoreChangeIndicator ticker={stock.ticker} days={7} variant="default" showPercentage={true} />
+                </div>
               </div>
               <div>
                 <AddToWatchlistButton ticker={stock.ticker} variant="default" />

@@ -22,6 +22,7 @@ from app.features.stocks.schemas import (
 from app.features.stocks.services import ScreenerService
 from app.features.stocks.services.sector_service import SectorService
 from app.features.stocks.services.price_data_service import get_price_data_service, PriceDataService
+from app.features.stocks.services.score_tracking_service import ScoreTrackingService
 from app.features.integrations.yahoo_finance_client import get_yahoo_finance_client, YahooFinanceClient
 
 router = APIRouter(prefix="/api/stocks", tags=["stocks"])
@@ -969,4 +970,193 @@ async def get_momentum_score(
         "explanation": explanation,
         "components": details.components,
         "indicators": details.indicators
+    }
+
+
+# ========================
+# Phase 5: Score Change Tracking
+# ========================
+
+@router.post("/scores/snapshot", status_code=status.HTTP_200_OK)
+async def snapshot_all_scores(
+    db: Session = Depends(get_db)
+):
+    """
+    Create a snapshot of current scores for all stocks.
+
+    This endpoint should be run daily (e.g., via cron job) to track score changes over time.
+    It captures the current score and signal for all stocks and stores them in the history table.
+
+    Args:
+        db: Database session
+
+    Returns:
+        Result with count of snapshots created
+    """
+    tracking_service = ScoreTrackingService(db)
+    count = tracking_service.snapshot_all_scores()
+
+    return {
+        "success": True,
+        "snapshots_created": count,
+        "message": f"Successfully created {count} score snapshots."
+    }
+
+
+@router.get("/{ticker}/score-history")
+async def get_score_history(
+    ticker: str,
+    days: int = Query(default=30, le=90, description="Number of days of history"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get historical score data for a stock.
+
+    Returns daily score snapshots for the specified time period, showing how
+    the stock's total score and component scores have changed over time.
+
+    Args:
+        ticker: Stock ticker symbol
+        days: Number of days of history to retrieve (max 90)
+        db: Database session
+
+    Returns:
+        List of historical score records
+
+    Raises:
+        HTTPException: 404 if stock not found
+    """
+    repo = get_stock_repository(db)
+
+    # Verify stock exists
+    stock = repo.get_by_ticker(ticker)
+    if not stock:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Stock with ticker '{ticker}' not found"
+        )
+
+    tracking_service = ScoreTrackingService(db)
+    history = tracking_service.get_score_history(ticker, days=days)
+
+    return {
+        "ticker": ticker,
+        "days": days,
+        "record_count": len(history),
+        "history": history
+    }
+
+
+@router.get("/{ticker}/score-change")
+async def get_score_change(
+    ticker: str,
+    days: int = Query(default=7, description="Number of days to look back"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get score change information for a stock over a specified period.
+
+    Compares the current score with the historical score from N days ago,
+    showing the change in total score and component scores.
+
+    Args:
+        ticker: Stock ticker symbol
+        days: Number of days to look back (1, 7, 30, etc.)
+        db: Database session
+
+    Returns:
+        Score change information including current vs historical scores
+
+    Raises:
+        HTTPException: 404 if stock not found or insufficient historical data
+    """
+    repo = get_stock_repository(db)
+
+    # Verify stock exists
+    stock = repo.get_by_ticker(ticker)
+    if not stock:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Stock with ticker '{ticker}' not found"
+        )
+
+    tracking_service = ScoreTrackingService(db)
+    change = tracking_service.get_score_change(ticker, days=days)
+
+    if not change:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Insufficient historical data for '{ticker}' to calculate {days}-day change"
+        )
+
+    return change
+
+
+@router.get("/score-changes/movers")
+async def get_top_movers(
+    days: int = Query(default=7, description="Number of days to look back"),
+    limit: int = Query(default=10, le=50, description="Number of results"),
+    direction: str = Query(default="up", description="Direction: 'up' for gainers, 'down' for losers"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get stocks with the largest score changes (gainers or losers).
+
+    Returns the top N stocks that had the biggest score increases or decreases
+    over the specified time period.
+
+    Args:
+        days: Number of days to look back
+        limit: Number of results to return
+        direction: "up" for gainers, "down" for losers
+        db: Database session
+
+    Returns:
+        List of top movers with score change details
+
+    Raises:
+        HTTPException: 400 if invalid direction
+    """
+    if direction not in ["up", "down"]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Direction must be 'up' or 'down'"
+        )
+
+    tracking_service = ScoreTrackingService(db)
+    movers = tracking_service.get_top_movers(days=days, limit=limit, direction=direction)
+
+    return {
+        "period_days": days,
+        "direction": direction,
+        "count": len(movers),
+        "movers": movers
+    }
+
+
+@router.get("/score-changes/signals")
+async def get_signal_changes(
+    days: int = Query(default=7, description="Number of days to look back"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get stocks that had signal changes (e.g., HOLD -> BUY).
+
+    Returns all stocks where the buy/sell signal changed over the specified period,
+    which can indicate important shifts in stock quality or momentum.
+
+    Args:
+        days: Number of days to look back
+        db: Database session
+
+    Returns:
+        List of stocks with signal changes
+    """
+    tracking_service = ScoreTrackingService(db)
+    changes = tracking_service.get_signal_changes(days=days)
+
+    return {
+        "period_days": days,
+        "count": len(changes),
+        "signal_changes": changes
     }

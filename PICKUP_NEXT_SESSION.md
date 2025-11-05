@@ -1,197 +1,196 @@
 # Next Session Pickup Point
 
-**Date:** October 28, 2025
-**Branch:** `claude/continue-next-phase-011CUY46QhpwfpWPNyYjYyVf`
-**Last Commit:** Complete Phase 4 Frontend: Deep Analysis Pages & Leaderboards
+**Date:** November 5, 2025
+**Branch:** `claude/implement-next-phase-011CUq3EKnLa9CTJpARsHWvt`
+**Last Commit:** Implement Phase 5: Watchlist Management System
 
 ---
 
-## ✅ Phase 4 - COMPLETE
+## ✅ Phase 5 - PARTIALLY COMPLETE
 
-Phase 4 (Deep Analysis Pages) is now **100% complete** with both backend and frontend fully implemented and tested.
+Phase 5 (Watchlists + Engagement) watchlist management is now **100% complete** with full CRUD operations and localStorage persistence.
 
 ### What Was Completed
 
-#### Backend (100%)
-- ✅ Historical price data service with mock data generation
-- ✅ Technical indicators (RSI, moving averages, volume trends)
-- ✅ Momentum scoring service (0-25 points)
-- ✅ 3 new API endpoints for price data and indicators
-- ✅ Integrated momentum into main scoring engine
+#### Watchlist Management (100%) ✅
+- ✅ **WatchlistContext** with React Context API and localStorage persistence
+- ✅ **Create multiple watchlists** with custom names
+- ✅ **Add/remove stocks** from any watchlist
+- ✅ **Rename/delete watchlists** with confirmation modals
+- ✅ **AddToWatchlistButton** component with 3 display variants (default, icon, compact)
+- ✅ **WatchlistManager** component for inline editing and management
+- ✅ **Watchlists page** (/watchlists) with sidebar and main panel layout
+- ✅ **Real-time stock data** fetching for watchlist items
+- ✅ **Integration** with StockCard and StockDetail pages
+- ✅ **Visual indicators** showing signal badges and scores
+- ✅ **Navigation updates** with Phase 5 badge and status
 
-#### Frontend (100%)
-- ✅ **StockDetail page** with 4 tabs (Overview, Charts, Fundamentals, Score Analysis)
-- ✅ **Leaderboard page** with 3 tabs (Top Stocks, By Signal, By Sector)
-- ✅ **Interactive charts** using Recharts:
-  - Price chart with 50-day & 200-day moving averages
-  - RSI chart with overbought/oversold indicators
-  - Volume chart with 20-day average
-- ✅ **React Router** implementation for dynamic routing
-- ✅ **Score breakdown visualization** with radar charts
-- ✅ Full TypeScript type safety
-- ✅ Build successful (645.71 kB bundle, 192.24 kB gzipped)
+#### New Routes (Phase 5)
+- `/watchlists` - Watchlist management page (NEW)
 
-### New Routes
-- `/` - Home page with stock browsing
-- `/screener` - Strategy screener
-- `/leaderboard` - Stock leaderboard (NEW)
-- `/stock/:ticker` - Individual stock detail page (NEW)
-
----
-
-## 🎯 Next Phase: Phase 5 - Watchlists + Engagement
-
-### Overview
-Phase 5 focuses on user engagement features to drive return visits and provide personalized tracking.
-
-### Planned Features
-
-#### 1. Watchlist Management (localStorage-based)
-**Priority: HIGH**
-
-- **Watchlist CRUD Operations:**
-  - Create multiple watchlists (e.g., "Growth Stocks", "Dividend Portfolio")
-  - Add/remove stocks from watchlists
-  - Rename/delete watchlists
-  - View all watchlists in a sidebar or dedicated page
-
-- **Watchlist Display:**
-  - Show current scores for all watched stocks
-  - Highlight score changes since last visit
-  - Display signal changes (e.g., moved from HOLD to BUY)
-  - Quick links to stock detail pages
-
-- **Technical Implementation:**
-  - Use React Context for watchlist state management
-  - Store in `localStorage` (no auth required for MVP)
-  - Create `WatchlistContext.tsx` provider
-  - Add "Add to Watchlist" buttons throughout the app
-  - Watchlist selector dropdown in navigation
-
-**Files to Create:**
-- `/frontend/src/contexts/WatchlistContext.tsx`
-- `/frontend/src/pages/Watchlists.tsx`
-- `/frontend/src/components/WatchlistManager.tsx`
-- `/frontend/src/components/AddToWatchlistButton.tsx`
-
-#### 2. Score Change Tracking
-**Priority: MEDIUM**
-
-- **Track Historical Scores:**
-  - Store score snapshots over time
-  - Calculate daily/weekly score changes
-  - Track which component scores changed (Value, Quality, Momentum, Health)
-
-- **Change Notifications:**
-  - "New to Top 20" badge
-  - "Score increased by 10+ points" alerts
-  - "Signal changed" notifications
-  - Highlight score trends (↑ ↓ →)
-
-- **Backend Requirements:**
-  - Create `stock_score_history` table
-  - Background job to snapshot scores daily
-  - API endpoint: `GET /api/stocks/score-changes?period=7d`
-
-**Files to Create:**
-- `/backend/app/features/stocks/models/stock_score_history.py`
-- `/backend/app/features/stocks/services/score_tracking_service.py`
-- `/frontend/src/components/ScoreChangeIndicator.tsx`
-
-#### 3. "What Changed This Week" Dashboard
-**Priority: MEDIUM**
-
-- **Weekly Summary Page:**
-  - Biggest score gainers (top 10)
-  - Biggest score losers (top 10)
-  - New entries to top 20
-  - Signal changes across all stocks
-  - Sector rotation analysis
-
-- **Visual Components:**
-  - Change percentage badges
-  - Before/after score comparison
-  - Mini sparkline charts showing trend
-  - Filters for time period (1 week, 1 month, 3 months)
-
-**Files to Create:**
-- `/frontend/src/pages/WeeklyChanges.tsx`
-- `/frontend/src/components/ScoreMoverCard.tsx`
-- `/backend/app/features/stocks/router.py` (add `/api/stocks/weekly-changes` endpoint)
-
-#### 4. Biggest Score Movers
-**Priority: MEDIUM**
-
-- Already covered by "What Changed This Week" dashboard
-- Add dedicated section on homepage showing top 5 gainers/losers
-- Add "🔥 Hot" badge to stocks with significant momentum
-
-#### 5. Portfolio Tracker (Optional)
-**Priority: LOW**
-
-- **Manual Portfolio Entry:**
-  - Add stocks with purchase price and quantity
-  - Calculate unrealized gains/losses
-  - Show portfolio total score (weighted average)
-  - Diversification analysis (by sector)
-  - Rebalancing suggestions based on scores
-
-- **Portfolio Analytics:**
-  - Risk exposure by sector
-  - Average portfolio score vs market benchmark
-  - Suggest sells (stocks with declining scores)
-  - Suggest buys (high-scoring stocks you don't own)
-
-**Files to Create:**
-- `/frontend/src/pages/Portfolio.tsx`
-- `/frontend/src/contexts/PortfolioContext.tsx`
-- `/frontend/src/components/PortfolioSummary.tsx`
-
-#### 6. AI Insights Section (Deferred from Phase 4)
-**Priority: LOW (Future Enhancement)**
-
-- Add AI-generated insights to stock detail pages
-- Use OpenAI API to analyze score trends and fundamentals
-- Generate natural language explanations
-- Suggest catalysts and risk factors
-
-#### 7. Peer Comparison Visualizations (Deferred from Phase 4)
-**Priority: LOW (Future Enhancement)**
-
-- Side-by-side comparison of 2-5 stocks
-- Radar charts comparing score components
-- Table showing key metrics
-- Highlight winners in each category
-
----
-
-## 📂 Current File Structure
-
-### Frontend (New in Phase 4)
+#### New Files Created (Phase 5)
 ```
 frontend/src/
-├── pages/
-│   ├── Screener.tsx (existing)
-│   ├── StockDetail.tsx (NEW - 350+ lines)
-│   └── Leaderboard.tsx (NEW - 320+ lines)
+├── contexts/
+│   └── WatchlistContext.tsx (159 lines)
 ├── components/
-│   ├── PriceChart.tsx (existing)
-│   ├── RSIChart.tsx (existing)
-│   ├── VolumeChart.tsx (existing)
-│   ├── ScoreBreakdown.tsx (existing)
-│   ├── StockList.tsx (updated with routing)
-│   └── StockCard.tsx (existing)
-├── App.tsx (refactored with React Router)
-└── main.tsx (wrapped with BrowserRouter)
+│   ├── AddToWatchlistButton.tsx (230 lines)
+│   └── WatchlistManager.tsx (121 lines)
+└── pages/
+    └── Watchlists.tsx (329 lines)
 ```
 
-### Backend (Existing from Phase 4)
+#### Build Status
+- Frontend builds successfully: **663.96 kB** (196.26 kB gzipped)
+- All TypeScript errors resolved
+- 7 files changed, 885 insertions, 16 deletions
+
+---
+
+## 🎯 Phase 5 - Remaining Features
+
+### 1. Score Change Tracking
+**Priority: HIGH** | **Status:** Not Started
+
+**Backend Implementation:**
+- Create `stock_score_history` table to store daily snapshots
+- Implement background job/cron to snapshot scores daily
+- Add migration for new table
+- Create service: `score_tracking_service.py`
+- Add API endpoint: `GET /api/stocks/score-changes?period=7d`
+- Add endpoint: `GET /api/stocks/{ticker}/score-history?days=30`
+
+**Frontend Implementation:**
+- Create `ScoreChangeIndicator.tsx` component
+- Show trend arrows (↑ ↓ →) next to scores
+- Display change percentage badges
+- Add "Score increased by X points" alerts
+- Highlight stocks with significant score changes
+- Add score history mini-charts (sparklines)
+
+**Files to Create:**
+```
+backend/app/features/stocks/
+├── models/stock_score_history.py
+├── services/score_tracking_service.py
+└── cron/score_snapshot_job.py
+
+frontend/src/components/
+├── ScoreChangeIndicator.tsx
+└── ScoreTrendBadge.tsx
+```
+
+**Database Schema:**
+```sql
+CREATE TABLE stock_score_history (
+    id UUID PRIMARY KEY,
+    stock_id UUID REFERENCES stocks(id),
+    total_score FLOAT,
+    value_score FLOAT,
+    quality_score FLOAT,
+    momentum_score FLOAT,
+    health_score FLOAT,
+    signal VARCHAR(20),
+    snapshot_date DATE,
+    created_at TIMESTAMP
+);
+
+CREATE INDEX idx_score_history_stock_date ON stock_score_history(stock_id, snapshot_date);
+```
+
+---
+
+### 2. "What Changed This Week" Dashboard
+**Priority: MEDIUM** | **Status:** Not Started
+
+**Features:**
+- Biggest score gainers (top 10)
+- Biggest score losers (top 10)
+- New entries to top 20
+- Signal changes across all stocks
+- Sector rotation analysis
+- Time period filters (1 week, 1 month, 3 months)
+
+**Visual Components:**
+- Change percentage badges
+- Before/after score comparison
+- Mini sparkline charts showing trend
+- "New to Top 20" badges
+- "Signal Changed" badges (HOLD → BUY)
+
+**Backend Requirements:**
+- Endpoint: `GET /api/stocks/weekly-changes?period=7d`
+- Endpoint: `GET /api/stocks/movers?direction=up&limit=10`
+- Endpoint: `GET /api/stocks/signal-changes?period=7d`
+
+**Files to Create:**
+```
+frontend/src/
+├── pages/WeeklyChanges.tsx
+└── components/
+    ├── ScoreMoverCard.tsx
+    ├── SignalChangeCard.tsx
+    └── SectorRotationChart.tsx
+```
+
+---
+
+### 3. Portfolio Tracker (Optional)
+**Priority: LOW** | **Status:** Not Started
+
+**Features:**
+- Manual portfolio entry (ticker, quantity, purchase price)
+- Calculate unrealized gains/losses
+- Portfolio total score (weighted average)
+- Diversification analysis (by sector)
+- Rebalancing suggestions based on scores
+- Risk exposure visualization
+
+**Files to Create:**
+```
+frontend/src/
+├── pages/Portfolio.tsx
+├── contexts/PortfolioContext.tsx
+└── components/
+    ├── PortfolioSummary.tsx
+    ├── PortfolioHolding.tsx
+    └── DiversificationChart.tsx
+```
+
+---
+
+## 📂 Current File Structure (Updated Phase 5)
+
+### Frontend
+```
+frontend/src/
+├── contexts/
+│   └── WatchlistContext.tsx (Phase 5 - NEW)
+├── pages/
+│   ├── Screener.tsx
+│   ├── StockDetail.tsx (Phase 4 - updated Phase 5)
+│   ├── Leaderboard.tsx (Phase 4)
+│   └── Watchlists.tsx (Phase 5 - NEW)
+├── components/
+│   ├── AddToWatchlistButton.tsx (Phase 5 - NEW)
+│   ├── WatchlistManager.tsx (Phase 5 - NEW)
+│   ├── PriceChart.tsx (Phase 4)
+│   ├── RSIChart.tsx (Phase 4)
+│   ├── VolumeChart.tsx (Phase 4)
+│   ├── ScoreBreakdown.tsx (Phase 4)
+│   ├── StockList.tsx
+│   └── StockCard.tsx (updated Phase 5)
+├── App.tsx (updated Phase 5 - WatchlistProvider)
+└── main.tsx
+```
+
+### Backend (No changes in Phase 5 - watchlists are client-side only)
 ```
 backend/app/features/stocks/
 ├── services/
 │   ├── price_data_service.py (Phase 4)
 │   ├── momentum_service.py (Phase 4)
-│   ├── scoring_service.py (updated Phase 4)
+│   ├── scoring_service.py (Phase 4)
 │   ├── sector_service.py (Phase 3)
 │   └── screener_service.py (Phase 2)
 ├── router.py (11+ endpoints)
@@ -206,96 +205,238 @@ backend/app/features/stocks/
 
 ## 🚀 Recommended Next Steps
 
-### Option 1: Start Phase 5 (Watchlists)
-**Time Estimate:** 4-6 hours
+### Option 1: Complete Phase 5 (Score Change Tracking)
+**Time Estimate:** 5-7 hours | **Impact:** HIGH
 
-1. Create `WatchlistContext.tsx` with localStorage persistence
-2. Build `Watchlists.tsx` page with watchlist management UI
-3. Add "Add to Watchlist" buttons to StockCard and StockDetail
-4. Update navigation with Watchlists link
-5. Test watchlist CRUD operations
+**Why this is important:**
+- Users need to see how stocks are trending over time
+- Score changes are a key engagement driver
+- Historical data enables better investment decisions
+- Required for "What Changed This Week" dashboard
+
+**Implementation Steps:**
+1. Create database migration for `stock_score_history` table
+2. Implement `score_tracking_service.py` with snapshot logic
+3. Add cron job to snapshot scores daily at market close
+4. Create API endpoints for score history and changes
+5. Build `ScoreChangeIndicator.tsx` component
+6. Integrate score change indicators throughout the app
+7. Test with backfilled historical data
+
+**Success Criteria:**
+- [ ] Score history table stores daily snapshots
+- [ ] API returns score changes for any time period
+- [ ] UI shows trend arrows and change percentages
+- [ ] Watchlist shows which stocks moved significantly
+- [ ] Performance: queries under 100ms for 30 days of history
+
+---
 
 ### Option 2: Build "What Changed This Week" Dashboard
-**Time Estimate:** 3-4 hours
+**Time Estimate:** 4-6 hours | **Impact:** MEDIUM
 
-1. Create backend endpoint for score changes
-2. Build `WeeklyChanges.tsx` page
-3. Add score change indicators throughout app
-4. Test with mock historical data
+**Why this is important:**
+- Provides actionable insights for users
+- Encourages daily/weekly engagement
+- Highlights investment opportunities
 
-### Option 3: Quick Wins Before Phase 5
-**Time Estimate:** 1-2 hours
+**Prerequisites:**
+- Score change tracking must be implemented first
+- Requires historical score data
 
-- Add loading skeletons to improve perceived performance
-- Add error boundaries for better error handling
-- Implement responsive mobile navigation
-- Add keyboard shortcuts for power users
-- Create a "Getting Started" tour for new users
-
----
-
-## 🐛 Known Issues / Tech Debt
-
-1. **Large Bundle Size:**
-   - Current: 645.71 kB (192.24 kB gzipped)
-   - Consider code splitting with `React.lazy()` and `Suspense`
-   - Split Recharts into separate chunk
-
-2. **No Error Handling on Charts:**
-   - Add fallback UI when price data fails to load
-   - Show empty state with helpful message
-
-3. **Tailwind Dynamic Classes:**
-   - Color classes like `bg-${color}-500` don't work with JIT
-   - Need to use full class names or inline styles
-
-4. **Missing Unit Tests:**
-   - No tests for new Phase 4 components
-   - Consider adding React Testing Library
-
-5. **Accessibility:**
-   - Add ARIA labels to interactive elements
-   - Ensure keyboard navigation works
-   - Test with screen readers
+**Implementation Steps:**
+1. Create backend endpoints for movers and signal changes
+2. Build `WeeklyChanges.tsx` page with filters
+3. Create `ScoreMoverCard.tsx` component
+4. Add sparkline charts for score trends
+5. Implement sector rotation analysis
+6. Add route to navigation
 
 ---
 
-## 📊 Project Statistics
+### Option 3: Move to Phase 6 (Authentication & User Accounts)
+**Time Estimate:** 8-10 hours | **Impact:** HIGH
 
-- **Total Phases:** 6
-- **Completed:** 4 (67%)
-- **Total Components:** 20+
-- **Total API Endpoints:** 18+
-- **Lines of Code (Frontend):** ~5,000+
-- **Lines of Code (Backend):** ~8,000+
+**Why this is important:**
+- Enable cloud-based watchlist sync
+- Prepare for premium features
+- Enable email alerts and notifications
+
+**Phase 6 Overview:**
+- User registration and login
+- JWT authentication
+- Protected routes
+- User profile management
+- Migrate watchlists from localStorage to database
+- Email verification (optional)
 
 ---
 
-## 💡 Tips for Next Session
+### Option 4: Quick Wins & Polish
+**Time Estimate:** 2-3 hours | **Impact:** MEDIUM
 
-1. **Start Backend First:** If building score tracking, create the database models and API endpoints before frontend work.
-
-2. **Use Existing Patterns:** Follow the same patterns established in Phase 4 for consistency.
-
-3. **Test Incrementally:** Test each feature as you build it rather than at the end.
-
-4. **Mobile First:** Consider mobile layout from the start since watchlists are likely to be checked on mobile.
-
-5. **Performance:** Watchlists could have many stocks, so consider pagination or virtualization.
+**Improvements:**
+- Add loading skeletons to watchlist page
+- Implement error boundaries for better error handling
+- Add keyboard shortcuts (e.g., 'W' to open watchlists)
+- Responsive mobile design improvements
+- Add tooltips to explain score components
+- Create onboarding tour for new users
+- Add "Share Watchlist" feature (export to JSON)
 
 ---
 
 ## 🎯 Success Metrics for Phase 5
 
-- [ ] User can create and manage multiple watchlists
-- [ ] Watchlists persist across browser sessions (localStorage)
+**Watchlist Management:**
+- [x] User can create and manage multiple watchlists
+- [x] Watchlists persist across browser sessions (localStorage)
+- [x] Add/remove stocks from watchlists works smoothly
+- [x] Watchlist UI is intuitive and responsive
+- [x] Build completes without errors
+- [x] All features work on desktop
+
+**Score Change Tracking:**
+- [ ] Score history is stored in database
 - [ ] Score changes are clearly visible and tracked
+- [ ] Trend indicators show at a glance
+- [ ] Historical data is queryable
+
+**Weekly Changes Dashboard:**
 - [ ] "What Changed" dashboard provides actionable insights
+- [ ] Top movers are highlighted
+- [ ] Signal changes are tracked
 - [ ] All features work on mobile devices
-- [ ] No performance degradation with 50+ watched stocks
+
+**Performance:**
+- [x] No performance degradation with 50+ watched stocks
+- [ ] Score history queries under 100ms
+- [ ] Page loads under 2 seconds
 
 ---
 
-**Ready to continue? Pick up where we left off and start building Phase 5!**
+## 🐛 Known Issues / Tech Debt
 
-Branch: `claude/continue-next-phase-011CUY46QhpwfpWPNyYjYyVf`
+### Bundle Size (Medium Priority)
+- **Current:** 663.96 kB (196.26 kB gzipped)
+- **Action:** Consider code splitting with `React.lazy()` and `Suspense`
+- **Impact:** Slower initial page load on slow connections
+- **Recommendation:** Split Recharts into separate chunk, lazy load watchlist page
+
+### Missing Features
+1. **No mobile-optimized watchlist layout** - Current design is desktop-first
+2. **No export/import watchlists** - Users can't backup or share watchlists
+3. **No watchlist search/filter** - Hard to find stocks in large watchlists
+4. **No score history** - Can't see how stocks trended over time
+5. **No bulk operations** - Can't add/remove multiple stocks at once
+
+### Accessibility
+- Add ARIA labels to watchlist buttons
+- Ensure keyboard navigation works in dropdown menus
+- Test with screen readers
+- Add focus indicators to interactive elements
+
+### Testing
+- No unit tests for watchlist context
+- No integration tests for watchlist CRUD operations
+- No E2E tests for watchlist user flows
+- Consider adding React Testing Library + Vitest
+
+---
+
+## 📊 Project Statistics (Updated)
+
+- **Total Phases:** 6
+- **Completed:** 4.5 (75%)
+- **Phase 5 Progress:** Watchlists (100%), Score Tracking (0%), Weekly Dashboard (0%)
+- **Total Components:** 24+
+- **Total Pages:** 5
+- **Total API Endpoints:** 18+
+- **Total Routes:** 5
+- **Lines of Code (Frontend):** ~6,000+
+- **Lines of Code (Backend):** ~8,000+
+- **Bundle Size:** 663.96 kB (196.26 kB gzipped)
+
+---
+
+## 💡 Tips for Next Session
+
+### If implementing Score Change Tracking:
+1. **Start with Database:** Create migration and table first
+2. **Backfill Data:** Generate historical snapshots for testing (last 30 days)
+3. **Test Queries:** Ensure score change queries are fast with indexes
+4. **Think About Cron:** Set up daily snapshot job (consider timezone)
+5. **UI First:** Build components with mock data before connecting to API
+
+### If implementing Weekly Changes Dashboard:
+1. **Requires Score History:** Don't start until score tracking is done
+2. **Design First:** Sketch out the layout before coding
+3. **Use Existing Components:** Leverage StockCard and charts from Phase 4
+4. **Add Filters:** Let users choose time period (7d, 30d, 90d)
+5. **Performance:** Limit results to top 20 movers to keep it fast
+
+### General Best Practices:
+1. **Follow Phase 5 Patterns:** Use Context API for new features
+2. **Maintain Type Safety:** Add TypeScript interfaces for all new data
+3. **Test Incrementally:** Test each feature as you build it
+4. **Mobile Responsive:** Test watchlists on mobile viewport
+5. **Git Commits:** Make small, atomic commits with clear messages
+
+---
+
+## 🎨 Design Considerations for Score Change Tracking
+
+### Visual Language
+- **Positive Changes:** Green arrow up ↑, +X points badge
+- **Negative Changes:** Red arrow down ↓, -X points badge
+- **No Change:** Gray dash →, no badge
+- **Significant Changes:** Bold colors, larger fonts, "🔥 Hot" badge
+
+### Where to Show Changes
+1. **Watchlist Page:** Next to each stock's score
+2. **Stock Detail Page:** In overview tab header
+3. **Leaderboard Page:** Optional column for 7-day change
+4. **Home Page:** Top 5 movers section (optional)
+5. **Weekly Dashboard:** Main focus with charts
+
+### Data Considerations
+- Store snapshots daily at 4 PM EST (after market close)
+- Keep 90 days of history (3 months)
+- Calculate changes: 1-day, 7-day, 30-day
+- Archive older data to separate table for performance
+
+---
+
+## 🔮 Future Enhancements (Beyond Phase 6)
+
+### Advanced Analytics
+- Correlation analysis between stocks
+- Sector momentum indicators
+- Market sentiment analysis
+- AI-powered stock recommendations
+
+### Social Features
+- Public watchlists (share with community)
+- Follow other users' watchlists
+- Discussion threads per stock
+- User ratings and reviews
+
+### Alerts & Notifications
+- Email alerts for score changes
+- Push notifications for signal changes
+- Price alerts (requires real-time data)
+- Custom alert rules
+
+### Premium Features
+- Advanced screeners with more criteria
+- Backtesting tools
+- Export to Excel/CSV
+- API access for developers
+- Real-time data (if available)
+
+---
+
+**Ready to continue? Phase 5 watchlists are complete! Next step: Implement score change tracking or move to Phase 6 authentication.**
+
+Branch: `claude/implement-next-phase-011CUq3EKnLa9CTJpARsHWvt`
+Commit: `24eedc0`

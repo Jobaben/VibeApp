@@ -6,6 +6,7 @@ import PriceChart from '../components/PriceChart';
 import RSIChart from '../components/RSIChart';
 import VolumeChart from '../components/VolumeChart';
 import ScoreBreakdown from '../components/ScoreBreakdown';
+import AddToWatchlistButton from '../components/AddToWatchlistButton';
 
 type Tab = 'overview' | 'charts' | 'fundamentals' | 'score';
 
@@ -126,6 +127,9 @@ export default function StockDetail() {
                     </>
                   )}
                 </p>
+              </div>
+              <div>
+                <AddToWatchlistButton ticker={stock.ticker} variant="default" />
               </div>
             </div>
 

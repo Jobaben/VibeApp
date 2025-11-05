@@ -3,19 +3,24 @@ import { StockList } from './components/StockList';
 import Screener from './pages/Screener';
 import StockDetail from './pages/StockDetail';
 import Leaderboard from './pages/Leaderboard';
+import Watchlists from './pages/Watchlists';
+import { WatchlistProvider } from './contexts/WatchlistContext';
 
 function App() {
   const location = useLocation();
 
   // Check if we're on a detail page (don't show header/footer)
-  const isDetailPage = location.pathname.startsWith('/stock/') || location.pathname === '/leaderboard';
+  const isDetailPage = location.pathname.startsWith('/stock/') || location.pathname === '/leaderboard' || location.pathname === '/watchlists';
 
   if (isDetailPage) {
     return (
-      <Routes>
-        <Route path="/stock/:ticker" element={<StockDetail />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-      </Routes>
+      <WatchlistProvider>
+        <Routes>
+          <Route path="/stock/:ticker" element={<StockDetail />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/watchlists" element={<Watchlists />} />
+        </Routes>
+      </WatchlistProvider>
     );
   }
 
@@ -23,6 +28,7 @@ function App() {
   const isScreenerPage = location.pathname === '/screener';
 
   return (
+    <WatchlistProvider>
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       {/* Ambient background effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -50,7 +56,7 @@ function App() {
               {/* Status Indicator */}
               <div className="hidden md:flex items-center gap-3 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20">
                 <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-                <span className="text-sm text-green-400 font-medium">Phase 4 Live</span>
+                <span className="text-sm text-green-400 font-medium">Phase 5 Live</span>
               </div>
             </div>
 
@@ -89,6 +95,16 @@ function App() {
                 Leaderboard
                 <span className="px-2 py-0.5 text-xs bg-cyan-400/20 rounded-full border border-cyan-400/30">Phase 4</span>
               </Link>
+              <Link
+                to="/watchlists"
+                className="px-6 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 text-gray-400 hover:text-white hover:bg-gray-800/50"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                </svg>
+                Watchlists
+                <span className="px-2 py-0.5 text-xs bg-green-400/20 rounded-full border border-green-400/30">Phase 5</span>
+              </Link>
             </nav>
           </div>
         </header>
@@ -111,14 +127,15 @@ function App() {
                           </div>
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-white mb-2">Welcome to Phase 4</h3>
+                          <h3 className="text-lg font-semibold text-white mb-2">Welcome to Phase 5</h3>
                           <p className="text-gray-300 text-sm leading-relaxed">
                             Explore stocks with advanced search and filtering, or try the
                             <span className="text-purple-400 font-medium"> Strategy Screener</span> to find opportunities with proven investment criteria.
-                            Check out the new
-                            <span className="text-cyan-400 font-medium"> Leaderboard</span> to see top-performing stocks with
-                            <span className="text-blue-400 font-medium"> interactive charts</span> and
-                            <span className="text-purple-400 font-medium"> deep analysis</span>.
+                            Check out the
+                            <span className="text-cyan-400 font-medium"> Leaderboard</span> for top-performing stocks, and use
+                            <span className="text-green-400 font-medium"> Watchlists</span> to track your favorite stocks with
+                            <span className="text-blue-400 font-medium"> score updates</span> and
+                            <span className="text-purple-400 font-medium"> signal changes</span>.
                           </p>
                         </div>
                       </div>
@@ -146,15 +163,16 @@ function App() {
                 <span className="text-purple-400 font-medium"> AI</span>
               </p>
               <div className="flex items-center gap-4 text-gray-500 text-xs">
-                <span>Phase 4/6</span>
+                <span>Phase 5/6</span>
                 <span>•</span>
-                <span>v1.4.0</span>
+                <span>v1.5.0</span>
               </div>
             </div>
           </div>
         </footer>
       </div>
     </div>
+    </WatchlistProvider>
   );
 }
 

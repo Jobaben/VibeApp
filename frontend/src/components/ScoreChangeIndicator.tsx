@@ -1,30 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpIcon, ArrowDownIcon, MinusIcon } from '@heroicons/react/24/solid';
-
-interface ScoreChange {
-  total_score: number;
-  value_score: number;
-  quality_score: number;
-  momentum_score: number;
-  health_score: number;
-  signal_changed: boolean;
-}
-
-interface ScoreChangeData {
-  ticker: string;
-  period_days: number;
-  current: {
-    total_score: number;
-    signal: string;
-  };
-  historical: {
-    date: string;
-    total_score: number;
-    signal: string;
-  };
-  changes: ScoreChange;
-  percent_change: number;
-}
+import { stockApi } from '../services/api';
+import type { ScoreChangeData } from '../types/stock';
 
 interface ScoreChangeIndicatorProps {
   ticker: string;
@@ -48,22 +25,15 @@ export function ScoreChangeIndicator({
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`http://localhost:8000/api/stocks/${ticker}/score-change?days=${days}`);
-
-        if (!response.ok) {
-          if (response.status === 404) {
-            setError('No historical data');
-            setChangeData(null);
-            return;
-          }
-          throw new Error('Failed to fetch score change');
-        }
-
-        const data = await response.json();
+        const data = await stockApi.getScoreChange(ticker, days);
         setChangeData(data);
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error fetching score change:', err);
-        setError('Failed to load');
+        if (err.response?.status === 404) {
+          setError('No historical data');
+        } else {
+          setError('Failed to load');
+        }
         setChangeData(null);
       } finally {
         setLoading(false);

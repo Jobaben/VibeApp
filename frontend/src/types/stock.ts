@@ -256,3 +256,54 @@ export interface LeaderboardStock {
 export interface SectorLeaderboard {
   [sector: string]: LeaderboardStock[];
 }
+
+// Phase 5: Score Change Tracking
+export interface ScoreChange {
+  total_score: number;
+  value_score: number;
+  quality_score: number;
+  momentum_score: number;
+  health_score: number;
+  signal_changed: boolean;
+}
+
+export interface ScoreChangeData {
+  ticker: string;
+  period_days: number;
+  current: {
+    total_score: number;
+    value_score: number;
+    quality_score: number;
+    momentum_score: number;
+    health_score: number;
+    signal: string;
+  };
+  historical: {
+    date: string;
+    total_score: number;
+    value_score: number;
+    quality_score: number;
+    momentum_score: number;
+    health_score: number;
+    signal: string;
+  };
+  changes: ScoreChange;
+  percent_change: number;
+}
+
+export interface ScoreHistoryPoint {
+  date: string;
+  total_score: number;
+  value_score: number;
+  quality_score: number;
+  momentum_score: number;
+  health_score: number;
+  signal: string;
+}
+
+export interface ScoreHistoryResponse {
+  ticker: string;
+  days: number;
+  record_count: number;
+  history: ScoreHistoryPoint[];
+}

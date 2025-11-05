@@ -12,7 +12,9 @@ import type {
   ScoreBreakdownResponse,
   LeaderboardStock,
   SectorLeaderboard,
-  Signal
+  Signal,
+  ScoreChangeData,
+  ScoreHistoryResponse
 } from '../types/stock';
 
 const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8000/api';
@@ -179,6 +181,24 @@ export const stockApi = {
   // Calculate scores for all stocks (admin/refresh operation)
   calculateAllScores: async (): Promise<{ success: boolean; scored_count: number; message: string }> => {
     const response = await apiClient.post('/stocks/scores/calculate');
+    return response.data;
+  },
+
+  // Phase 5: Score Change Tracking
+
+  // Get score change for a stock over a period
+  getScoreChange: async (ticker: string, days: number = 7): Promise<ScoreChangeData> => {
+    const response = await apiClient.get<ScoreChangeData>(`/stocks/${ticker}/score-change`, {
+      params: { days }
+    });
+    return response.data;
+  },
+
+  // Get historical score data
+  getScoreHistory: async (ticker: string, days: number = 30): Promise<ScoreHistoryResponse> => {
+    const response = await apiClient.get<ScoreHistoryResponse>(`/stocks/${ticker}/score-history`, {
+      params: { days }
+    });
     return response.data;
   },
 };

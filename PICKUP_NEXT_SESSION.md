@@ -6,6 +6,131 @@
 
 ---
 
+## 🚀 RECOMMENDED NEXT STEPS
+
+Phase 5 is now **100% COMPLETE**. Choose one of the following options:
+
+### ⭐ Option 1: Build "What Changed This Week" Dashboard
+**Time Estimate:** 4-6 hours | **Impact:** MEDIUM-HIGH | **Priority:** RECOMMENDED
+
+**Why this is valuable:**
+- Provides actionable insights for users
+- Encourages daily/weekly engagement
+- Highlights investment opportunities
+- Leverages newly built score tracking infrastructure
+
+**What to build:**
+- Create `/weekly-changes` page with:
+  - Biggest score gainers (top 10)
+  - Biggest score losers (top 10)
+  - Stocks with signal changes (HOLD → BUY, etc.)
+  - Sector rotation analysis
+  - Time period filters (7d, 30d, 90d)
+- Visual components:
+  - ScoreMoverCard showing before/after comparison
+  - SignalChangeCard with visual indicators
+  - Sparkline charts showing score trends
+  - "New to Top 20" badges
+
+**Implementation steps:**
+1. Create `WeeklyChanges.tsx` page component
+2. Build `ScoreMoverCard.tsx` component for gainers/losers
+3. Build `SignalChangeCard.tsx` for signal transitions
+4. Add sector rotation visualization
+5. Add time period selector
+6. Add route to navigation
+7. Test with real data
+
+**API endpoints (already available):**
+- `GET /api/stocks/score-changes/movers?direction=up&limit=10`
+- `GET /api/stocks/score-changes/movers?direction=down&limit=10`
+- `GET /api/stocks/score-changes/signals?days=7`
+
+---
+
+### 🔐 Option 2: Move to Phase 6 - Authentication & User Accounts
+**Time Estimate:** 8-10 hours | **Impact:** HIGH | **Priority:** IMPORTANT FOR SCALING
+
+**Why this is important:**
+- Enable cloud-based watchlist sync across devices
+- Prepare for premium features and monetization
+- Enable email alerts and notifications
+- User-specific data and preferences
+
+**Phase 6 Overview:**
+- User registration and login system
+- JWT authentication with secure tokens
+- Protected routes in frontend and backend
+- User profile management
+- Migrate watchlists from localStorage to database
+- Email verification (optional)
+- Password reset functionality
+
+**Implementation steps:**
+1. Create User model and authentication tables
+2. Implement JWT token generation and validation
+3. Add registration and login endpoints
+4. Create login/signup pages in frontend
+5. Implement protected routes
+6. Add user context in frontend
+7. Migrate watchlist storage to database with user_id
+8. Add logout and token refresh
+9. Test authentication flow
+
+**New technologies:**
+- `python-jose` for JWT tokens
+- `passlib` for password hashing
+- `bcrypt` for secure passwords
+
+---
+
+### ⚡ Option 3: Quick Wins & Polish
+**Time Estimate:** 2-3 hours | **Impact:** MEDIUM | **Priority:** GOOD FOR USER EXPERIENCE
+
+**Improvements to implement:**
+1. **Loading Skeletons:** Add to watchlist page and stock cards
+2. **Error Boundaries:** Better error handling throughout app
+3. **Keyboard Shortcuts:**
+   - 'W' to open watchlists
+   - '/' to focus search
+   - Escape to close modals
+4. **Mobile Responsive:**
+   - Improve watchlist layout on mobile
+   - Better navigation for small screens
+5. **Tooltips:** Explain score components and signals
+6. **Onboarding Tour:** Guide new users through features
+7. **Export Watchlists:** Export to JSON/CSV for backup
+8. **Score History Charts:** Add sparklines to show trends
+9. **Performance:** Code splitting with React.lazy()
+10. **Accessibility:** ARIA labels, screen reader support
+
+---
+
+### 📊 Option 4: Advanced Analytics & Visualizations
+**Time Estimate:** 6-8 hours | **Impact:** MEDIUM | **Priority:** NICE TO HAVE
+
+**Features to add:**
+1. **Portfolio Tracker:**
+   - Manual entry of holdings
+   - Calculate gains/losses
+   - Portfolio score (weighted average)
+   - Diversification analysis
+   - Rebalancing suggestions
+
+2. **Sector Analysis:**
+   - Sector performance dashboard
+   - Sector momentum tracking
+   - Correlation heatmaps
+   - Sector rotation indicators
+
+3. **Advanced Charts:**
+   - Multi-stock comparison charts
+   - Score correlation analysis
+   - Historical score overlays on price charts
+   - Volume profile analysis
+
+---
+
 ## ✅ Phase 5 - SCORE TRACKING COMPLETE
 
 Phase 5 (Watchlists + Engagement) is now **COMPLETE** with:

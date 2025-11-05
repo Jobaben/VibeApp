@@ -1,14 +1,18 @@
 # Next Session Pickup Point
 
 **Date:** November 5, 2025
-**Branch:** `claude/implement-next-phase-011CUq3EKnLa9CTJpARsHWvt`
-**Last Commit:** Implement Phase 5: Watchlist Management System
+**Branch:** `claude/continue-next-phase-011CUq53CNmubXnxmgXS4eYo`
+**Last Commit:** Implement Phase 5: Score Change Tracking
 
 ---
 
-## ✅ Phase 5 - PARTIALLY COMPLETE
+## ✅ Phase 5 - SCORE TRACKING COMPLETE
 
-Phase 5 (Watchlists + Engagement) watchlist management is now **100% complete** with full CRUD operations and localStorage persistence.
+Phase 5 (Watchlists + Engagement) is now **COMPLETE** with:
+- ✅ Watchlist management (100%)
+- ✅ Score change tracking (100%)
+
+Score change tracking is fully implemented with backend API, database models, and frontend components.
 
 ### What Was Completed
 
@@ -25,32 +29,56 @@ Phase 5 (Watchlists + Engagement) watchlist management is now **100% complete** 
 - ✅ **Visual indicators** showing signal badges and scores
 - ✅ **Navigation updates** with Phase 5 badge and status
 
+#### Score Change Tracking (100%) ✅
+- ✅ **StockScoreHistory** database model for storing daily score snapshots
+- ✅ **Database migration** for stock_score_history table with indexes
+- ✅ **ScoreTrackingService** with snapshot logic and change calculations
+- ✅ **API endpoints** for score history, score changes, top movers, and signal changes:
+  - `POST /api/stocks/scores/snapshot` - Create daily score snapshots
+  - `GET /api/stocks/{ticker}/score-history` - Get historical score data
+  - `GET /api/stocks/{ticker}/score-change` - Get score change over period
+  - `GET /api/stocks/score-changes/movers` - Get top gainers/losers
+  - `GET /api/stocks/score-changes/signals` - Get stocks with signal changes
+- ✅ **ScoreChangeIndicator** component with 3 display variants (default, compact, detailed)
+- ✅ **Integration** with StockCard, StockDetail, and Watchlists pages
+- ✅ **Visual indicators** showing trend arrows and percentage changes
+
 #### New Routes (Phase 5)
-- `/watchlists` - Watchlist management page (NEW)
+- `/watchlists` - Watchlist management page
 
 #### New Files Created (Phase 5)
 ```
+backend/app/features/stocks/
+├── models/__init__.py (updated - added StockScoreHistory model)
+├── services/
+│   └── score_tracking_service.py (362 lines - NEW)
+├── router.py (updated - added 5 new endpoints)
+└── alembic/versions/
+    └── add_stock_score_history_table.py (57 lines - NEW)
+
 frontend/src/
 ├── contexts/
 │   └── WatchlistContext.tsx (159 lines)
 ├── components/
 │   ├── AddToWatchlistButton.tsx (230 lines)
-│   └── WatchlistManager.tsx (121 lines)
+│   ├── WatchlistManager.tsx (121 lines)
+│   └── ScoreChangeIndicator.tsx (212 lines - NEW)
 └── pages/
-    └── Watchlists.tsx (329 lines)
+    ├── Watchlists.tsx (335 lines - updated)
+    └── StockDetail.tsx (updated)
 ```
 
 #### Build Status
-- Frontend builds successfully: **663.96 kB** (196.26 kB gzipped)
+- Frontend builds successfully: **669.10 kB** (197.44 kB gzipped)
 - All TypeScript errors resolved
-- 7 files changed, 885 insertions, 16 deletions
+- Backend: 13+ files changed, 1400+ insertions
 
 ---
 
 ## 🎯 Phase 5 - Remaining Features
 
 ### 1. Score Change Tracking
-**Priority: HIGH** | **Status:** Not Started
+**Priority: HIGH** | **Status:** ✅ COMPLETE
 
 **Backend Implementation:**
 - Create `stock_score_history` table to store daily snapshots
@@ -297,10 +325,10 @@ backend/app/features/stocks/
 - [x] All features work on desktop
 
 **Score Change Tracking:**
-- [ ] Score history is stored in database
-- [ ] Score changes are clearly visible and tracked
-- [ ] Trend indicators show at a glance
-- [ ] Historical data is queryable
+- [x] Score history is stored in database
+- [x] Score changes are clearly visible and tracked
+- [x] Trend indicators show at a glance
+- [x] Historical data is queryable
 
 **Weekly Changes Dashboard:**
 - [ ] "What Changed" dashboard provides actionable insights

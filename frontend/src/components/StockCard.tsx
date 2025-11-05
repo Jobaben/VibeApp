@@ -1,5 +1,6 @@
 import type { Stock } from '../types/stock';
 import AddToWatchlistButton from './AddToWatchlistButton';
+import ScoreChangeIndicator from './ScoreChangeIndicator';
 
 interface StockCardProps {
   stock: Stock;
@@ -60,7 +61,11 @@ export function StockCard({ stock, onClick }: StockCardProps) {
             <h3 className="text-xl font-bold text-white">{stock.ticker}</h3>
             <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
           </div>
-          <p className="text-sm text-gray-300 line-clamp-2 leading-relaxed">{stock.name}</p>
+          <p className="text-sm text-gray-300 line-clamp-2 leading-relaxed mb-2">{stock.name}</p>
+          {/* Score Change Indicator */}
+          <div onClick={(e) => e.stopPropagation()}>
+            <ScoreChangeIndicator ticker={stock.ticker} days={7} variant="compact" />
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <span className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30 backdrop-blur-sm">

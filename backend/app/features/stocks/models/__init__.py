@@ -63,6 +63,7 @@ class Stock(BaseEntity):
     prices = relationship("StockPrice", back_populates="stock", cascade="all, delete-orphan")
     fundamentals = relationship("StockFundamental", back_populates="stock", uselist=False, cascade="all, delete-orphan")
     scores = relationship("StockScore", back_populates="stock", uselist=False, cascade="all, delete-orphan")
+    score_history = relationship("StockScoreHistory", foreign_keys="[StockScoreHistory.stock_id]", cascade="all, delete-orphan")
     watchlist_items = relationship("WatchlistItem", back_populates="stock", cascade="all, delete-orphan")
 
     # Indexes
@@ -185,6 +186,39 @@ class StockScore(BaseEntity):
         return f"<StockScore(stock_id={self.stock_id}, total={self.total_score}, signal={self.signal})>"
 
 
+class StockScoreHistory(BaseEntity):
+    """Historical snapshots of stock scores for tracking changes over time."""
+
+    __tablename__ = "stock_score_history"
+
+    stock_id = Column(PGUUID(as_uuid=True), ForeignKey("stocks.id", ondelete="CASCADE"), nullable=False)
+    snapshot_date = Column(Date, nullable=False)
+
+    # Overall score (0-100)
+    total_score = Column(Numeric(5, 2), nullable=False)
+
+    # Component scores (0-25 each)
+    value_score = Column(Numeric(5, 2), nullable=False)
+    quality_score = Column(Numeric(5, 2), nullable=False)
+    momentum_score = Column(Numeric(5, 2), nullable=False)
+    health_score = Column(Numeric(5, 2), nullable=False)
+
+    # Signal
+    signal = Column(SQLEnum(Signal), nullable=False)
+
+    # Relationship
+    stock = relationship("Stock", foreign_keys=[stock_id])
+
+    # Indexes
+    __table_args__ = (
+        Index('idx_score_history_stock_date', 'stock_id', 'snapshot_date', unique=True),
+        Index('idx_score_history_date', 'snapshot_date'),
+    )
+
+    def __repr__(self):
+        return f"<StockScoreHistory(stock_id={self.stock_id}, date={self.snapshot_date}, total={self.total_score})>"
+
+
 class SectorAverage(BaseEntity):
     """Cached sector benchmarks for comparison."""
 
@@ -261,6 +295,7 @@ __all__ = [
     "StockPrice",
     "StockFundamental",
     "StockScore",
+    "StockScoreHistory",
     "SectorAverage",
     "Watchlist",
     "WatchlistItem",

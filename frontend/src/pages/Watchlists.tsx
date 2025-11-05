@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useWatchlist } from '../contexts/WatchlistContext';
 import WatchlistManager from '../components/WatchlistManager';
+import ScoreChangeIndicator from '../components/ScoreChangeIndicator';
 import { stockApi } from '../services/api';
 import type { Stock } from '../types/stock';
 
@@ -268,7 +269,7 @@ export default function Watchlists() {
                                   )}
                                 </div>
                                 <div className="text-gray-600 mb-2">{stockData.name}</div>
-                                <div className="flex items-center gap-4 text-sm">
+                                <div className="flex items-center gap-4 text-sm mb-2">
                                   <div>
                                     <span className="text-gray-500">Score:</span>{' '}
                                     <span className="font-semibold text-gray-900">
@@ -287,6 +288,10 @@ export default function Watchlists() {
                                       </span>
                                     </div>
                                   )}
+                                </div>
+                                {/* Score Change Indicator */}
+                                <div className="mt-2">
+                                  <ScoreChangeIndicator ticker={ticker} days={7} variant="compact" />
                                 </div>
                               </div>
 

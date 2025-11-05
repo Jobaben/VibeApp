@@ -307,3 +307,39 @@ export interface ScoreHistoryResponse {
   record_count: number;
   history: ScoreHistoryPoint[];
 }
+
+// Weekly Changes Dashboard Types
+export interface ScoreMover {
+  ticker: string;
+  name: string;
+  sector: string;
+  current_score: number;
+  previous_score: number;
+  change: number;
+  percent_change: number;
+  current_signal: string;
+  previous_signal: string;
+  days: number;
+}
+
+export interface SignalChangeStock {
+  ticker: string;
+  name: string;
+  sector: string;
+  current_score: number;
+  current_signal: string;
+  previous_signal: string;
+  signal_change_date: string;
+  days_ago: number;
+}
+
+export interface MoversResponse {
+  direction: 'up' | 'down';
+  days: number;
+  movers: ScoreMover[];
+}
+
+export interface SignalChangesResponse {
+  days: number;
+  changes: SignalChangeStock[];
+}

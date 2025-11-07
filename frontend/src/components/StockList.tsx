@@ -78,7 +78,7 @@ export function StockList() {
 
   // Handle stock click - navigate to detail page
   const handleStockClick = (stock: Stock) => {
-    navigate(`/stock/${stock.ticker}`);
+    navigate(`/stock/${encodeURIComponent(stock.ticker)}`);
   };
 
   return (

@@ -23,9 +23,11 @@ export function ScoreMoverCard({ mover, rank }: ScoreMoverCardProps) {
 
   const signalChanged = mover.current_signal !== mover.previous_signal;
 
+  const encodedTicker = encodeURIComponent(mover.ticker);
+
   return (
     <Link
-      to={`/stock/${mover.ticker}`}
+      to={`/stock/${encodedTicker}`}
       className={`block p-4 rounded-lg border ${changeBorderColor} ${changeBgColor} hover:bg-opacity-20 transition-all duration-200 hover:scale-[1.02]`}
     >
       <div className="flex items-start justify-between gap-4">

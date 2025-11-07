@@ -142,7 +142,11 @@ export default function Leaderboard() {
               {loading ? (
                 <LoadingSpinner />
               ) : (
-                <StockTable stocks={topStocks} onRowClick={(ticker) => navigate(`/stock/${ticker}`)} showRank />
+                <StockTable
+                  stocks={topStocks}
+                  onRowClick={(ticker) => navigate(`/stock/${encodeURIComponent(ticker)}`)}
+                  showRank
+                />
               )}
             </div>
           )}
@@ -175,7 +179,10 @@ export default function Leaderboard() {
                   <p className="text-gray-400">No stocks found with {signalConfig[selectedSignal].label} signal</p>
                 </div>
               ) : (
-                <StockTable stocks={signalStocks} onRowClick={(ticker) => navigate(`/stock/${ticker}`)} />
+                <StockTable
+                  stocks={signalStocks}
+                  onRowClick={(ticker) => navigate(`/stock/${encodeURIComponent(ticker)}`)}
+                />
               )}
             </div>
           )}
@@ -199,7 +206,7 @@ export default function Leaderboard() {
                       </h3>
                       <StockTable
                         stocks={stocks}
-                        onRowClick={(ticker) => navigate(`/stock/${ticker}`)}
+                        onRowClick={(ticker) => navigate(`/stock/${encodeURIComponent(ticker)}`)}
                         compact
                       />
                     </div>

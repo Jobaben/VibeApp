@@ -253,7 +253,7 @@ export default function Watchlists() {
                               <div className="flex-1">
                                 <div className="flex items-center gap-3 mb-2">
                                   <Link
-                                    to={`/stock/${ticker}`}
+                                    to={`/stock/${encodeURIComponent(ticker)}`}
                                     className="text-xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
                                   >
                                     {ticker}
@@ -297,7 +297,7 @@ export default function Watchlists() {
 
                               <div className="flex items-center gap-3">
                                 <Link
-                                  to={`/stock/${ticker}`}
+                                  to={`/stock/${encodeURIComponent(ticker)}`}
                                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                                 >
                                   View Details

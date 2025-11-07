@@ -14,7 +14,9 @@ import type {
   SectorLeaderboard,
   Signal,
   ScoreChangeData,
-  ScoreHistoryResponse
+  ScoreHistoryResponse,
+  MoversResponse,
+  SignalChangesResponse
 } from '../types/stock';
 
 const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8000/api';
@@ -198,6 +200,22 @@ export const stockApi = {
   getScoreHistory: async (ticker: string, days: number = 30): Promise<ScoreHistoryResponse> => {
     const response = await apiClient.get<ScoreHistoryResponse>(`/stocks/${ticker}/score-history`, {
       params: { days }
+    });
+    return response.data;
+  },
+
+  // Weekly Changes Dashboard - Get top movers (gainers or losers)
+  getScoreMovers: async (direction: 'up' | 'down', days: number = 7, limit: number = 10): Promise<MoversResponse> => {
+    const response = await apiClient.get<MoversResponse>('/stocks/score-changes/movers', {
+      params: { direction, days, limit }
+    });
+    return response.data;
+  },
+
+  // Weekly Changes Dashboard - Get stocks with signal changes
+  getSignalChanges: async (days: number = 7, limit?: number): Promise<SignalChangesResponse> => {
+    const response = await apiClient.get<SignalChangesResponse>('/stocks/score-changes/signals', {
+      params: { days, limit }
     });
     return response.data;
   },

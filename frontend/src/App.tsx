@@ -4,13 +4,14 @@ import Screener from './pages/Screener';
 import StockDetail from './pages/StockDetail';
 import Leaderboard from './pages/Leaderboard';
 import Watchlists from './pages/Watchlists';
+import WeeklyChanges from './pages/WeeklyChanges';
 import { WatchlistProvider } from './contexts/WatchlistContext';
 
 function App() {
   const location = useLocation();
 
   // Check if we're on a detail page (don't show header/footer)
-  const isDetailPage = location.pathname.startsWith('/stock/') || location.pathname === '/leaderboard' || location.pathname === '/watchlists';
+  const isDetailPage = location.pathname.startsWith('/stock/') || location.pathname === '/leaderboard' || location.pathname === '/watchlists' || location.pathname === '/weekly-changes';
 
   if (isDetailPage) {
     return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/stock/:ticker" element={<StockDetail />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/watchlists" element={<Watchlists />} />
+          <Route path="/weekly-changes" element={<WeeklyChanges />} />
         </Routes>
       </WatchlistProvider>
     );
@@ -104,6 +106,16 @@ function App() {
                 </svg>
                 Watchlists
                 <span className="px-2 py-0.5 text-xs bg-green-400/20 rounded-full border border-green-400/30">Phase 5</span>
+              </Link>
+              <Link
+                to="/weekly-changes"
+                className="px-6 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 text-gray-400 hover:text-white hover:bg-gray-800/50"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                </svg>
+                What Changed
+                <span className="px-2 py-0.5 text-xs bg-blue-400/20 rounded-full border border-blue-400/30">NEW</span>
               </Link>
             </nav>
           </div>

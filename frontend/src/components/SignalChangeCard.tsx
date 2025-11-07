@@ -43,7 +43,7 @@ export function SignalChangeCard({ stock }: SignalChangeCardProps) {
 
   return (
     <Link
-      to={`/stocks/${stock.ticker}`}
+      to={`/stock/${stock.ticker}`}
       className={`block p-4 rounded-lg border ${changeType.color} hover:bg-opacity-20 transition-all duration-200 hover:scale-[1.02]`}
     >
       <div className="flex items-start justify-between gap-4">

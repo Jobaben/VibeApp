@@ -25,7 +25,7 @@ export function ScoreMoverCard({ mover, rank }: ScoreMoverCardProps) {
 
   return (
     <Link
-      to={`/stocks/${mover.ticker}`}
+      to={`/stock/${mover.ticker}`}
       className={`block p-4 rounded-lg border ${changeBorderColor} ${changeBgColor} hover:bg-opacity-20 transition-all duration-200 hover:scale-[1.02]`}
     >
       <div className="flex items-start justify-between gap-4">

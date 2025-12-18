@@ -644,6 +644,324 @@
 
 ---
 
+## Phase L8: Enhanced Learning Features (v2.0)
+**Duration:** ~2 weeks | **Priority:** Medium (Post-MVP)
+
+### 8.1 Adaptive Learning System
+- [ ] Create skill pre-assessment quiz (15 questions)
+  - [ ] Questions covering basics, charts, fundamentals, strategies
+  - [ ] Scoring algorithm to determine skill level
+  - [ ] Module unlock recommendations based on score
+- [ ] Implement "Test Out" feature for each module
+  - [ ] Condensed quiz (5 questions) to skip module
+  - [ ] 80% pass rate required
+- [ ] Add adaptive difficulty tracking
+  - [ ] Track weak areas from quiz failures
+  - [ ] Recommend remedial lessons
+  - [ ] Adjust example complexity based on performance
+- [ ] Create `/frontend/src/types/adaptive.ts`
+  - [ ] `AdaptiveLearningState` interface
+  - [ ] `SkillAssessment` interface
+  - [ ] `LearningRecommendation` interface
+
+### 8.2 Spaced Repetition System
+- [ ] Implement review scheduling algorithm
+  - [ ] Calculate next review date based on performance
+  - [ ] Intervals: 1 day → 3 days → 1 week → 2 weeks → 1 month
+- [ ] Create "Daily Review" feature
+  - [ ] 3-5 questions from completed modules
+  - [ ] Prioritize items due for review
+  - [ ] Track retention rates
+- [ ] Add review notifications
+  - [ ] "You have 3 concepts due for review"
+  - [ ] Badge indicator in Learning Mode toggle
+- [ ] Create `/frontend/src/components/learning/DailyReview.tsx`
+- [ ] Update localStorage schema for repetition history
+
+### 8.3 Real-Time Market Integration
+- [ ] Create market event detection system
+  - [ ] Golden/death cross detection
+  - [ ] RSI overbought/oversold alerts
+  - [ ] Unusual volume detection
+  - [ ] Breakout identification
+- [ ] Implement "What's Happening Now" feed
+  - [ ] Real-time learning opportunities
+  - [ ] Link events to relevant lessons
+- [ ] Create market event micro-lessons
+  - [ ] 30-second explanations for each event type
+  - [ ] "See it in action" with live stock
+- [ ] Create `/frontend/src/components/learning/MarketEventFeed.tsx`
+- [ ] Create `/frontend/src/data/learning/market-events.json`
+
+### 8.4 Micro-Learning & Quick Tips
+- [ ] Create "Tip of the Day" system
+  - [ ] 50+ rotating tips
+  - [ ] Show on app open (dismissible)
+  - [ ] Link to full lesson
+- [ ] Create quick reference cards
+  - [ ] Metrics cheat sheet (downloadable)
+  - [ ] Strategy comparison card
+  - [ ] Technical indicators guide
+  - [ ] Decision framework card
+- [ ] Create `/frontend/src/components/learning/TipOfTheDay.tsx`
+- [ ] Create `/frontend/src/components/learning/ReferenceCard.tsx`
+- [ ] Create `/frontend/src/data/learning/tips.json`
+
+### 8.5 Contextual Learning Triggers
+- [ ] Implement trigger system
+  - [ ] First stock view trigger
+  - [ ] Metric hover trigger
+  - [ ] Watchlist add trigger
+  - [ ] Low score view trigger
+- [ ] Create non-intrusive prompt component
+  - [ ] Slide-in notification style
+  - [ ] "Learn more" CTA
+  - [ ] Dismiss permanently option
+- [ ] Create `/frontend/src/components/learning/ContextualPrompt.tsx`
+- [ ] Create `/frontend/src/hooks/useContextualLearning.ts`
+
+### 8.6 Enhanced Gamification
+- [ ] Implement streak system
+  - [ ] Track consecutive days
+  - [ ] Streak rewards at milestones (3, 7, 14, 30, 60 days)
+  - [ ] Streak recovery (1 freeze per week)
+- [ ] Create XP system
+  - [ ] XP for all learning activities
+  - [ ] Level progression (1-50)
+  - [ ] Level-up notifications
+- [ ] Create daily/weekly goals
+  - [ ] Configurable daily lesson goal
+  - [ ] Weekly quiz challenge
+  - [ ] Monthly completion milestones
+- [ ] Create `/frontend/src/components/learning/StreakDisplay.tsx`
+- [ ] Create `/frontend/src/components/learning/XPBar.tsx`
+- [ ] Create `/frontend/src/components/learning/DailyGoals.tsx`
+
+### 8.7 Paper Trading Sandbox
+- [ ] Create virtual portfolio system
+  - [ ] $100,000 starting balance
+  - [ ] Buy/sell mechanics
+  - [ ] Position tracking
+- [ ] Implement performance tracking
+  - [ ] Total return calculation
+  - [ ] Comparison vs market index
+  - [ ] Best/worst trade tracking
+- [ ] Create investment journal
+  - [ ] Record reasoning for each trade
+  - [ ] Review past decisions
+  - [ ] AI feedback on reasoning
+- [ ] Create `/frontend/src/components/learning/PaperTrading.tsx`
+- [ ] Create `/frontend/src/components/learning/VirtualPortfolio.tsx`
+- [ ] Create `/frontend/src/components/learning/TradeJournal.tsx`
+- [ ] Create `/frontend/src/contexts/PaperTradingContext.tsx`
+
+### 8.8 AI-Powered Learning Q&A
+- [ ] Create contextual AI assistant
+  - [ ] "Ask a question" button in lessons
+  - [ ] Context-aware responses
+  - [ ] Stock-specific explanations
+- [ ] Implement question types
+  - [ ] Concept explanations
+  - [ ] Stock analysis questions
+  - [ ] "Why" questions about scores
+- [ ] Create `/frontend/src/components/learning/LearningAI.tsx`
+- [ ] Create `/frontend/src/services/learningAI.ts`
+
+### 8.9 Personalized Examples
+- [ ] Implement watchlist integration for lessons
+  - [ ] Use user's stocks as examples
+  - [ ] Personalized score breakdowns
+  - [ ] Sector-specific content
+- [ ] Track user interests
+  - [ ] Most viewed sectors
+  - [ ] Preferred analysis types
+  - [ ] Customize lesson examples
+- [ ] Create `/frontend/src/hooks/usePersonalizedLearning.ts`
+
+### 8.10 Multiple Learning Paths
+- [ ] Create path selection UI
+  - [ ] Path descriptions and time estimates
+  - [ ] Recommended path based on assessment
+- [ ] Implement path configurations
+  - [ ] Comprehensive (all modules)
+  - [ ] Quick Start (essential modules)
+  - [ ] Technical (chart-focused)
+  - [ ] Fundamental (value-focused)
+  - [ ] Practical (action-oriented)
+- [ ] Create `/frontend/src/components/learning/PathSelector.tsx`
+- [ ] Create `/frontend/src/data/learning/paths.json`
+
+### 8.11 Phase L8 Validation
+- [ ] Adaptive learning adjusts to user performance
+- [ ] Spaced repetition schedules reviews correctly
+- [ ] Market events trigger relevant lessons
+- [ ] Tips display and rotate correctly
+- [ ] Contextual prompts appear appropriately
+- [ ] Streaks and XP track correctly
+- [ ] Paper trading works end-to-end
+- [ ] AI Q&A provides relevant answers
+- [ ] Personalized examples use user data
+- [ ] Learning paths filter content correctly
+
+---
+
+## Phase L9: Money-Making Features
+**Duration:** ~2 weeks | **Priority:** High (Revenue Impact)
+
+### 9.1 AI Trading Assistant
+- [ ] Create AI analysis mode
+  - [ ] Autonomous stock screening
+  - [ ] Daily opportunity alerts
+  - [ ] Risk-adjusted recommendations
+- [ ] Implement trade suggestion system
+  - [ ] Entry point suggestions
+  - [ ] Position size calculator
+  - [ ] Stop-loss recommendations
+  - [ ] Take-profit targets
+- [ ] Create confidence scoring
+  - [ ] AI confidence level (1-100)
+  - [ ] Historical accuracy tracking
+  - [ ] Backtest results display
+- [ ] Create `/frontend/src/components/ai/TradingAssistant.tsx`
+- [ ] Create `/frontend/src/services/aiTrading.ts`
+
+### 9.2 Portfolio Optimization
+- [ ] Implement portfolio analyzer
+  - [ ] Current allocation analysis
+  - [ ] Diversification score
+  - [ ] Risk assessment
+  - [ ] Correlation matrix
+- [ ] Create rebalancing suggestions
+  - [ ] Overweight/underweight alerts
+  - [ ] Sector concentration warnings
+  - [ ] Specific trade recommendations
+- [ ] Implement portfolio simulation
+  - [ ] "What if" scenarios
+  - [ ] Historical performance projection
+  - [ ] Monte Carlo simulation (optional)
+- [ ] Create `/frontend/src/components/portfolio/PortfolioAnalyzer.tsx`
+- [ ] Create `/frontend/src/components/portfolio/RebalanceSuggestions.tsx`
+
+### 9.3 Alert & Notification System
+- [ ] Create price alerts
+  - [ ] Target price notifications
+  - [ ] Percentage change alerts
+  - [ ] Support/resistance breach alerts
+- [ ] Implement score change alerts
+  - [ ] Signal upgrade/downgrade notifications
+  - [ ] Score threshold alerts
+  - [ ] Watchlist score changes
+- [ ] Create technical alerts
+  - [ ] Golden/death cross alerts
+  - [ ] RSI extreme alerts
+  - [ ] Volume spike alerts
+  - [ ] Moving average crossovers
+- [ ] Create `/frontend/src/components/alerts/AlertManager.tsx`
+- [ ] Create `/frontend/src/contexts/AlertContext.tsx`
+- [ ] Backend: Create alert processing service
+
+### 9.4 Opportunity Scanner
+- [ ] Create daily opportunity dashboard
+  - [ ] Top scoring stocks today
+  - [ ] Biggest score improvements
+  - [ ] Upcoming catalysts
+  - [ ] Sector rotation signals
+- [ ] Implement screening presets
+  - [ ] "Best value today"
+  - [ ] "Momentum breakouts"
+  - [ ] "Oversold bounces"
+  - [ ] "Dividend opportunities"
+- [ ] Create opportunity scoring
+  - [ ] Time-sensitive opportunity rating
+  - [ ] Risk/reward ratio calculation
+  - [ ] Confidence level display
+- [ ] Create `/frontend/src/components/scanner/OpportunityScanner.tsx`
+- [ ] Create `/frontend/src/pages/DailyOpportunities.tsx`
+
+### 9.5 Performance Tracking
+- [ ] Create portfolio performance dashboard
+  - [ ] Real-time P&L tracking
+  - [ ] Performance vs benchmarks
+  - [ ] Win rate statistics
+  - [ ] Average return per trade
+- [ ] Implement trade journal
+  - [ ] Automatic trade logging
+  - [ ] Reasoning documentation
+  - [ ] Outcome analysis
+  - [ ] Learning from mistakes
+- [ ] Create performance analytics
+  - [ ] Best/worst performing strategies
+  - [ ] Sector performance breakdown
+  - [ ] Time-based analysis (best days/months)
+- [ ] Create `/frontend/src/components/performance/PerformanceDashboard.tsx`
+- [ ] Create `/frontend/src/components/performance/TradeJournal.tsx`
+
+### 9.6 Risk Management Tools
+- [ ] Create position size calculator
+  - [ ] Risk-based sizing
+  - [ ] Kelly criterion option
+  - [ ] Max portfolio allocation limits
+- [ ] Implement portfolio risk metrics
+  - [ ] Portfolio beta
+  - [ ] Value at Risk (VaR)
+  - [ ] Maximum drawdown tracking
+- [ ] Create risk alerts
+  - [ ] Concentration warnings
+  - [ ] Correlation alerts
+  - [ ] Volatility warnings
+- [ ] Create `/frontend/src/components/risk/PositionSizer.tsx`
+- [ ] Create `/frontend/src/components/risk/RiskDashboard.tsx`
+
+### 9.7 Backtesting System
+- [ ] Create strategy backtester
+  - [ ] Historical performance testing
+  - [ ] Multiple timeframe analysis
+  - [ ] Transaction cost modeling
+- [ ] Implement backtest visualization
+  - [ ] Equity curve display
+  - [ ] Drawdown chart
+  - [ ] Trade distribution histogram
+- [ ] Create strategy comparison
+  - [ ] Side-by-side strategy results
+  - [ ] Risk-adjusted returns (Sharpe, Sortino)
+  - [ ] Win rate and profit factor
+- [ ] Create `/frontend/src/components/backtest/Backtester.tsx`
+- [ ] Create `/frontend/src/services/backtesting.ts`
+- [ ] Backend: Create backtesting API endpoints
+
+### 9.8 AI Mode for Autonomous Operation
+- [ ] Create AI agent interface
+  - [ ] Structured data export for AI consumption
+  - [ ] Action API for AI agents
+  - [ ] Context summary generation
+- [ ] Implement decision explanation system
+  - [ ] Clear reasoning for each recommendation
+  - [ ] Confidence intervals
+  - [ ] Alternative considerations
+- [ ] Create AI-friendly API endpoints
+  - [ ] `/api/ai/analyze/{ticker}`
+  - [ ] `/api/ai/opportunities`
+  - [ ] `/api/ai/portfolio-suggest`
+  - [ ] `/api/ai/execute-screen`
+- [ ] Add AI operation logging
+  - [ ] Track AI decisions
+  - [ ] Performance attribution
+  - [ ] Learning from outcomes
+- [ ] Create `/frontend/src/services/aiAgent.ts`
+- [ ] Backend: Create AI-specific API routes
+
+### 9.9 Phase L9 Validation
+- [ ] AI trading assistant provides actionable suggestions
+- [ ] Portfolio optimizer identifies improvements
+- [ ] Alerts trigger correctly
+- [ ] Opportunity scanner finds relevant stocks
+- [ ] Performance tracking is accurate
+- [ ] Risk tools calculate correctly
+- [ ] Backtester produces valid results
+- [ ] AI mode API is functional
+
+---
+
 ## Summary Statistics
 
 | Phase | Tasks | Duration | Priority |
@@ -655,8 +973,35 @@
 | L5: Quiz | 28 | 1 week | High |
 | L6: Advanced | 30 | 1 week | Medium |
 | L7: Polish | 25 | 1 week | Medium |
-| **Total** | **188** | **7 weeks** | - |
+| **MVP Total** | **188** | **7 weeks** | - |
+| L8: Enhanced Learning | 45 | 2 weeks | Medium |
+| L9: Money-Making | 40 | 2 weeks | High |
+| **Full Total** | **273** | **11 weeks** | - |
 
 ---
 
 **Ready to begin implementation!**
+
+---
+
+## Quick Reference: Priority Implementation Order
+
+For maximum user value, consider this implementation order:
+
+### Immediate Impact (Week 1-7)
+1. **L1-L7**: Complete MVP Learning Mode
+
+### High Revenue Impact (Week 8-9)
+2. **L9.3**: Alert & Notification System - Users need timely information
+3. **L9.4**: Opportunity Scanner - Daily actionable insights
+4. **L9.1**: AI Trading Assistant - Core value proposition
+
+### User Retention (Week 10-11)
+5. **L8.6**: Enhanced Gamification - Streaks and daily goals
+6. **L8.2**: Spaced Repetition - Knowledge retention
+7. **L8.7**: Paper Trading - Safe practice environment
+
+### Advanced Features (Post-Launch)
+8. **L9.7**: Backtesting System
+9. **L9.8**: AI Mode for autonomous operation
+10. **L8.1**: Adaptive Learning

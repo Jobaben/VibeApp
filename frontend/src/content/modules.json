@@ -1,0 +1,389 @@
+{
+  "modules": [
+    {
+      "id": "module-1",
+      "title": "Introduction to Stock Analysis",
+      "description": "Learn the fundamentals of analyzing stocks and understanding investment approaches.",
+      "icon": "BookOpen",
+      "level": "beginner",
+      "estimatedTime": 20,
+      "prerequisites": [],
+      "lessons": [
+        {
+          "id": "lesson-1-1",
+          "moduleId": "module-1",
+          "title": "What is Stock Analysis?",
+          "type": "theory",
+          "order": 1,
+          "estimatedMinutes": 5,
+          "content": {
+            "text": "Stock analysis is the process of evaluating a company's stock to determine if it's a good investment. Think of it as doing your homework before buying something important.\n\nThere are two main goals:\n\n**1. Understanding Value** - Is this stock worth its current price? A great company at the wrong price can still be a poor investment.\n\n**2. Assessing Quality** - Is this a good business? Does it make money consistently? Is it growing?\n\nGood investors don't just follow tips or hunches. They analyze data, understand trends, and make informed decisions. This app helps you do exactly that by providing scores, metrics, and insights on every stock.",
+            "highlights": [
+              {
+                "term": "Stock Analysis",
+                "definition": "The process of evaluating a stock to make investment decisions"
+              },
+              {
+                "term": "Value",
+                "definition": "What the stock is truly worth vs. what people are paying for it"
+              },
+              {
+                "term": "Quality",
+                "definition": "How good the underlying business is at generating profits"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lesson-1-2",
+          "moduleId": "module-1",
+          "title": "Fundamental vs Technical Analysis",
+          "type": "theory",
+          "order": 2,
+          "estimatedMinutes": 5,
+          "content": {
+            "text": "There are two main approaches to stock analysis. Most successful investors use a combination of both.\n\n**Fundamental Analysis** looks at the business itself:\n- How much money does the company make?\n- Is it growing or shrinking?\n- How much debt does it have?\n- Is the stock cheap or expensive compared to earnings?\n\n**Technical Analysis** looks at price patterns:\n- Is the stock trending up or down?\n- When might be a good time to buy or sell?\n- What are other traders doing?\n\nThis app combines both approaches. Our scoring system uses fundamentals to find quality companies, while charts and technical indicators help you time your decisions.",
+            "highlights": [
+              {
+                "term": "Fundamental Analysis",
+                "definition": "Analyzing a company's financial health, earnings, and value"
+              },
+              {
+                "term": "Technical Analysis",
+                "definition": "Studying price patterns and trends to time buy/sell decisions"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lesson-1-3",
+          "moduleId": "module-1",
+          "title": "Tour of the App Interface",
+          "type": "interactive",
+          "order": 3,
+          "estimatedMinutes": 5,
+          "targetPage": "/",
+          "content": {
+            "text": "Let's take a quick tour of the main features in the Avanza Stock Finder.",
+            "tourSteps": [
+              {
+                "targetSelector": "[data-tour='header-nav']",
+                "title": "Navigation Menu",
+                "content": "Use these tabs to switch between Browse Stocks, Strategy Screener, Leaderboard, and Watchlists.",
+                "position": "bottom"
+              },
+              {
+                "targetSelector": "[data-tour='stock-search']",
+                "title": "Stock Search",
+                "content": "Search for any stock by name or ticker symbol. Start typing to see matching results.",
+                "position": "bottom"
+              },
+              {
+                "targetSelector": "[data-tour='sector-filter']",
+                "title": "Sector Filter",
+                "content": "Filter stocks by industry sector to focus on areas you're interested in.",
+                "position": "bottom"
+              },
+              {
+                "targetSelector": "[data-tour='stock-card']",
+                "title": "Stock Cards",
+                "content": "Each card shows a stock's key info: score, signal, and quick metrics. Click to see full details.",
+                "position": "top"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lesson-1-4",
+          "moduleId": "module-1",
+          "title": "Basics Quiz",
+          "type": "quiz",
+          "order": 4,
+          "estimatedMinutes": 5,
+          "content": {
+            "text": "Let's test your understanding of the basics!",
+            "quiz": [
+              {
+                "id": "q1-1",
+                "question": "What is the main goal of stock analysis?",
+                "options": [
+                  { "id": "a", "text": "To predict lottery numbers", "isCorrect": false },
+                  { "id": "b", "text": "To evaluate if a stock is a good investment", "isCorrect": true },
+                  { "id": "c", "text": "To follow what famous investors buy", "isCorrect": false },
+                  { "id": "d", "text": "To buy the cheapest stocks available", "isCorrect": false }
+                ],
+                "explanation": "Stock analysis helps you make informed investment decisions by evaluating a company's value and quality.",
+                "correctExplanation": "Exactly! Stock analysis is about evaluating investments, not guessing or blindly following others.",
+                "incorrectExplanation": "Remember: stock analysis is about making informed decisions by evaluating a company's value and quality."
+              },
+              {
+                "id": "q1-2",
+                "question": "Which type of analysis looks at a company's financial health and earnings?",
+                "options": [
+                  { "id": "a", "text": "Technical Analysis", "isCorrect": false },
+                  { "id": "b", "text": "Fundamental Analysis", "isCorrect": true },
+                  { "id": "c", "text": "Sentimental Analysis", "isCorrect": false },
+                  { "id": "d", "text": "Pattern Analysis", "isCorrect": false }
+                ],
+                "explanation": "Fundamental analysis examines the underlying business - its earnings, debt, growth, and valuation.",
+                "correctExplanation": "Correct! Fundamental analysis focuses on the business itself - revenue, profits, and financial strength.",
+                "incorrectExplanation": "Fundamental analysis looks at the business fundamentals. Technical analysis focuses on price patterns."
+              },
+              {
+                "id": "q1-3",
+                "question": "What does technical analysis primarily study?",
+                "options": [
+                  { "id": "a", "text": "Company earnings reports", "isCorrect": false },
+                  { "id": "b", "text": "CEO interviews", "isCorrect": false },
+                  { "id": "c", "text": "Price patterns and trends", "isCorrect": true },
+                  { "id": "d", "text": "Competitor products", "isCorrect": false }
+                ],
+                "explanation": "Technical analysis uses price charts and indicators to identify trends and timing opportunities.",
+                "correctExplanation": "Right! Technical analysis is all about reading price movements and identifying patterns.",
+                "incorrectExplanation": "Technical analysis studies price charts and patterns, not company fundamentals."
+              },
+              {
+                "id": "q1-4",
+                "question": "A great company at the wrong price can still be a poor investment. True or False?",
+                "options": [
+                  { "id": "a", "text": "True", "isCorrect": true },
+                  { "id": "b", "text": "False", "isCorrect": false }
+                ],
+                "explanation": "Even excellent companies can be overpriced. Smart investors pay attention to both quality AND value.",
+                "correctExplanation": "Correct! Value matters. Even the best company can be a bad investment if you overpay for it.",
+                "incorrectExplanation": "Actually, paying too much for even a great company can lead to poor returns."
+              },
+              {
+                "id": "q1-5",
+                "question": "Most successful investors use:",
+                "options": [
+                  { "id": "a", "text": "Only fundamental analysis", "isCorrect": false },
+                  { "id": "b", "text": "Only technical analysis", "isCorrect": false },
+                  { "id": "c", "text": "A combination of both approaches", "isCorrect": true },
+                  { "id": "d", "text": "Neither - they just guess", "isCorrect": false }
+                ],
+                "explanation": "Combining both approaches gives you a complete picture: fundamentals tell you WHAT to buy, technicals help with WHEN.",
+                "correctExplanation": "Excellent! Using both approaches gives you the most complete analysis framework.",
+                "incorrectExplanation": "The best results come from combining fundamentals (what to buy) with technicals (when to buy)."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "module-2",
+      "title": "Understanding the Dashboard",
+      "description": "Learn how to navigate the app and understand what each metric and feature means.",
+      "icon": "LayoutDashboard",
+      "level": "beginner",
+      "estimatedTime": 15,
+      "prerequisites": ["module-1"],
+      "lessons": [
+        {
+          "id": "lesson-2-1",
+          "moduleId": "module-2",
+          "title": "Navigating Stock Cards",
+          "type": "interactive",
+          "order": 1,
+          "estimatedMinutes": 4,
+          "targetPage": "/",
+          "targetComponent": "StockCard",
+          "content": {
+            "text": "Stock cards are your quick snapshot of each company. Let's learn what each element means.",
+            "tourSteps": [
+              {
+                "targetSelector": "[data-tour='stock-ticker']",
+                "title": "Ticker Symbol",
+                "content": "The unique identifier for each stock. For example, 'AAPL' is Apple, 'TSLA' is Tesla.",
+                "position": "right"
+              },
+              {
+                "targetSelector": "[data-tour='stock-score']",
+                "title": "Total Score",
+                "content": "Our composite score from 0-100 combining value, quality, momentum, and financial health.",
+                "position": "left"
+              },
+              {
+                "targetSelector": "[data-tour='stock-signal']",
+                "title": "Signal Badge",
+                "content": "Quick recommendation: STRONG_BUY, BUY, HOLD, SELL, or STRONG_SELL based on the total score.",
+                "position": "bottom"
+              },
+              {
+                "targetSelector": "[data-tour='stock-sector']",
+                "title": "Sector Tag",
+                "content": "The industry category this company belongs to, like Technology, Healthcare, or Finance.",
+                "position": "top"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lesson-2-2",
+          "moduleId": "module-2",
+          "title": "What Each Metric Means",
+          "type": "theory",
+          "order": 2,
+          "estimatedMinutes": 5,
+          "content": {
+            "text": "Let's break down the key metrics you'll see throughout the app.\n\n**Score (0-100)** - Our overall rating combining four factors:\n- **Value Score**: Is the stock cheap or expensive?\n- **Quality Score**: Is it a profitable, well-run business?\n- **Momentum Score**: Is the stock trending up or down?\n- **Health Score**: Is the company financially stable?\n\n**Signals** translate scores into actions:\n- **STRONG_BUY** (80-100): Excellent across all metrics\n- **BUY** (65-79): Good opportunity with some minor concerns\n- **HOLD** (45-64): Mixed signals, not clearly good or bad\n- **SELL** (30-44): More concerns than positives\n- **STRONG_SELL** (0-29): Significant problems detected\n\n**P/E Ratio** - Price divided by earnings. Lower often means better value.\n\n**ROE** - Return on Equity. Higher means the company is efficient at generating profits.",
+            "highlights": [
+              {
+                "term": "Score",
+                "definition": "Composite rating from 0-100 based on value, quality, momentum, and health"
+              },
+              {
+                "term": "Signal",
+                "definition": "Actionable recommendation from STRONG_BUY to STRONG_SELL"
+              },
+              {
+                "term": "P/E Ratio",
+                "definition": "Price-to-Earnings ratio - how much you pay per dollar of earnings"
+              },
+              {
+                "term": "ROE",
+                "definition": "Return on Equity - how efficiently the company generates profit from shareholder money"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lesson-2-3",
+          "moduleId": "module-2",
+          "title": "Using Search and Filters",
+          "type": "interactive",
+          "order": 3,
+          "estimatedMinutes": 3,
+          "targetPage": "/",
+          "content": {
+            "text": "Learn how to quickly find the stocks you're looking for.",
+            "tourSteps": [
+              {
+                "targetSelector": "[data-tour='stock-search']",
+                "title": "Search Box",
+                "content": "Type a company name or ticker to find it instantly. Try searching for a company you know!",
+                "position": "bottom",
+                "action": "click"
+              },
+              {
+                "targetSelector": "[data-tour='sector-filter']",
+                "title": "Sector Dropdown",
+                "content": "Click to filter by industry sector. Great for focusing on areas you understand.",
+                "position": "bottom"
+              },
+              {
+                "targetSelector": "[data-tour='results-count']",
+                "title": "Results Counter",
+                "content": "Shows how many stocks match your current search and filter criteria.",
+                "position": "left"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lesson-2-4",
+          "moduleId": "module-2",
+          "title": "Find a Stock Exercise",
+          "type": "exercise",
+          "order": 4,
+          "estimatedMinutes": 3,
+          "targetPage": "/",
+          "content": {
+            "text": "Let's practice using the search and filters!",
+            "exercise": {
+              "type": "stock_selection",
+              "instructions": "Use the search or filters to find a stock with a score above 60 in the Technology sector.",
+              "successCriteria": "Find and click on any Technology stock with a score of 60 or higher.",
+              "hints": [
+                "Try filtering by the Technology sector first",
+                "Look for stocks with green score badges (60+)",
+                "Click on the stock card to view its details"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "module-3",
+      "title": "Reading Price Charts",
+      "description": "Master the art of reading and interpreting stock price charts.",
+      "icon": "TrendingUp",
+      "level": "intermediate",
+      "estimatedTime": 30,
+      "prerequisites": ["module-2"],
+      "lessons": []
+    },
+    {
+      "id": "module-4",
+      "title": "Technical Indicators",
+      "description": "Learn to use RSI, moving averages, and volume to time your trades.",
+      "icon": "Activity",
+      "level": "intermediate",
+      "estimatedTime": 25,
+      "prerequisites": ["module-2"],
+      "lessons": []
+    },
+    {
+      "id": "module-5",
+      "title": "The Scoring System",
+      "description": "Deep dive into how our 4-factor scoring system works.",
+      "icon": "Target",
+      "level": "intermediate",
+      "estimatedTime": 25,
+      "prerequisites": ["module-2"],
+      "lessons": []
+    },
+    {
+      "id": "module-6",
+      "title": "Investment Strategies",
+      "description": "Explore different investment strategies from value investing to growth.",
+      "icon": "Lightbulb",
+      "level": "intermediate",
+      "estimatedTime": 30,
+      "prerequisites": ["module-5"],
+      "lessons": []
+    },
+    {
+      "id": "module-7",
+      "title": "Fundamental Analysis Deep Dive",
+      "description": "Advanced fundamental metrics and how to use them.",
+      "icon": "BarChart3",
+      "level": "advanced",
+      "estimatedTime": 35,
+      "prerequisites": ["module-5"],
+      "lessons": []
+    },
+    {
+      "id": "module-8",
+      "title": "Building a Watchlist",
+      "description": "Learn to build and manage an effective watchlist.",
+      "icon": "Star",
+      "level": "intermediate",
+      "estimatedTime": 20,
+      "prerequisites": ["module-2"],
+      "lessons": []
+    },
+    {
+      "id": "module-9",
+      "title": "Making Investment Decisions",
+      "description": "A framework for making sound investment decisions.",
+      "icon": "CheckCircle",
+      "level": "advanced",
+      "estimatedTime": 30,
+      "prerequisites": ["module-5", "module-6"],
+      "lessons": []
+    },
+    {
+      "id": "module-10",
+      "title": "Putting It All Together",
+      "description": "Apply everything you've learned in practical exercises.",
+      "icon": "Award",
+      "level": "mastery",
+      "estimatedTime": 25,
+      "prerequisites": ["module-7", "module-8", "module-9"],
+      "lessons": []
+    }
+  ]
+}

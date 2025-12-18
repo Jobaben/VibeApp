@@ -6,6 +6,8 @@ import Leaderboard from './pages/Leaderboard';
 import Watchlists from './pages/Watchlists';
 import WeeklyChanges from './pages/WeeklyChanges';
 import { WatchlistProvider } from './contexts/WatchlistContext';
+import { LearningModeProvider } from './contexts/LearningModeContext';
+import { LearningModeToggle, LessonSidebar, LessonContent } from './components/learning';
 
 function App() {
   const location = useLocation();
@@ -15,14 +17,19 @@ function App() {
 
   if (isDetailPage) {
     return (
-      <WatchlistProvider>
-        <Routes>
-          <Route path="/stock/:ticker" element={<StockDetail />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/watchlists" element={<Watchlists />} />
-          <Route path="/weekly-changes" element={<WeeklyChanges />} />
-        </Routes>
-      </WatchlistProvider>
+      <LearningModeProvider>
+        <WatchlistProvider>
+          <Routes>
+            <Route path="/stock/:ticker" element={<StockDetail />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/watchlists" element={<Watchlists />} />
+            <Route path="/weekly-changes" element={<WeeklyChanges />} />
+          </Routes>
+          {/* Learning Mode Components */}
+          <LessonSidebar />
+          <LessonContent />
+        </WatchlistProvider>
+      </LearningModeProvider>
     );
   }
 
@@ -30,6 +37,7 @@ function App() {
   const isScreenerPage = location.pathname === '/screener';
 
   return (
+    <LearningModeProvider>
     <WatchlistProvider>
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       {/* Ambient background effects */}
@@ -55,10 +63,16 @@ function App() {
                 </p>
               </div>
 
-              {/* Status Indicator */}
-              <div className="hidden md:flex items-center gap-3 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20">
-                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-                <span className="text-sm text-green-400 font-medium">Phase 5 Live</span>
+              {/* Right side controls */}
+              <div className="flex items-center gap-3">
+                {/* Learning Mode Toggle */}
+                <LearningModeToggle />
+
+                {/* Status Indicator */}
+                <div className="hidden md:flex items-center gap-3 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20">
+                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                  <span className="text-sm text-green-400 font-medium">Phase 5 Live</span>
+                </div>
               </div>
             </div>
 
@@ -184,7 +198,11 @@ function App() {
         </footer>
       </div>
     </div>
+    {/* Learning Mode Components */}
+    <LessonSidebar />
+    <LessonContent />
     </WatchlistProvider>
+    </LearningModeProvider>
   );
 }
 

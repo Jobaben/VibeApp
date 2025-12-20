@@ -1,0 +1,52 @@
+{
+  "id": "dashboard-tour",
+  "title": "Dashboard Tour",
+  "description": "Learn how to navigate the stock dashboard",
+  "relatedLesson": "lesson-2-1",
+  "steps": [
+    {
+      "targetSelector": "[data-tour='welcome-banner']",
+      "title": "Welcome to the Dashboard",
+      "content": "This is the main dashboard where you can browse and discover stocks. Let's walk through the key features.",
+      "position": "bottom"
+    },
+    {
+      "targetSelector": "[data-tour='search-bar']",
+      "title": "Search for Stocks",
+      "content": "Use the search bar to find specific stocks by ticker symbol or company name. Try searching for 'AAPL' or 'Apple'.",
+      "position": "bottom",
+      "action": "click"
+    },
+    {
+      "targetSelector": "[data-tour='sector-filter']",
+      "title": "Filter by Sector",
+      "content": "Filter stocks by sector to focus on specific industries like Technology, Healthcare, or Financial Services.",
+      "position": "bottom"
+    },
+    {
+      "targetSelector": "[data-tour='stock-card']",
+      "title": "Stock Cards",
+      "content": "Each card shows a stock with its ticker, name, sector, and market cap. Click any card to see detailed analysis.",
+      "position": "right",
+      "action": "click"
+    },
+    {
+      "targetSelector": "[data-tour='score-badge']",
+      "title": "Score Badge",
+      "content": "The score badge shows our composite rating (0-100). Higher scores indicate stronger overall investment metrics.",
+      "position": "left"
+    },
+    {
+      "targetSelector": "[data-tour='watchlist-button']",
+      "title": "Add to Watchlist",
+      "content": "Click the bookmark icon to add stocks to your watchlist. You can track your favorite stocks from the Watchlist page.",
+      "position": "left"
+    },
+    {
+      "targetSelector": "[data-tour='pagination']",
+      "title": "Browse More Stocks",
+      "content": "Use pagination to browse through all available stocks. You're ready to explore!",
+      "position": "top"
+    }
+  ]
+}

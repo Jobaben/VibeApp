@@ -1,0 +1,244 @@
+{
+  "metrics": [
+    {
+      "key": "pe_ratio",
+      "name": "P/E Ratio",
+      "shortDescription": "Price-to-Earnings ratio shows how much you pay per dollar of earnings.",
+      "fullDescription": "The Price-to-Earnings ratio divides the stock price by earnings per share. A lower P/E might indicate better value, but context matters - growth companies often have higher P/Es.",
+      "interpretation": {
+        "low": { "threshold": 15, "meaning": "Potentially undervalued or low growth expectations" },
+        "medium": { "meaning": "Fair value based on historical averages" },
+        "high": { "threshold": 25, "meaning": "High growth expectations priced in" }
+      },
+      "relatedLesson": "lesson-7-1"
+    },
+    {
+      "key": "peg_ratio",
+      "name": "PEG Ratio",
+      "shortDescription": "P/E adjusted for growth - Peter Lynch's favorite metric.",
+      "fullDescription": "PEG = P/E divided by growth rate. A PEG under 1.0 suggests the stock may be undervalued relative to its growth. Peter Lynch famously used this to find bargains.",
+      "interpretation": {
+        "low": { "threshold": 1.0, "meaning": "Potentially undervalued relative to growth" },
+        "medium": { "meaning": "Fairly valued considering growth rate" },
+        "high": { "threshold": 2.0, "meaning": "May be overvalued even accounting for growth" }
+      },
+      "relatedLesson": "lesson-7-2"
+    },
+    {
+      "key": "pb_ratio",
+      "name": "P/B Ratio",
+      "shortDescription": "Price-to-Book compares stock price to net asset value.",
+      "fullDescription": "P/B ratio compares market price to book value (assets minus liabilities). Below 1.0 means trading below asset value, though some businesses don't need many assets.",
+      "interpretation": {
+        "low": { "threshold": 1.0, "meaning": "Trading below book value - potential deep value" },
+        "medium": { "meaning": "Trading near book value" },
+        "high": { "threshold": 3.0, "meaning": "Premium to book value - market values intangibles" }
+      },
+      "relatedLesson": "lesson-7-4"
+    },
+    {
+      "key": "roic",
+      "name": "ROIC",
+      "shortDescription": "Return on Invested Capital - Warren Buffett's favorite quality metric.",
+      "fullDescription": "ROIC measures how efficiently a company uses its capital to generate profits. Higher ROIC indicates a competitive advantage. Buffett loves companies with ROIC above 15%.",
+      "interpretation": {
+        "low": { "threshold": 10, "meaning": "Below cost of capital - destroying value" },
+        "medium": { "meaning": "Acceptable returns on capital" },
+        "high": { "threshold": 15, "meaning": "Excellent capital allocation - competitive moat likely" }
+      },
+      "relatedLesson": "lesson-7-3"
+    },
+    {
+      "key": "roe",
+      "name": "ROE",
+      "shortDescription": "Return on Equity measures profit generated from shareholder funds.",
+      "fullDescription": "ROE = Net Income / Shareholder Equity. Shows how effectively the company uses shareholder money. Very high ROE can indicate good management or high debt leverage.",
+      "interpretation": {
+        "low": { "threshold": 10, "meaning": "Below average returns for shareholders" },
+        "medium": { "meaning": "Reasonable returns on equity" },
+        "high": { "threshold": 20, "meaning": "Strong returns - check if driven by debt" }
+      },
+      "relatedLesson": "lesson-7-3"
+    },
+    {
+      "key": "gross_margin",
+      "name": "Gross Margin",
+      "shortDescription": "Percentage of revenue left after production costs.",
+      "fullDescription": "Gross Margin = (Revenue - Cost of Goods Sold) / Revenue. Higher margins indicate pricing power or efficient production. Software companies often have 70%+ margins.",
+      "interpretation": {
+        "low": { "threshold": 20, "meaning": "Thin margins - competitive or commodity business" },
+        "medium": { "meaning": "Average margins for the industry" },
+        "high": { "threshold": 50, "meaning": "Strong pricing power or scalable model" }
+      },
+      "relatedLesson": "lesson-7-5"
+    },
+    {
+      "key": "operating_margin",
+      "name": "Operating Margin",
+      "shortDescription": "Profit from core operations as percentage of revenue.",
+      "fullDescription": "Operating Margin shows what percentage of each sale becomes operating profit after all operating costs. Excludes interest and taxes. Shows operational efficiency.",
+      "interpretation": {
+        "low": { "threshold": 10, "meaning": "Tight margins - limited room for error" },
+        "medium": { "meaning": "Healthy operating efficiency" },
+        "high": { "threshold": 25, "meaning": "Excellent operational leverage" }
+      },
+      "relatedLesson": "lesson-7-5"
+    },
+    {
+      "key": "net_margin",
+      "name": "Net Margin",
+      "shortDescription": "Final profit percentage after all expenses.",
+      "fullDescription": "Net Margin = Net Income / Revenue. The bottom line - what percentage of revenue becomes actual profit for shareholders after all costs, interest, and taxes.",
+      "interpretation": {
+        "low": { "threshold": 5, "meaning": "Razor-thin margins - high risk" },
+        "medium": { "meaning": "Acceptable profitability" },
+        "high": { "threshold": 15, "meaning": "Highly profitable business model" }
+      },
+      "relatedLesson": "lesson-7-5"
+    },
+    {
+      "key": "debt_equity",
+      "name": "Debt/Equity",
+      "shortDescription": "How much debt the company uses relative to equity.",
+      "fullDescription": "Debt/Equity ratio shows financial leverage. Higher means more debt-financed. Some debt is healthy, but too much increases bankruptcy risk, especially in downturns.",
+      "interpretation": {
+        "low": { "threshold": 0.5, "meaning": "Conservative financing - low risk" },
+        "medium": { "meaning": "Moderate leverage - industry standard" },
+        "high": { "threshold": 2.0, "meaning": "High leverage - watch interest coverage" }
+      },
+      "relatedLesson": "lesson-7-4"
+    },
+    {
+      "key": "current_ratio",
+      "name": "Current Ratio",
+      "shortDescription": "Can the company pay its short-term obligations?",
+      "fullDescription": "Current Ratio = Current Assets / Current Liabilities. Above 1.0 means the company can cover short-term debts. Below 1.0 may indicate liquidity problems.",
+      "interpretation": {
+        "low": { "threshold": 1.0, "meaning": "Potential liquidity issues" },
+        "medium": { "meaning": "Adequate liquidity" },
+        "high": { "threshold": 2.0, "meaning": "Strong liquidity position" }
+      },
+      "relatedLesson": "lesson-7-4"
+    },
+    {
+      "key": "fcf_yield",
+      "name": "FCF Yield",
+      "shortDescription": "Free cash flow relative to market cap.",
+      "fullDescription": "Free Cash Flow Yield = FCF / Market Cap. Shows how much real cash the business generates relative to its price. Higher is better - more cash for dividends, buybacks, or growth.",
+      "interpretation": {
+        "low": { "threshold": 3, "meaning": "Low cash generation relative to price" },
+        "medium": { "meaning": "Reasonable cash yield" },
+        "high": { "threshold": 7, "meaning": "Strong cash generation - potential value" }
+      },
+      "relatedLesson": "lesson-7-5"
+    },
+    {
+      "key": "dividend_yield",
+      "name": "Dividend Yield",
+      "shortDescription": "Annual dividend as percentage of stock price.",
+      "fullDescription": "Dividend Yield = Annual Dividends / Stock Price. Shows income return from dividends alone. Very high yields may indicate a struggling company with falling stock price.",
+      "interpretation": {
+        "low": { "threshold": 1.5, "meaning": "Low income but may indicate growth focus" },
+        "medium": { "meaning": "Moderate income stream" },
+        "high": { "threshold": 5, "meaning": "High income - verify sustainability" }
+      },
+      "relatedLesson": "lesson-6-5"
+    },
+    {
+      "key": "rsi",
+      "name": "RSI",
+      "shortDescription": "Relative Strength Index measures momentum and potential reversals.",
+      "fullDescription": "RSI ranges from 0-100. Above 70 is 'overbought' (may pull back). Below 30 is 'oversold' (may bounce). Used for timing, not quality assessment.",
+      "interpretation": {
+        "low": { "threshold": 30, "meaning": "Oversold - potential bounce coming" },
+        "medium": { "meaning": "Neutral momentum" },
+        "high": { "threshold": 70, "meaning": "Overbought - may see pullback" }
+      },
+      "relatedLesson": "lesson-4-1"
+    },
+    {
+      "key": "sma_50",
+      "name": "50-Day Moving Average",
+      "shortDescription": "Average price over the last 50 trading days.",
+      "fullDescription": "The 50-day SMA smooths out daily price noise to show the medium-term trend. Price above the 50-day is generally bullish; below is bearish.",
+      "interpretation": {
+        "low": { "threshold": 0, "meaning": "Price below 50-day - short-term weakness" },
+        "medium": { "meaning": "Price near 50-day average" },
+        "high": { "threshold": 0, "meaning": "Price above 50-day - short-term strength" }
+      },
+      "relatedLesson": "lesson-3-4"
+    },
+    {
+      "key": "sma_200",
+      "name": "200-Day Moving Average",
+      "shortDescription": "Average price over the last 200 trading days.",
+      "fullDescription": "The 200-day SMA shows the long-term trend. Widely watched by institutions. Price above the 200-day indicates a bull market; below indicates a bear market.",
+      "interpretation": {
+        "low": { "threshold": 0, "meaning": "Price below 200-day - long-term downtrend" },
+        "medium": { "meaning": "Price near 200-day - trend inflection" },
+        "high": { "threshold": 0, "meaning": "Price above 200-day - long-term uptrend" }
+      },
+      "relatedLesson": "lesson-3-4"
+    },
+    {
+      "key": "total_score",
+      "name": "Total Score",
+      "shortDescription": "Composite score combining value, quality, momentum, and health.",
+      "fullDescription": "Our 0-100 score combines four factors equally weighted. It provides a quick assessment of overall investment attractiveness based on both fundamentals and technicals.",
+      "interpretation": {
+        "low": { "threshold": 40, "meaning": "Significant concerns - exercise caution" },
+        "medium": { "meaning": "Mixed signals - do more research" },
+        "high": { "threshold": 70, "meaning": "Strong across multiple factors" }
+      },
+      "relatedLesson": "lesson-5-1"
+    },
+    {
+      "key": "value_score",
+      "name": "Value Score",
+      "shortDescription": "How attractively priced is the stock?",
+      "fullDescription": "Value Score assesses whether the stock is cheap or expensive based on P/E, PEG, P/B, and other valuation metrics. Higher means better value relative to fundamentals.",
+      "interpretation": {
+        "low": { "threshold": 40, "meaning": "Potentially overvalued" },
+        "medium": { "meaning": "Fairly valued" },
+        "high": { "threshold": 70, "meaning": "Attractively valued - potential bargain" }
+      },
+      "relatedLesson": "lesson-5-2"
+    },
+    {
+      "key": "quality_score",
+      "name": "Quality Score",
+      "shortDescription": "Is this a high-quality business?",
+      "fullDescription": "Quality Score measures business fundamentals: ROIC, ROE, margins, and consistency. High-quality businesses have competitive moats and generate strong returns.",
+      "interpretation": {
+        "low": { "threshold": 40, "meaning": "Weak business fundamentals" },
+        "medium": { "meaning": "Average business quality" },
+        "high": { "threshold": 70, "meaning": "Excellent business with competitive advantages" }
+      },
+      "relatedLesson": "lesson-5-3"
+    },
+    {
+      "key": "momentum_score",
+      "name": "Momentum Score",
+      "shortDescription": "Is the stock trending up or down?",
+      "fullDescription": "Momentum Score uses technical indicators like RSI, moving averages, and volume trends. Positive momentum often continues in the short term.",
+      "interpretation": {
+        "low": { "threshold": 40, "meaning": "Negative momentum - in a downtrend" },
+        "medium": { "meaning": "Neutral momentum - no clear trend" },
+        "high": { "threshold": 70, "meaning": "Strong positive momentum - trending up" }
+      },
+      "relatedLesson": "lesson-5-4"
+    },
+    {
+      "key": "health_score",
+      "name": "Health Score",
+      "shortDescription": "How financially stable is the company?",
+      "fullDescription": "Health Score evaluates financial stability: debt levels, interest coverage, current ratio, and cash flow. Strong health reduces bankruptcy and crisis risk.",
+      "interpretation": {
+        "low": { "threshold": 40, "meaning": "Financial stress - elevated risk" },
+        "medium": { "meaning": "Adequate financial health" },
+        "high": { "threshold": 70, "meaning": "Strong balance sheet - low financial risk" }
+      },
+      "relatedLesson": "lesson-5-5"
+    }
+  ]
+}

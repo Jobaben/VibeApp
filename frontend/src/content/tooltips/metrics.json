@@ -239,6 +239,78 @@
         "high": { "threshold": 70, "meaning": "Strong balance sheet - low financial risk" }
       },
       "relatedLesson": "lesson-5-5"
+    },
+    {
+      "key": "ev_ebitda",
+      "name": "EV/EBITDA",
+      "shortDescription": "Enterprise value relative to operating earnings.",
+      "fullDescription": "EV/EBITDA compares a company's total value (including debt) to its operating earnings. Lower values may indicate undervaluation. Often used for comparing companies with different capital structures.",
+      "interpretation": {
+        "low": { "threshold": 8, "meaning": "Potentially undervalued - check for quality issues" },
+        "medium": { "meaning": "Fair valuation relative to earnings" },
+        "high": { "threshold": 15, "meaning": "Premium valuation - high expectations" }
+      },
+      "relatedLesson": "lesson-7-1"
+    },
+    {
+      "key": "ps_ratio",
+      "name": "P/S Ratio",
+      "shortDescription": "Price-to-Sales shows valuation relative to revenue.",
+      "fullDescription": "P/S ratio divides market cap by annual revenue. Useful for companies without profits. Lower P/S may indicate undervaluation, but profitability matters more long-term.",
+      "interpretation": {
+        "low": { "threshold": 1, "meaning": "Low valuation relative to sales" },
+        "medium": { "meaning": "Moderate sales multiple" },
+        "high": { "threshold": 5, "meaning": "High premium to sales - need strong growth" }
+      },
+      "relatedLesson": "lesson-7-1"
+    },
+    {
+      "key": "interest_coverage",
+      "name": "Interest Coverage",
+      "shortDescription": "Can the company afford its debt payments?",
+      "fullDescription": "Interest Coverage = EBIT / Interest Expense. Shows how easily a company can pay interest on debt. Higher is safer. Below 1.5 suggests potential debt troubles.",
+      "interpretation": {
+        "low": { "threshold": 2, "meaning": "Tight coverage - debt risk" },
+        "medium": { "meaning": "Adequate interest coverage" },
+        "high": { "threshold": 5, "meaning": "Strong coverage - comfortable debt load" }
+      },
+      "relatedLesson": "lesson-7-4"
+    },
+    {
+      "key": "revenue_growth",
+      "name": "Revenue Growth",
+      "shortDescription": "Year-over-year increase in total sales.",
+      "fullDescription": "Revenue Growth measures how fast the company is growing its top line. Positive growth indicates expanding business, but check if it's profitable growth.",
+      "interpretation": {
+        "low": { "threshold": 5, "meaning": "Slow or declining growth" },
+        "medium": { "meaning": "Moderate growth rate" },
+        "high": { "threshold": 15, "meaning": "Strong growth - verify sustainability" }
+      },
+      "relatedLesson": "lesson-7-5"
+    },
+    {
+      "key": "earnings_growth",
+      "name": "Earnings Growth",
+      "shortDescription": "Year-over-year increase in profits.",
+      "fullDescription": "Earnings Growth shows how fast profits are growing. Sustainable earnings growth drives long-term stock returns. Look for consistent growth over multiple years.",
+      "interpretation": {
+        "low": { "threshold": 5, "meaning": "Slow or declining earnings" },
+        "medium": { "meaning": "Moderate earnings growth" },
+        "high": { "threshold": 15, "meaning": "Strong profit growth" }
+      },
+      "relatedLesson": "lesson-7-5"
+    },
+    {
+      "key": "payout_ratio",
+      "name": "Payout Ratio",
+      "shortDescription": "Percentage of earnings paid as dividends.",
+      "fullDescription": "Payout Ratio = Dividends / Earnings. Shows how much profit goes to shareholders vs. reinvestment. Too high (>80%) may be unsustainable; too low may indicate growth focus.",
+      "interpretation": {
+        "low": { "threshold": 30, "meaning": "Low payout - focus on reinvestment" },
+        "medium": { "meaning": "Balanced dividend and growth" },
+        "high": { "threshold": 70, "meaning": "High payout - verify sustainability" }
+      },
+      "relatedLesson": "lesson-6-5"
     }
   ]
 }

@@ -8,6 +8,7 @@ import VolumeChart from '../components/VolumeChart';
 import ScoreBreakdown from '../components/ScoreBreakdown';
 import AddToWatchlistButton from '../components/AddToWatchlistButton';
 import ScoreChangeIndicator from '../components/ScoreChangeIndicator';
+import { EnhancedMetricCard } from '../components/learning';
 
 type Tab = 'overview' | 'charts' | 'fundamentals' | 'score';
 
@@ -242,19 +243,19 @@ export default function StockDetail() {
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {stock.fundamentals.pe_ratio != null && (
-                    <MetricCard label="P/E Ratio" value={stock.fundamentals.pe_ratio.toFixed(2)} />
+                    <EnhancedMetricCard label="P/E Ratio" value={stock.fundamentals.pe_ratio.toFixed(2)} metricKey="pe_ratio" numericValue={stock.fundamentals.pe_ratio} />
                   )}
                   {stock.fundamentals.pb_ratio != null && (
-                    <MetricCard label="P/B Ratio" value={stock.fundamentals.pb_ratio.toFixed(2)} />
+                    <EnhancedMetricCard label="P/B Ratio" value={stock.fundamentals.pb_ratio.toFixed(2)} metricKey="pb_ratio" numericValue={stock.fundamentals.pb_ratio} />
                   )}
                   {stock.fundamentals.peg_ratio != null && (
-                    <MetricCard label="PEG Ratio" value={stock.fundamentals.peg_ratio.toFixed(2)} />
+                    <EnhancedMetricCard label="PEG Ratio" value={stock.fundamentals.peg_ratio.toFixed(2)} metricKey="peg_ratio" numericValue={stock.fundamentals.peg_ratio} />
                   )}
                   {stock.fundamentals.ev_ebitda != null && (
-                    <MetricCard label="EV/EBITDA" value={stock.fundamentals.ev_ebitda.toFixed(2)} />
+                    <EnhancedMetricCard label="EV/EBITDA" value={stock.fundamentals.ev_ebitda.toFixed(2)} metricKey="ev_ebitda" numericValue={stock.fundamentals.ev_ebitda} />
                   )}
                   {stock.fundamentals.ps_ratio != null && (
-                    <MetricCard label="P/S Ratio" value={stock.fundamentals.ps_ratio.toFixed(2)} />
+                    <EnhancedMetricCard label="P/S Ratio" value={stock.fundamentals.ps_ratio.toFixed(2)} metricKey="ps_ratio" numericValue={stock.fundamentals.ps_ratio} />
                   )}
                 </div>
               </div>
@@ -269,22 +270,22 @@ export default function StockDetail() {
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {stock.fundamentals.roic != null && (
-                    <MetricCard label="ROIC" value={`${stock.fundamentals.roic.toFixed(2)}%`} />
+                    <EnhancedMetricCard label="ROIC" value={`${stock.fundamentals.roic.toFixed(2)}%`} metricKey="roic" numericValue={stock.fundamentals.roic} />
                   )}
                   {stock.fundamentals.roe != null && (
-                    <MetricCard label="ROE" value={`${stock.fundamentals.roe.toFixed(2)}%`} />
+                    <EnhancedMetricCard label="ROE" value={`${stock.fundamentals.roe.toFixed(2)}%`} metricKey="roe" numericValue={stock.fundamentals.roe} />
                   )}
                   {stock.fundamentals.gross_margin != null && (
-                    <MetricCard label="Gross Margin" value={`${stock.fundamentals.gross_margin.toFixed(2)}%`} />
+                    <EnhancedMetricCard label="Gross Margin" value={`${stock.fundamentals.gross_margin.toFixed(2)}%`} metricKey="gross_margin" numericValue={stock.fundamentals.gross_margin} />
                   )}
                   {stock.fundamentals.operating_margin != null && (
-                    <MetricCard label="Operating Margin" value={`${stock.fundamentals.operating_margin.toFixed(2)}%`} />
+                    <EnhancedMetricCard label="Operating Margin" value={`${stock.fundamentals.operating_margin.toFixed(2)}%`} metricKey="operating_margin" numericValue={stock.fundamentals.operating_margin} />
                   )}
                   {stock.fundamentals.net_margin != null && (
-                    <MetricCard label="Net Margin" value={`${stock.fundamentals.net_margin.toFixed(2)}%`} />
+                    <EnhancedMetricCard label="Net Margin" value={`${stock.fundamentals.net_margin.toFixed(2)}%`} metricKey="net_margin" numericValue={stock.fundamentals.net_margin} />
                   )}
                   {stock.fundamentals.fcf_yield != null && (
-                    <MetricCard label="FCF Yield" value={`${stock.fundamentals.fcf_yield.toFixed(2)}%`} />
+                    <EnhancedMetricCard label="FCF Yield" value={`${stock.fundamentals.fcf_yield.toFixed(2)}%`} metricKey="fcf_yield" numericValue={stock.fundamentals.fcf_yield} />
                   )}
                 </div>
               </div>
@@ -299,13 +300,13 @@ export default function StockDetail() {
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {stock.fundamentals.debt_equity != null && (
-                    <MetricCard label="Debt/Equity" value={stock.fundamentals.debt_equity.toFixed(2)} />
+                    <EnhancedMetricCard label="Debt/Equity" value={stock.fundamentals.debt_equity.toFixed(2)} metricKey="debt_equity" numericValue={stock.fundamentals.debt_equity} />
                   )}
                   {stock.fundamentals.current_ratio != null && (
-                    <MetricCard label="Current Ratio" value={stock.fundamentals.current_ratio.toFixed(2)} />
+                    <EnhancedMetricCard label="Current Ratio" value={stock.fundamentals.current_ratio.toFixed(2)} metricKey="current_ratio" numericValue={stock.fundamentals.current_ratio} />
                   )}
                   {stock.fundamentals.interest_coverage != null && (
-                    <MetricCard label="Interest Coverage" value={stock.fundamentals.interest_coverage.toFixed(2)} />
+                    <EnhancedMetricCard label="Interest Coverage" value={stock.fundamentals.interest_coverage.toFixed(2)} metricKey="interest_coverage" numericValue={stock.fundamentals.interest_coverage} />
                   )}
                 </div>
               </div>
@@ -320,16 +321,16 @@ export default function StockDetail() {
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {stock.fundamentals.revenue_growth != null && (
-                    <MetricCard label="Revenue Growth" value={`${stock.fundamentals.revenue_growth.toFixed(2)}%`} />
+                    <EnhancedMetricCard label="Revenue Growth" value={`${stock.fundamentals.revenue_growth.toFixed(2)}%`} metricKey="revenue_growth" numericValue={stock.fundamentals.revenue_growth} />
                   )}
                   {stock.fundamentals.earnings_growth != null && (
-                    <MetricCard label="Earnings Growth" value={`${stock.fundamentals.earnings_growth.toFixed(2)}%`} />
+                    <EnhancedMetricCard label="Earnings Growth" value={`${stock.fundamentals.earnings_growth.toFixed(2)}%`} metricKey="earnings_growth" numericValue={stock.fundamentals.earnings_growth} />
                   )}
                   {stock.fundamentals.dividend_yield != null && (
-                    <MetricCard label="Dividend Yield" value={`${stock.fundamentals.dividend_yield.toFixed(2)}%`} />
+                    <EnhancedMetricCard label="Dividend Yield" value={`${stock.fundamentals.dividend_yield.toFixed(2)}%`} metricKey="dividend_yield" numericValue={stock.fundamentals.dividend_yield} />
                   )}
                   {stock.fundamentals.payout_ratio != null && (
-                    <MetricCard label="Payout Ratio" value={`${stock.fundamentals.payout_ratio.toFixed(2)}%`} />
+                    <EnhancedMetricCard label="Payout Ratio" value={`${stock.fundamentals.payout_ratio.toFixed(2)}%`} metricKey="payout_ratio" numericValue={stock.fundamentals.payout_ratio} />
                   )}
                 </div>
               </div>
@@ -344,16 +345,6 @@ export default function StockDetail() {
           )}
         </main>
       </div>
-    </div>
-  );
-}
-
-// Helper component for metric display
-function MetricCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="bg-gray-700/50 rounded-lg p-3">
-      <p className="text-gray-400 text-xs mb-1">{label}</p>
-      <p className="text-white text-lg font-semibold">{value}</p>
     </div>
   );
 }

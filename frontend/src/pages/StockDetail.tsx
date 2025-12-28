@@ -28,23 +28,43 @@ export default function StockDetail() {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
-      try {
-        // Fetch stock details, score breakdown, and price data in parallel
-        const [stockData, scoreData, pricesData] = await Promise.all([
-          stockApi.getStockByTicker(ticker),
-          stockApi.getScoreBreakdown(ticker, true),
-          stockApi.getHistoricalPrices(ticker, '1y', true),
-        ]);
 
-        setStock(stockData);
-        setScoreBreakdown(scoreData);
-        setPriceData(pricesData);
-      } catch (err: any) {
-        console.error('Error fetching stock data:', err);
-        setError(err.response?.data?.detail || 'Failed to load stock data');
-      } finally {
+      // Fetch all data in parallel using Promise.allSettled for graceful degradation
+      const results = await Promise.allSettled([
+        stockApi.getStockByTicker(ticker),
+        stockApi.getScoreBreakdown(ticker, true),
+        stockApi.getHistoricalPrices(ticker, '1y', true),
+      ]);
+
+      const [stockResult, scoreResult, pricesResult] = results;
+
+      // Stock is required - show error if it fails
+      if (stockResult.status === 'fulfilled') {
+        setStock(stockResult.value);
+      } else {
+        console.error('Failed to fetch stock:', stockResult.reason);
+        setError(stockResult.reason?.response?.data?.detail || 'Failed to load stock data');
         setLoading(false);
+        return;
       }
+
+      // Score breakdown is optional - log warning and continue
+      if (scoreResult.status === 'fulfilled') {
+        setScoreBreakdown(scoreResult.value);
+      } else {
+        console.warn('Failed to fetch score breakdown:', scoreResult.reason);
+        // Continue rendering - score is optional
+      }
+
+      // Price data is optional - log warning and continue
+      if (pricesResult.status === 'fulfilled') {
+        setPriceData(pricesResult.value);
+      } else {
+        console.warn('Failed to fetch price data:', pricesResult.reason);
+        // Continue rendering - prices are optional
+      }
+
+      setLoading(false);
     };
 
     fetchData();
@@ -61,7 +81,7 @@ export default function StockDetail() {
     );
   }
 
-  if (error || !stock || !scoreBreakdown) {
+  if (error || !stock) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center">
         <div className="max-w-md w-full mx-4">
@@ -166,11 +186,18 @@ export default function StockDetail() {
             <div className="space-y-6">
               {/* Quick Stats */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 border border-white/10">
-                  <p className="text-gray-400 text-sm mb-1">Total Score</p>
-                  <p className="text-3xl font-bold text-white">{scoreBreakdown.total_score.toFixed(1)}</p>
-                  <p className="text-xs text-gray-500 mt-1">out of 100</p>
-                </div>
+                {scoreBreakdown ? (
+                  <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                    <p className="text-gray-400 text-sm mb-1">Total Score</p>
+                    <p className="text-3xl font-bold text-white">{scoreBreakdown.total_score.toFixed(1)}</p>
+                    <p className="text-xs text-gray-500 mt-1">out of 100</p>
+                  </div>
+                ) : (
+                  <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                    <p className="text-gray-400 text-sm mb-1">Total Score</p>
+                    <p className="text-lg text-gray-500">Unavailable</p>
+                  </div>
+                )}
                 {stock.market_cap && (
                   <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 border border-white/10">
                     <p className="text-gray-400 text-sm mb-1">Market Cap</p>
@@ -197,41 +224,71 @@ export default function StockDetail() {
               </div>
 
               {/* Score Breakdown */}
-              <ScoreBreakdown breakdown={scoreBreakdown} />
+              {scoreBreakdown ? (
+                <ScoreBreakdown breakdown={scoreBreakdown} />
+              ) : (
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center">
+                  <svg className="w-12 h-12 text-gray-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  <p className="text-gray-400">Score data unavailable</p>
+                  <p className="text-sm text-gray-500 mt-1">Unable to load score breakdown at this time</p>
+                </div>
+              )}
 
               {/* Quick Price Chart */}
-              {priceData && priceData.data.length > 0 && (
+              {priceData && priceData.data.length > 0 ? (
                 <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
                   <h2 className="text-xl font-bold text-white mb-4">Price Chart (1 Year)</h2>
                   <PriceChart data={priceData.data} showMovingAverages={true} height={300} />
+                </div>
+              ) : (
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center">
+                  <svg className="w-12 h-12 text-gray-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                  </svg>
+                  <p className="text-gray-400">Price chart unavailable</p>
+                  <p className="text-sm text-gray-500 mt-1">Unable to load price data at this time</p>
                 </div>
               )}
             </div>
           )}
 
           {/* Charts Tab */}
-          {activeTab === 'charts' && priceData && priceData.data.length > 0 && (
-            <div className="space-y-6">
-              {/* Price Chart */}
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
-                <h2 className="text-xl font-bold text-white mb-4">Price & Moving Averages</h2>
-                <PriceChart data={priceData.data} showMovingAverages={true} height={400} />
-              </div>
+          {activeTab === 'charts' && (
+            priceData && priceData.data.length > 0 ? (
+              <div className="space-y-6">
+                {/* Price Chart */}
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                  <h2 className="text-xl font-bold text-white mb-4">Price & Moving Averages</h2>
+                  <PriceChart data={priceData.data} showMovingAverages={true} height={400} />
+                </div>
 
-              {/* RSI Chart */}
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
-                <RSIChart data={priceData.data} height={250} />
-              </div>
+                {/* RSI Chart */}
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                  <RSIChart data={priceData.data} height={250} />
+                </div>
 
-              {/* Volume Chart */}
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
-                <VolumeChart data={priceData.data} height={250} />
+                {/* Volume Chart */}
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                  <VolumeChart data={priceData.data} height={250} />
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center">
+                <svg className="w-16 h-16 text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                </svg>
+                <h3 className="text-lg font-semibold text-gray-300 mb-2">Charts Unavailable</h3>
+                <p className="text-gray-400">Unable to load price data at this time</p>
+                <p className="text-sm text-gray-500 mt-2">Please try again later</p>
+              </div>
+            )
           )}
 
           {/* Fundamentals Tab */}
-          {activeTab === 'fundamentals' && stock.fundamentals && (
+          {activeTab === 'fundamentals' && (
+            stock.fundamentals ? (
             <div className="space-y-6">
               {/* Valuation Metrics */}
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
@@ -335,12 +392,33 @@ export default function StockDetail() {
                 </div>
               </div>
             </div>
+            ) : (
+              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center">
+                <svg className="w-16 h-16 text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <h3 className="text-lg font-semibold text-gray-300 mb-2">Fundamentals Unavailable</h3>
+                <p className="text-gray-400">Unable to load fundamental data at this time</p>
+                <p className="text-sm text-gray-500 mt-2">Please try again later</p>
+              </div>
+            )
           )}
 
           {/* Score Analysis Tab */}
           {activeTab === 'score' && (
             <div className="space-y-6">
-              <ScoreBreakdown breakdown={scoreBreakdown} />
+              {scoreBreakdown ? (
+                <ScoreBreakdown breakdown={scoreBreakdown} />
+              ) : (
+                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center">
+                  <svg className="w-16 h-16 text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  <h3 className="text-lg font-semibold text-gray-300 mb-2">Score Analysis Unavailable</h3>
+                  <p className="text-gray-400">Unable to load score breakdown at this time</p>
+                  <p className="text-sm text-gray-500 mt-2">Please try again later</p>
+                </div>
+              )}
             </div>
           )}
         </main>

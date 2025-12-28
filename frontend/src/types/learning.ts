@@ -145,6 +145,7 @@ export interface LearningModeContextType {
   // Actions
   toggleLearningMode: () => void;
   toggleSidebar: () => void;
+  closeLesson: () => void;
   startModule: (moduleId: string) => void;
   startLesson: (lessonId: string) => void;
   completeLesson: (lessonId: string, quizScore?: number) => void;

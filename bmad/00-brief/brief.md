@@ -2,81 +2,98 @@
 
 ## Problem Statement
 
-The Learning Mode modal's close button (X icon in top-right corner) does not dismiss the modal. Instead, it toggles the lesson sidebar drawer on/off, leaving the modal permanently displayed. This renders the application unusable once a user opens a lesson, as they cannot return to the main application.
+The GitHub CI pipeline has configuration issues causing potential failures. The primary issue is a **missing ESLint configuration file** for ESLint v9.x, which requires the new flat config format (`eslint.config.js`) but no config file exists in the frontend directory.
 
-**Who has this problem**: All users who engage with the Learning Mode feature.
+**Who has this problem**: Developers and CI/CD pipeline - any PR or push to main/develop branches.
 
 ## Current State
 
-The `LessonContent` modal component (`frontend/src/components/learning/LessonContent.tsx:371-379`) has a close button that calls `toggleSidebar()` instead of closing the lesson modal:
+After running all CI processes locally, the following issues were identified:
 
-```typescript
-<button
-  onClick={toggleSidebar}  // BUG: This toggles sidebar, not the modal
-  className="p-2 text-gray-400 hover:text-white transition-colors"
-  title="Close lesson"
->
+### Critical Issue: ESLint Configuration Missing
+
+**Location**: `frontend/` directory
+
+ESLint 9.x (`^9.15.0`) is installed in `package.json` but there is **no ESLint configuration file** (`eslint.config.js`, `.eslintrc.*`). The CI workflow has a workaround:
+
+```yaml
+run: npm run lint || echo "ESLint config needs migration to v9 format - skipping for now"
+continue-on-error: true
 ```
 
-**Pain Points**:
-- Modal cannot be closed once opened
-- Only workaround is page refresh, losing user context
-- Breaks the entire learning flow experience
-- Users cannot access any other part of the application
+**Error when running `npm run lint`:**
+```
+ESLint: 9.38.0
+ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
+```
 
-**Root Cause**: The `LearningModeContext` provides `toggleSidebar()` but does not expose a dedicated `closeLesson()` function. The context does have internal access to `setCurrentLesson(null)` which would close the modal (line 314), but this is only used within `resetProgress()`.
+### Secondary Issues (Non-blocking due to continue-on-error)
+
+1. **Black formatting** - 35 files would need reformatting
+   - Has `continue-on-error: true` in CI
+
+2. **Mypy type errors** - 12 type errors in 6 files
+   - Missing type annotations
+   - Has `continue-on-error: true` in CI
+
+### What Works
+
+| CI Job | Status | Notes |
+|--------|--------|-------|
+| Backend Tests (pytest) | PASS | 241 tests pass |
+| Backend Linting (flake8) | PASS | No critical errors |
+| Frontend Build | PASS | Builds successfully |
+| TypeScript Check | PASS | No errors |
+| Integration Tests | PASS | All pass |
 
 ## Desired Outcome
 
-The close button (X) on the LessonContent modal should:
-1. Close the lesson modal and return user to the main application
-2. Optionally keep the sidebar open so users can select another lesson
-3. Preserve lesson progress (do not reset progress on close)
+1. Create a proper ESLint flat config (`eslint.config.js`) for the frontend
+2. Remove the workaround from CI workflow
+3. Optionally: Fix Black formatting and Mypy type errors
 
-**Measurement**: User can open a lesson, click the X button, and be returned to the normal application view without losing any progress or needing to refresh.
+**Measurement**: CI pipeline runs green on all jobs without `continue-on-error` workarounds.
 
 ## Scope
 
 ### In Scope
-- Fix the close button handler in `LessonContent.tsx`
-- Add a `closeLesson()` function to `LearningModeContext` if needed
-- Ensure modal closes properly without side effects
+- Create `eslint.config.js` with proper React/TypeScript configuration
+- Update CI workflow to remove ESLint workaround
+- Test that CI passes
 
 ### Out of Scope
-- Redesigning the learning mode UI
-- Adding keyboard shortcuts (Escape key) - future enhancement
-- Changing sidebar behavior
-- Adding confirmation dialogs
+- Fixing all Black formatting issues (can be done separately)
+- Fixing all Mypy type errors (can be done separately)
+- Upgrading dependencies
 
 ## Stakeholders
 
 | Stakeholder | Interest |
 |-------------|----------|
-| End Users | Need functional close button to use the app |
-| Product | Learning mode is a key feature that must work |
-| Dev Team | Simple fix with clear scope |
+| Developers | Need clean CI feedback on code quality |
+| DevOps | Need reliable CI pipeline |
+| Code Reviewers | Need linting to catch issues |
 
 ## Constraints
 
-- **Technical**: Fix must maintain existing learning progress persistence
-- **UX**: Close behavior should be intuitive (X closes modal, not something else)
-- **Code**: Should follow existing patterns in the codebase
+- **Technical**: Must use ESLint 9.x flat config format
+- **Compatibility**: Config must work with existing React/TypeScript setup
+- **CI**: Should not break existing passing tests
 
 ## Risks
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| Breaking sidebar toggle | Low | Medium | Test sidebar still works after fix |
-| Progress loss on close | Low | High | Ensure closeLesson() doesn't call resetProgress() |
-| State desync | Low | Medium | Verify currentLesson null state is handled |
+| ESLint config breaks existing code | Low | Medium | Use relaxed rules initially |
+| CI timeout with new checks | Low | Low | Monitor CI run times |
+| Breaking TypeScript integration | Low | Medium | Test locally first |
 
 ## Success Criteria
 
-- [ ] Clicking X button on LessonContent modal closes the modal
-- [ ] Sidebar remains accessible after closing lesson modal
-- [ ] User progress is preserved when closing modal
-- [ ] User can re-open lessons after closing
-- [ ] No console errors or state desync issues
+- [ ] `eslint.config.js` exists in frontend directory
+- [ ] `npm run lint` runs without errors about missing config
+- [ ] CI workflow ESLint step passes without workaround
+- [ ] No new linting errors block the build
 
 ---
 ## Checklist

@@ -17,8 +17,9 @@ class TestListStocksEndpoint:
         data = response.json()
         assert data["items"] == []
         assert data["total"] == 0
-        assert data["skip"] == 0
-        assert data["has_more"] is False
+        assert data["page"] == 1
+        assert data["page_size"] == 12
+        assert data["total_pages"] == 0
 
     def test_list_stocks_with_data(self, client, test_db):
         """Test listing stocks with data."""
@@ -46,17 +47,20 @@ class TestListStocksEndpoint:
         test_db.commit()
 
         # Get first page
-        response = client.get("/api/stocks/?skip=0&limit=5")
+        response = client.get("/api/stocks/?page=1&page_size=5")
         data = response.json()
         assert len(data["items"]) == 5
         assert data["total"] == 10
-        assert data["has_more"] is True
+        assert data["page"] == 1
+        assert data["page_size"] == 5
+        assert data["total_pages"] == 2
 
         # Get second page
-        response = client.get("/api/stocks/?skip=5&limit=5")
+        response = client.get("/api/stocks/?page=2&page_size=5")
         data = response.json()
         assert len(data["items"]) == 5
-        assert data["has_more"] is False
+        assert data["page"] == 2
+        assert data["total_pages"] == 2
 
     def test_list_stocks_filter_by_instrument_type(self, client, test_db):
         """Test filtering by instrument type."""
@@ -88,14 +92,14 @@ class TestListStocksEndpoint:
         assert len(data["items"]) == 2
         assert data["total"] == 2
 
-    def test_list_stocks_invalid_skip(self, client):
-        """Test validation of skip parameter."""
-        response = client.get("/api/stocks/?skip=-1")
+    def test_list_stocks_invalid_page(self, client):
+        """Test validation of page parameter."""
+        response = client.get("/api/stocks/?page=0")
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    def test_list_stocks_invalid_limit(self, client):
-        """Test validation of limit parameter."""
-        response = client.get("/api/stocks/?limit=1001")
+    def test_list_stocks_invalid_page_size(self, client):
+        """Test validation of page_size parameter."""
+        response = client.get("/api/stocks/?page_size=101")
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
@@ -343,17 +347,19 @@ class TestStockEndpointsValidation:
 class TestStockEndpointsEdgeCases:
     """Test edge cases and boundary conditions."""
 
-    def test_list_stocks_skip_beyond_total(self, client, test_db):
-        """Test pagination skip beyond total records."""
+    def test_list_stocks_page_beyond_total(self, client, test_db):
+        """Test pagination page beyond total records."""
         stock = Stock(ticker="AAPL", name="Apple Inc.")
         test_db.add(stock)
         test_db.commit()
 
-        response = client.get("/api/stocks/?skip=100")
+        response = client.get("/api/stocks/?page=100")
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
         assert data["items"] == []
         assert data["total"] == 1
+        assert data["page"] == 100
+        assert data["total_pages"] == 1
 
     def test_search_special_characters(self, client, test_db):
         """Test search with special characters."""
@@ -400,9 +406,9 @@ class TestStockEndpointsResponseFormat:
         # Check pagination fields
         assert "items" in data
         assert "total" in data
-        assert "skip" in data
-        assert "limit" in data
-        assert "has_more" in data
+        assert "page" in data
+        assert "page_size" in data
+        assert "total_pages" in data
 
         # Check stock item fields
         stock_item = data["items"][0]

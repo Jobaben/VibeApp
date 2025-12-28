@@ -147,9 +147,9 @@ class StockListPaginatedResponse(BaseModel):
     """Paginated stock list response."""
     items: List[StockListResponse]
     total: int
-    skip: int
-    limit: int
-    has_more: bool
+    page: int
+    page_size: int
+    total_pages: int
 
     model_config = ConfigDict(from_attributes=True)
 

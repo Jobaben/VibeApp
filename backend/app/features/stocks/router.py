@@ -30,8 +30,8 @@ router = APIRouter(prefix="/api/stocks", tags=["stocks"])
 
 @router.get("/", response_model=StockListPaginatedResponse)
 async def list_stocks(
-    skip: int = Query(default=0, ge=0, description="Number of records to skip"),
-    limit: int = Query(default=100, le=1000, description="Maximum number of records"),
+    page: int = Query(default=1, ge=1, description="Page number (1-indexed)"),
+    page_size: int = Query(default=12, le=100, description="Number of items per page"),
     instrument_type: Optional[InstrumentType] = Query(default=None, description="Filter by instrument type"),
     sector: Optional[str] = Query(default=None, description="Filter by sector"),
     db: Session = Depends(get_db)
@@ -40,8 +40,8 @@ async def list_stocks(
     List all stocks with pagination and optional filtering.
 
     Args:
-        skip: Number of records to skip (for pagination)
-        limit: Maximum number of records to return
+        page: Page number (1-indexed)
+        page_size: Number of items per page
         instrument_type: Filter by instrument type (STOCK, FUND, ETF, etc.)
         sector: Filter by sector
         db: Database session
@@ -51,10 +51,13 @@ async def list_stocks(
     """
     repo = get_stock_repository(db)
 
+    # Convert page-based to offset-based pagination
+    skip = (page - 1) * page_size
+
     # Get stocks
     stocks = repo.get_all(
         skip=skip,
-        limit=limit,
+        limit=page_size,
         instrument_type=instrument_type,
         sector=sector
     )
@@ -62,12 +65,15 @@ async def list_stocks(
     # Get total count
     total = repo.count(instrument_type=instrument_type, sector=sector)
 
+    # Calculate total pages (ceiling division)
+    total_pages = (total + page_size - 1) // page_size if total > 0 else 0
+
     return StockListPaginatedResponse(
         items=stocks,
         total=total,
-        skip=skip,
-        limit=limit,
-        has_more=(skip + len(stocks)) < total
+        page=page,
+        page_size=page_size,
+        total_pages=total_pages
     )
 
 

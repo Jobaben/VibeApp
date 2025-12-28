@@ -3,29 +3,33 @@
 ## Overview
 
 ### Problem Summary
+Users clicking on stock cards are navigated to a blank white page instead of seeing the expected stock detail view with charts, scores, and fundamental data. This blocks a core user journey in the application.
 
-The Learning Mode modal cannot be closed once opened. The close button (X) incorrectly toggles the sidebar instead of dismissing the modal, rendering the application unusable until the page is refreshed.
-
-Reference: [Brief](../00-brief/brief.md)
+**Source**: [Brief](../00-brief/brief.md)
 
 ### Product Vision
-
-Provide users with a functional, intuitive close mechanism for the Learning Mode lesson modal that allows them to exit a lesson and return to the main application without losing progress or needing to refresh the page.
+Restore and ensure reliable stock detail page functionality so users can seamlessly view comprehensive stock information (overview, charts, fundamentals, and scoring) when clicking any stock card in the application.
 
 ## User Personas
 
-### Primary: Learning User
+### Persona 1: Retail Investor
+- **Description**: Individual investor researching stocks for personal portfolio
+- **Goals**:
+  - View detailed stock information quickly
+  - Analyze price history and trends
+  - Understand stock scores and fundamentals
+- **Pain Points**:
+  - Cannot access stock details - sees blank white page
+  - Core research workflow is completely blocked
 
-- **Who**: Any user engaging with the Learning Mode feature
-- **Goal**: Learn app features through interactive lessons
-- **Need**: Ability to exit a lesson at any time to return to main app functionality
-- **Frustration**: Currently trapped in modal with no escape except page refresh
-
-### Secondary: Returning Learner
-
-- **Who**: User who partially completed a lesson and wants to close and return later
-- **Goal**: Close lesson, do other tasks, reopen later without losing progress
-- **Need**: Progress preserved on modal close
+### Persona 2: Casual Browser
+- **Description**: User exploring stocks casually without investment intent
+- **Goals**:
+  - Browse and learn about different stocks
+  - Compare stock performance
+- **Pain Points**:
+  - App appears broken when clicking stock cards
+  - Poor user experience diminishes trust in platform
 
 ## Requirements
 
@@ -33,74 +37,88 @@ Provide users with a functional, intuitive close mechanism for the Learning Mode
 
 | ID | Requirement | Priority | Notes |
 |----|-------------|----------|-------|
-| FR-01 | Close button (X) on lesson modal must dismiss the modal | Must Have | Core fix |
-| FR-02 | Closing modal must not affect sidebar open/closed state | Must Have | Sidebar behavior independent |
-| FR-03 | User progress must be preserved when closing modal | Must Have | No data loss |
-| FR-04 | User must be able to reopen the same lesson after closing | Must Have | Continuity |
-| FR-05 | User must be able to select a different lesson after closing | Should Have | Navigation flow |
+| FR-01 | Stock card click navigates to stock detail page | Critical | Currently broken - shows blank white page |
+| FR-02 | Stock detail page displays stock overview information | Critical | Name, ticker, current price, daily change |
+| FR-03 | Stock detail page displays score breakdown | High | Vibe score components and analysis |
+| FR-04 | Stock detail page displays historical price chart | High | Interactive chart with price history |
+| FR-05 | Stock detail page shows loading state during data fetch | High | Spinner with dark background (not white) |
+| FR-06 | Stock detail page shows error state on API failure | High | Friendly error message with "Back to Home" button |
+| FR-07 | All tabs (Overview, Charts, Fundamentals, Score) are functional | High | Tab navigation works correctly |
 
 ### Non-Functional Requirements
 
 | ID | Requirement | Priority | Notes |
 |----|-------------|----------|-------|
-| NFR-01 | Close action must respond immediately (<100ms perceived) | Must Have | UX responsiveness |
-| NFR-02 | No console errors on close action | Must Have | Code quality |
-| NFR-03 | Close behavior must be consistent with standard modal patterns (X = close) | Must Have | UX convention |
-| NFR-04 | Fix must not introduce regressions in existing learning mode functionality | Must Have | Stability |
+| NFR-01 | Page load time < 2 seconds on standard connection | High | Including API response time |
+| NFR-02 | Graceful degradation on partial API failure | Medium | Show available data if some endpoints fail |
+| NFR-03 | No JavaScript errors in browser console | Critical | React must not crash before render |
+| NFR-04 | Consistent dark theme styling | Medium | Loading/error states match app theme |
+| NFR-05 | Works across Chrome, Firefox, Safari browsers | Medium | Cross-browser compatibility |
 
 ## User Stories Overview
 
-| Story | As a... | I want to... | So that... |
-|-------|---------|--------------|------------|
-| US-01 | Learning user | Click the X button to close the lesson modal | I can return to the main application |
-| US-02 | Returning learner | Close a lesson without losing my progress | I can continue later where I left off |
-| US-03 | Exploring user | Close a lesson and select a different one | I can browse lessons at my own pace |
+| ID | User Story | Priority |
+|----|------------|----------|
+| US-01 | As a retail investor, I want to click a stock card and see detailed information so I can make informed decisions | Critical |
+| US-02 | As a user, I want to see a loading indicator while data fetches so I know the app is working | High |
+| US-03 | As a user, I want to see a friendly error message if something goes wrong so I can take action | High |
+| US-04 | As a user, I want to navigate between Overview, Charts, Fundamentals, and Score tabs so I can explore different aspects | High |
 
 ## Acceptance Criteria
 
-### AC-01: Modal Close Functionality
-- **Given** a user has opened a lesson in Learning Mode
-- **When** they click the X button in the top-right corner of the modal
-- **Then** the lesson modal closes and the main application is visible
+### AC-01: Stock Card Navigation (FR-01)
+- **Given** a user is on the stock list page
+- **When** they click any stock card
+- **Then** they are navigated to `/stock/{ticker}` showing the stock detail page (not a blank white page)
 
-### AC-02: Progress Preservation
-- **Given** a user is viewing a lesson (completed or in-progress)
-- **When** they close the modal
-- **Then** their lesson completion status and quiz scores remain unchanged
+### AC-02: Stock Detail Content (FR-02, FR-03, FR-04)
+- **Given** a user navigates to a stock detail page
+- **When** the page loads successfully
+- **Then** they see:
+  - Stock name and ticker symbol
+  - Current price and daily change
+  - Score breakdown with vibe score
+  - Historical price chart
 
-### AC-03: Sidebar Independence
-- **Given** the sidebar is open/closed
-- **When** user closes the lesson modal
-- **Then** the sidebar remains in its current open/closed state
+### AC-03: Loading State (FR-05)
+- **Given** a user navigates to a stock detail page
+- **When** data is being fetched from API
+- **Then** they see a loading spinner on a dark background (matching app theme)
 
-### AC-04: Lesson Re-entry
-- **Given** a user has closed a lesson modal
-- **When** they click on the same lesson in the sidebar
-- **Then** the lesson reopens with their previous progress intact
+### AC-04: Error State (FR-06)
+- **Given** a user navigates to a stock detail page
+- **When** the API returns an error
+- **Then** they see a friendly error message with a "Back to Home" button
 
-### AC-05: No Side Effects
-- **Given** a user closes the lesson modal
-- **When** they continue using the application
-- **Then** no console errors occur and all features function normally
+### AC-05: Tab Navigation (FR-07)
+- **Given** a user is on the stock detail page
+- **When** they click on any tab (Overview, Charts, Fundamentals, Score)
+- **Then** the corresponding content is displayed
 
 ## Dependencies
 
-| Dependency | Type | Status |
-|------------|------|--------|
-| LearningModeContext | Internal | Exists, needs modification |
-| LessonContent component | Internal | Exists, needs fix |
-| LessonSidebar component | Internal | Exists, no changes needed |
+| Dependency | Type | Status | Notes |
+|------------|------|--------|-------|
+| Backend API server running | Infrastructure | Required | Must serve `/stocks/{ticker}` endpoints |
+| Database with stock data | Data | Required | Stocks must have scores and price history |
+| Frontend dev server | Infrastructure | Required | Vite dev server or production build |
+| API endpoints functional | Backend | Required | 3 endpoints: details, score-breakdown, prices/historical |
 
 ## Assumptions
 
-1. The existing state management pattern in LearningModeContext is the correct approach
-2. Setting `currentLesson` to `null` is the appropriate way to close the modal
-3. Progress is persisted to localStorage and will survive modal close/reopen
-4. No backend changes are required for this fix
+1. The stock data exists in the database for stocks shown in the list
+2. Backend API endpoints are correctly implemented (code review suggests they are)
+3. The issue is a runtime/environment problem, not a fundamental code issue
+4. CORS is properly configured for frontend-backend communication
 
 ## Open Questions
 
-*None - this is a straightforward bug fix with clear requirements*
+| # | Question | Impact | Status |
+|---|----------|--------|--------|
+| 1 | Is the backend server running when the blank page appears? | Critical | Needs verification |
+| 2 | Are there JavaScript errors in browser console? | Critical | Needs verification |
+| 3 | Does the network tab show failed API requests? | Critical | Needs verification |
+| 4 | Is this reproducible with all stocks or specific ones? | Medium | Needs verification |
 
 ---
 ## Checklist

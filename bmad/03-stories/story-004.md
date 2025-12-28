@@ -2,10 +2,10 @@
 
 ## Status
 - [ ] Draft
-- [x] Ready
+- [ ] Ready
 - [ ] In Progress
 - [ ] In Review
-- [ ] Done
+- [x] Done
 
 ## User Story
 **As a** user navigating to stock details
@@ -27,12 +27,12 @@ The StockDetail component already implements dark-themed loading states. This st
 
 ## Acceptance Criteria
 
-- [ ] StockDetail loading state shows dark background (`bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950`)
-- [ ] Loading spinner uses blue accent color (`border-blue-500`)
-- [ ] Error state maintains dark theme styling
-- [ ] No white flash visible during page transition
-- [ ] Loading state text is readable (gray text on dark background)
-- [ ] Consistent with app's overall dark theme
+- [x] StockDetail loading state shows dark background (`bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950`)
+- [x] Loading spinner uses blue accent color (`border-blue-500`)
+- [x] Error state maintains dark theme styling
+- [x] No white flash visible during page transition
+- [x] Loading state text is readable (gray text on dark background)
+- [x] Consistent with app's overall dark theme
 
 ## Technical Notes
 
@@ -114,7 +114,69 @@ None - this is a verification/styling task.
 
 ---
 ## Dev Notes
-<!-- Filled in by Dev during implementation -->
+
+**Verification Date**: 2025-12-28
+**Verified by**: Dev (Claude)
+
+### Verification Results
+
+All acceptance criteria verified in `frontend/src/pages/StockDetail.tsx`:
+
+| Criteria | Status | Evidence |
+|----------|--------|----------|
+| Loading dark background | ✅ PASS | Line 82: `bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950` |
+| Blue spinner | ✅ PASS | Line 84: `border-b-2 border-blue-500` |
+| Error dark theme | ✅ PASS | Line 93: Same dark gradient background |
+| No white flash | ✅ PASS | All three states (loading, error, main) use identical dark gradient |
+| Readable loading text | ✅ PASS | Line 85: `text-gray-400` on dark background |
+| App theme consistency | ✅ PASS | Main content (line 121) uses same `bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950` |
+
+### Code Verification
+
+**Loading State (lines 80-89):**
+```tsx
+if (loading) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+        <p className="text-gray-400">Loading stock data...</p>
+      </div>
+    </div>
+  );
+}
+```
+
+**Error State (lines 91-111):**
+```tsx
+if (error || !stock) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center">
+      ...red accent error card with gray text...
+    </div>
+  );
+}
+```
+
+**Main Content (line 120-121):**
+```tsx
+return (
+  <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+```
+
+### Conclusion
+
+No code changes required. Implementation already meets all acceptance criteria per ADR-003.
 
 ## QA Notes
-<!-- Filled in by QA during review -->
+
+**Review Date**: 2025-12-28
+**Verdict**: ✅ PASS
+
+All 6 acceptance criteria verified by static code analysis:
+- Loading, error, and main content states all use identical dark gradient
+- Blue spinner accent color confirmed
+- Gray text on dark background provides sufficient contrast
+- Implementation follows ADR-003
+
+See: `bmad/04-qa/review-story-004.md`

@@ -2,81 +2,87 @@
 
 ## Problem Statement
 
-The Learning Mode modal's close button (X icon in top-right corner) does not dismiss the modal. Instead, it toggles the lesson sidebar drawer on/off, leaving the modal permanently displayed. This renders the application unusable once a user opens a lesson, as they cannot return to the main application.
+The GitHub CI pipeline fails during the `npm ci` step because **`package.json` and `package-lock.json` are out of sync**.
 
-**Who has this problem**: All users who engage with the Learning Mode feature.
+**Error from CI:**
+```
+npm error `npm ci` can only install packages when your package.json and package-lock.json are in sync.
+npm error Invalid: lock file's react-is@19.2.0 does not satisfy react-is@19.2.3
+```
+
+**Who has this problem**: All developers and CI/CD pipeline - any PR or push to main/develop branches fails.
 
 ## Current State
 
-The `LessonContent` modal component (`frontend/src/components/learning/LessonContent.tsx:371-379`) has a close button that calls `toggleSidebar()` instead of closing the lesson modal:
+### Primary Issue: Lock File Out of Sync
 
-```typescript
-<button
-  onClick={toggleSidebar}  // BUG: This toggles sidebar, not the modal
-  className="p-2 text-gray-400 hover:text-white transition-colors"
-  title="Close lesson"
->
-```
+**Location**: `frontend/package.json` and `frontend/package-lock.json`
 
-**Pain Points**:
-- Modal cannot be closed once opened
-- Only workaround is page refresh, losing user context
-- Breaks the entire learning flow experience
-- Users cannot access any other part of the application
+- `package.json` requires: `"react-is": "^19.2.3"`
+- `package-lock.json` has: `react-is@19.2.0`
 
-**Root Cause**: The `LearningModeContext` provides `toggleSidebar()` but does not expose a dedicated `closeLesson()` function. The context does have internal access to `setCurrentLesson(null)` which would close the modal (line 314), but this is only used within `resetProgress()`.
+The `npm ci` command requires exact sync between these files and fails when they differ.
+
+**Root Cause**: The `package.json` was updated (likely by a dependency bump) but `npm install` was not run to regenerate the lock file before committing.
+
+### Secondary Issue: ESLint Configuration Missing
+
+ESLint 9.x is installed but no `eslint.config.js` exists. CI has a workaround with `continue-on-error: true`, so this doesn't block builds.
+
+### CI Job Status
+
+| CI Job | Status | Notes |
+|--------|--------|-------|
+| Frontend npm ci | **FAIL** | Lock file out of sync |
+| Frontend ESLint | SKIP | No config, has workaround |
+| Frontend Build | BLOCKED | Can't run without npm ci |
+| Backend Tests | PASS | 241 tests pass |
+| Backend Linting | PASS | flake8 passes |
 
 ## Desired Outcome
 
-The close button (X) on the LessonContent modal should:
-1. Close the lesson modal and return user to the main application
-2. Optionally keep the sidebar open so users can select another lesson
-3. Preserve lesson progress (do not reset progress on close)
+1. `npm ci` succeeds in CI
+2. All CI jobs pass without workarounds
 
-**Measurement**: User can open a lesson, click the X button, and be returned to the normal application view without losing any progress or needing to refresh.
+**Measurement**: CI pipeline completes successfully on push/PR.
 
 ## Scope
 
 ### In Scope
-- Fix the close button handler in `LessonContent.tsx`
-- Add a `closeLesson()` function to `LearningModeContext` if needed
-- Ensure modal closes properly without side effects
+- Regenerate `package-lock.json` by running `npm install`
+- Commit the updated lock file
+- Verify CI passes
 
 ### Out of Scope
-- Redesigning the learning mode UI
-- Adding keyboard shortcuts (Escape key) - future enhancement
-- Changing sidebar behavior
-- Adding confirmation dialogs
+- Fixing ESLint configuration (separate issue)
+- Backend formatting/type issues (have workarounds)
 
 ## Stakeholders
 
 | Stakeholder | Interest |
 |-------------|----------|
-| End Users | Need functional close button to use the app |
-| Product | Learning mode is a key feature that must work |
-| Dev Team | Simple fix with clear scope |
+| Developers | PRs are blocked by failing CI |
+| Reviewers | Cannot merge PRs |
+| Product | Deployment pipeline broken |
 
 ## Constraints
 
-- **Technical**: Fix must maintain existing learning progress persistence
-- **UX**: Close behavior should be intuitive (X closes modal, not something else)
-- **Code**: Should follow existing patterns in the codebase
+- **Technical**: Must use `npm install` to regenerate lock file
+- **Process**: Lock file must be committed to git
 
 ## Risks
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| Breaking sidebar toggle | Low | Medium | Test sidebar still works after fix |
-| Progress loss on close | Low | High | Ensure closeLesson() doesn't call resetProgress() |
-| State desync | Low | Medium | Verify currentLesson null state is handled |
+| New dependency versions break build | Low | High | Test build after regenerating |
+| Other lock file conflicts | Low | Medium | Check git status before commit |
 
 ## Success Criteria
 
-- [ ] Clicking X button on LessonContent modal closes the modal
-- [ ] Sidebar remains accessible after closing lesson modal
-- [ ] User progress is preserved when closing modal
-- [ ] User can re-open lessons after closing
-- [ ] No console errors or state desync issues
+- [ ] `npm ci` succeeds locally
+- [ ] `npm run build` succeeds locally
+- [ ] Updated `package-lock.json` committed
+- [ ] CI pipeline passes
 
 ---
 ## Checklist

@@ -2,10 +2,10 @@
 
 ## Status
 - [ ] Draft
-- [x] Ready
+- [ ] Ready
 - [ ] In Progress
 - [ ] In Review
-- [ ] Done
+- [x] Done
 
 ## User Story
 **As a** user viewing stock details
@@ -28,14 +28,14 @@ The StockDetail component fetches data from 3 API endpoints in parallel. If any 
 
 ## Acceptance Criteria
 
-- [ ] StockDetail uses `Promise.allSettled()` instead of `Promise.all()`
-- [ ] Stock basic info displays even if score/price endpoints fail
-- [ ] Score breakdown section shows "Unable to load" message if score API fails
-- [ ] Price chart section shows "Unable to load" message if price API fails
-- [ ] Error messages match dark theme styling
-- [ ] User can still navigate back to home from partial content view
-- [ ] Tab navigation works even with partial data
-- [ ] Console logs which specific endpoints failed (for debugging)
+- [x] StockDetail uses `Promise.allSettled()` instead of `Promise.all()`
+- [x] Stock basic info displays even if score/price endpoints fail
+- [x] Score breakdown section shows "Unable to load" message if score API fails
+- [x] Price chart section shows "Unable to load" message if price API fails
+- [x] Error messages match dark theme styling
+- [x] User can still navigate back to home from partial content view
+- [x] Tab navigation works even with partial data
+- [x] Console logs which specific endpoints failed (for debugging)
 
 ## Technical Notes
 
@@ -168,7 +168,62 @@ None - this is a rendering/error handling change.
 
 ---
 ## Dev Notes
-<!-- Filled in by Dev during implementation -->
+
+### Implementation Summary (2025-12-28)
+
+**Changes made to `frontend/src/pages/StockDetail.tsx`:**
+
+1. **Data Fetching (lines 28-68)**
+   - Replaced `Promise.all()` with `Promise.allSettled()` for graceful degradation
+   - Stock API failure still shows error state (stock is required)
+   - Score/price API failures log warnings and continue with partial data
+
+2. **Conditional Rendering (line 84)**
+   - Changed from `if (error || !stock || !scoreBreakdown)` to `if (error || !stock)`
+   - Score breakdown and price data are now optional
+
+3. **Fallback UI Components**
+   - Overview tab: Quick Stats shows "Unavailable" for missing score (lines 195-200)
+   - Overview tab: ScoreBreakdown shows fallback card (lines 229-237)
+   - Overview tab: Price chart shows fallback card (lines 245-253)
+   - Charts tab: Full fallback when price data unavailable (lines 277-286)
+   - Fundamentals tab: Fallback when fundamentals unavailable (lines 395-404)
+   - Score Analysis tab: Fallback when score unavailable (lines 412-421)
+
+4. **Console Logging**
+   - `console.error()` for stock API failures
+   - `console.warn()` for score/price API failures
+
+**Testing Notes:**
+- No automated testing framework is currently set up in the project
+- All acceptance criteria verified through code review
+- Recommend: Set up Vitest for future testing needs
+
+**Quality Checklist:**
+- [x] TypeScript compiles without errors
+- [x] All fallback UI uses consistent dark theme styling
+- [x] Navigation always accessible
+- [x] Tab navigation functional with partial data
 
 ## QA Notes
-<!-- Filled in by QA during review -->
+
+### Review Summary (2025-12-28)
+
+**Verdict**: PASS
+
+**Acceptance Criteria**: All 8 criteria verified and passed
+
+**Code Quality**:
+- Clean implementation following project patterns
+- Proper TypeScript usage with `PromiseSettledResult` handling
+- Consistent dark theme styling
+- Clear comments explaining logic
+
+**Issues**:
+- Minor: No automated tests (project lacks testing infrastructure)
+
+**Recommendations**:
+- Consider adding Vitest testing framework in future story
+- Consider adding retry button on fallback UI for transient failures
+
+**Full Review**: [review-story-003.md](../04-qa/review-story-003.md)

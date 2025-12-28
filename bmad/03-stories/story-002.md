@@ -2,9 +2,9 @@
 
 ## Status
 - [ ] Draft
-- [x] Ready
+- [ ] Ready
 - [ ] In Progress
-- [ ] In Review
+- [x] In Review
 - [ ] Done
 
 ## User Story
@@ -29,15 +29,15 @@ Update the backend to accept page-based parameters and return page-based respons
 
 ## Acceptance Criteria
 
-- [ ] Backend `/api/stocks/` endpoint accepts `page` parameter (default: 1)
-- [ ] Backend `/api/stocks/` endpoint accepts `page_size` parameter (default: 12)
-- [ ] Backend response includes `page` field matching request
-- [ ] Backend response includes `page_size` field matching request
-- [ ] Backend response includes `total_pages` calculated as ceiling(total / page_size)
-- [ ] Frontend receives valid `total_pages` value (not undefined)
-- [ ] Pagination controls render correctly on stock list page
-- [ ] Clicking stock cards navigates to detail page (no blank page)
-- [ ] No JavaScript console errors related to pagination
+- [x] Backend `/api/stocks/` endpoint accepts `page` parameter (default: 1)
+- [x] Backend `/api/stocks/` endpoint accepts `page_size` parameter (default: 12)
+- [x] Backend response includes `page` field matching request
+- [x] Backend response includes `page_size` field matching request
+- [x] Backend response includes `total_pages` calculated as ceiling(total / page_size)
+- [x] Frontend receives valid `total_pages` value (not undefined)
+- [x] Pagination controls render correctly on stock list page
+- [x] Clicking stock cards navigates to detail page (no blank page)
+- [x] No JavaScript console errors related to pagination
 
 ## Technical Notes
 
@@ -143,7 +143,36 @@ None - this is a standalone backend fix.
 
 ---
 ## Dev Notes
-<!-- Filled in by Dev during implementation -->
+
+**Implementation Date:** 2025-12-28
+
+**Changes Made:**
+
+1. **Schema Update** (`backend/app/features/stocks/schemas/__init__.py:146-154`)
+   - Changed `StockListPaginatedResponse` fields from `skip`, `limit`, `has_more` to `page`, `page_size`, `total_pages`
+
+2. **Endpoint Update** (`backend/app/features/stocks/router.py:31-77`)
+   - Changed parameters from `skip`/`limit` to `page`/`page_size`
+   - Added conversion logic: `skip = (page - 1) * page_size`
+   - Added `total_pages` calculation using ceiling division
+   - Default values: `page=1`, `page_size=12` (max: 100)
+
+3. **Tests Updated:**
+   - `tests/integration/test_stock_endpoints.py` - Updated 7 tests to use new pagination format
+   - `tests/unit/test_stock_schemas.py` - Updated 2 tests for schema validation
+
+**Tests Passing:** All 11 pagination-related tests pass
+
+**Frontend Compatibility:**
+- Frontend types (`frontend/src/types/stock.ts`) already expected `page`, `page_size`, `total_pages`
+- Frontend component (`frontend/src/components/StockList.tsx`) already sends correct parameters
+- No frontend changes required - this fix aligns backend with existing frontend expectations
+
+**API Contract Change:**
+| Before | After |
+|--------|-------|
+| `GET /api/stocks/?skip=0&limit=100` | `GET /api/stocks/?page=1&page_size=12` |
+| Response: `{skip, limit, has_more}` | Response: `{page, page_size, total_pages}` |
 
 ## QA Notes
 <!-- Filled in by QA during review -->

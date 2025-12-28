@@ -410,27 +410,29 @@ class TestStockListPaginatedResponseSchema:
                 )
             ],
             total=100,
-            skip=0,
-            limit=20,
-            has_more=True
+            page=1,
+            page_size=12,
+            total_pages=9
         )
 
         assert len(response.items) == 1
         assert response.total == 100
-        assert response.has_more is True
+        assert response.page == 1
+        assert response.page_size == 12
+        assert response.total_pages == 9
 
     def test_paginated_response_empty(self):
         """Test paginated response with no items."""
         response = StockListPaginatedResponse(
             items=[],
             total=0,
-            skip=0,
-            limit=20,
-            has_more=False
+            page=1,
+            page_size=12,
+            total_pages=0
         )
 
         assert len(response.items) == 0
-        assert response.has_more is False
+        assert response.total_pages == 0
 
 
 class TestStockSearchParamsSchema:

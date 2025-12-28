@@ -2,98 +2,87 @@
 
 ## Problem Statement
 
-The GitHub CI pipeline has configuration issues causing potential failures. The primary issue is a **missing ESLint configuration file** for ESLint v9.x, which requires the new flat config format (`eslint.config.js`) but no config file exists in the frontend directory.
+The GitHub CI pipeline fails during the `npm ci` step because **`package.json` and `package-lock.json` are out of sync**.
 
-**Who has this problem**: Developers and CI/CD pipeline - any PR or push to main/develop branches.
+**Error from CI:**
+```
+npm error `npm ci` can only install packages when your package.json and package-lock.json are in sync.
+npm error Invalid: lock file's react-is@19.2.0 does not satisfy react-is@19.2.3
+```
+
+**Who has this problem**: All developers and CI/CD pipeline - any PR or push to main/develop branches fails.
 
 ## Current State
 
-After running all CI processes locally, the following issues were identified:
+### Primary Issue: Lock File Out of Sync
 
-### Critical Issue: ESLint Configuration Missing
+**Location**: `frontend/package.json` and `frontend/package-lock.json`
 
-**Location**: `frontend/` directory
+- `package.json` requires: `"react-is": "^19.2.3"`
+- `package-lock.json` has: `react-is@19.2.0`
 
-ESLint 9.x (`^9.15.0`) is installed in `package.json` but there is **no ESLint configuration file** (`eslint.config.js`, `.eslintrc.*`). The CI workflow has a workaround:
+The `npm ci` command requires exact sync between these files and fails when they differ.
 
-```yaml
-run: npm run lint || echo "ESLint config needs migration to v9 format - skipping for now"
-continue-on-error: true
-```
+**Root Cause**: The `package.json` was updated (likely by a dependency bump) but `npm install` was not run to regenerate the lock file before committing.
 
-**Error when running `npm run lint`:**
-```
-ESLint: 9.38.0
-ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
-```
+### Secondary Issue: ESLint Configuration Missing
 
-### Secondary Issues (Non-blocking due to continue-on-error)
+ESLint 9.x is installed but no `eslint.config.js` exists. CI has a workaround with `continue-on-error: true`, so this doesn't block builds.
 
-1. **Black formatting** - 35 files would need reformatting
-   - Has `continue-on-error: true` in CI
-
-2. **Mypy type errors** - 12 type errors in 6 files
-   - Missing type annotations
-   - Has `continue-on-error: true` in CI
-
-### What Works
+### CI Job Status
 
 | CI Job | Status | Notes |
 |--------|--------|-------|
-| Backend Tests (pytest) | PASS | 241 tests pass |
-| Backend Linting (flake8) | PASS | No critical errors |
-| Frontend Build | PASS | Builds successfully |
-| TypeScript Check | PASS | No errors |
-| Integration Tests | PASS | All pass |
+| Frontend npm ci | **FAIL** | Lock file out of sync |
+| Frontend ESLint | SKIP | No config, has workaround |
+| Frontend Build | BLOCKED | Can't run without npm ci |
+| Backend Tests | PASS | 241 tests pass |
+| Backend Linting | PASS | flake8 passes |
 
 ## Desired Outcome
 
-1. Create a proper ESLint flat config (`eslint.config.js`) for the frontend
-2. Remove the workaround from CI workflow
-3. Optionally: Fix Black formatting and Mypy type errors
+1. `npm ci` succeeds in CI
+2. All CI jobs pass without workarounds
 
-**Measurement**: CI pipeline runs green on all jobs without `continue-on-error` workarounds.
+**Measurement**: CI pipeline completes successfully on push/PR.
 
 ## Scope
 
 ### In Scope
-- Create `eslint.config.js` with proper React/TypeScript configuration
-- Update CI workflow to remove ESLint workaround
-- Test that CI passes
+- Regenerate `package-lock.json` by running `npm install`
+- Commit the updated lock file
+- Verify CI passes
 
 ### Out of Scope
-- Fixing all Black formatting issues (can be done separately)
-- Fixing all Mypy type errors (can be done separately)
-- Upgrading dependencies
+- Fixing ESLint configuration (separate issue)
+- Backend formatting/type issues (have workarounds)
 
 ## Stakeholders
 
 | Stakeholder | Interest |
 |-------------|----------|
-| Developers | Need clean CI feedback on code quality |
-| DevOps | Need reliable CI pipeline |
-| Code Reviewers | Need linting to catch issues |
+| Developers | PRs are blocked by failing CI |
+| Reviewers | Cannot merge PRs |
+| Product | Deployment pipeline broken |
 
 ## Constraints
 
-- **Technical**: Must use ESLint 9.x flat config format
-- **Compatibility**: Config must work with existing React/TypeScript setup
-- **CI**: Should not break existing passing tests
+- **Technical**: Must use `npm install` to regenerate lock file
+- **Process**: Lock file must be committed to git
 
 ## Risks
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| ESLint config breaks existing code | Low | Medium | Use relaxed rules initially |
-| CI timeout with new checks | Low | Low | Monitor CI run times |
-| Breaking TypeScript integration | Low | Medium | Test locally first |
+| New dependency versions break build | Low | High | Test build after regenerating |
+| Other lock file conflicts | Low | Medium | Check git status before commit |
 
 ## Success Criteria
 
-- [ ] `eslint.config.js` exists in frontend directory
-- [ ] `npm run lint` runs without errors about missing config
-- [ ] CI workflow ESLint step passes without workaround
-- [ ] No new linting errors block the build
+- [ ] `npm ci` succeeds locally
+- [ ] `npm run build` succeeds locally
+- [ ] Updated `package-lock.json` committed
+- [ ] CI pipeline passes
 
 ---
 ## Checklist

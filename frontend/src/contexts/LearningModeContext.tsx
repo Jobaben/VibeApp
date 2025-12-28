@@ -96,21 +96,17 @@ export function LearningModeProvider({ children }: { children: ReactNode }) {
     }
   }, [preferences, isInitialized]);
 
-  // Restore current module/lesson from progress
+  // Restore current module from progress (but not lesson - let user manually open)
   useEffect(() => {
     if (isInitialized && modules.length > 0 && progress.currentModuleId) {
       const module = modules.find(m => m.id === progress.currentModuleId);
       if (module) {
         setCurrentModule(module);
-        if (progress.currentLessonId) {
-          const lesson = module.lessons.find(l => l.id === progress.currentLessonId);
-          if (lesson) {
-            setCurrentLesson(lesson);
-          }
-        }
+        // Don't auto-restore currentLesson - let user manually open lessons
+        // This prevents the modal from blocking the app on every page load
       }
     }
-  }, [isInitialized, modules, progress.currentModuleId, progress.currentLessonId]);
+  }, [isInitialized, modules, progress.currentModuleId]);
 
   const toggleLearningMode = useCallback(() => {
     setIsEnabled(prev => {

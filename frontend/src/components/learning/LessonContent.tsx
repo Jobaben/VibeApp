@@ -10,7 +10,7 @@ export function LessonContent() {
     nextLesson,
     previousLesson,
     isLessonCompleted,
-    toggleSidebar,
+    closeLesson,
   } = useLearningMode();
 
   const [quizState, setQuizState] = useState<{
@@ -369,7 +369,7 @@ export function LessonContent() {
               </h2>
             </div>
             <button
-              onClick={toggleSidebar}
+              onClick={closeLesson}
               className="p-2 text-gray-400 hover:text-white transition-colors"
               title="Close lesson"
             >

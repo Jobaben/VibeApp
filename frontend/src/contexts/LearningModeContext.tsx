@@ -142,6 +142,10 @@ export function LearningModeProvider({ children }: { children: ReactNode }) {
     setIsSidebarOpen(prev => !prev);
   }, []);
 
+  const closeLesson = useCallback(() => {
+    setCurrentLesson(null);
+  }, []);
+
   const isModuleUnlocked = useCallback((moduleId: string): boolean => {
     const module = modules.find(m => m.id === moduleId);
     if (!module) return false;
@@ -352,6 +356,7 @@ export function LearningModeProvider({ children }: { children: ReactNode }) {
     modules,
     toggleLearningMode,
     toggleSidebar,
+    closeLesson,
     startModule,
     startLesson,
     completeLesson,

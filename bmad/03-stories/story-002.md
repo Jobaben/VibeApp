@@ -4,8 +4,8 @@
 - [ ] Draft
 - [ ] Ready
 - [ ] In Progress
-- [x] In Review
-- [ ] Done
+- [ ] In Review
+- [x] Done
 
 ## User Story
 **As a** user browsing the stock list
@@ -175,4 +175,16 @@ None - this is a standalone backend fix.
 | Response: `{skip, limit, has_more}` | Response: `{page, page_size, total_pages}` |
 
 ## QA Notes
-<!-- Filled in by QA during review -->
+
+**Review Date:** 2025-12-28
+**Verdict:** PASS
+
+**Verification Summary:**
+- All 9 acceptance criteria verified and met
+- 11 tests passing (2 unit, 9 integration)
+- Code follows architecture document (ADR-001) exactly
+- Frontend/backend API contract now aligned
+- No security vulnerabilities
+- No regressions detected
+
+**Full Review:** [review-story-002.md](../04-qa/review-story-002.md)

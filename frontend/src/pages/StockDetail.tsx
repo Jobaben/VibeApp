@@ -9,18 +9,25 @@ import ScoreBreakdown from '../components/ScoreBreakdown';
 import AddToWatchlistButton from '../components/AddToWatchlistButton';
 import ScoreChangeIndicator from '../components/ScoreChangeIndicator';
 import { EnhancedMetricCard } from '../components/learning';
+import { useLearningMode } from '../contexts/LearningModeContext';
 
 type Tab = 'overview' | 'charts' | 'fundamentals' | 'score';
 
 export default function StockDetail() {
   const { ticker } = useParams<{ ticker: string }>();
   const navigate = useNavigate();
+  const { closeLesson } = useLearningMode();
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [stock, setStock] = useState<StockDetailType | null>(null);
   const [scoreBreakdown, setScoreBreakdown] = useState<ScoreBreakdownResponse | null>(null);
   const [priceData, setPriceData] = useState<HistoricalPricesResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Close any open lesson modal when viewing stock details
+  useEffect(() => {
+    closeLesson();
+  }, [closeLesson]);
 
   useEffect(() => {
     if (!ticker) return;

@@ -26,6 +26,9 @@ const DEFAULT_PROGRESS: LearningProgress = {
   lastActivityAt: new Date().toISOString(),
 };
 
+// Separate storage key for explicit isEnabled state
+const ENABLED_KEY = 'vibeapp_learning_enabled';
+
 const DEFAULT_PREFERENCES: LearningPreferences = {
   showTooltips: true,
   showAnnotations: true,
@@ -60,8 +63,14 @@ export function LearningModeProvider({ children }: { children: ReactNode }) {
       if (storedProgress) {
         const parsed = JSON.parse(storedProgress);
         setProgress(parsed);
-        setIsEnabled(parsed.currentModuleId !== null);
       }
+
+      // Only restore isEnabled if user explicitly enabled it (stored separately)
+      const storedEnabled = localStorage.getItem(ENABLED_KEY);
+      if (storedEnabled === 'true') {
+        setIsEnabled(true);
+      }
+      // If storedEnabled is null/undefined/'false', isEnabled stays false (default)
 
       const storedPreferences = localStorage.getItem(PREFERENCES_KEY);
       if (storedPreferences) {
@@ -84,6 +93,17 @@ export function LearningModeProvider({ children }: { children: ReactNode }) {
       }
     }
   }, [progress, isInitialized]);
+
+  // Save isEnabled state separately when it changes (explicit user choice)
+  useEffect(() => {
+    if (isInitialized) {
+      try {
+        localStorage.setItem(ENABLED_KEY, String(isEnabled));
+      } catch (error) {
+        console.error('Failed to save learning enabled state:', error);
+      }
+    }
+  }, [isEnabled, isInitialized]);
 
   // Save preferences to localStorage whenever they change
   useEffect(() => {
@@ -314,6 +334,12 @@ export function LearningModeProvider({ children }: { children: ReactNode }) {
     setCurrentLesson(null);
     setIsEnabled(false);
     setIsSidebarOpen(false);
+    // Also clear the explicit enabled state from localStorage
+    try {
+      localStorage.removeItem(ENABLED_KEY);
+    } catch (error) {
+      console.error('Failed to clear learning enabled state:', error);
+    }
   }, []);
 
   const updatePreferences = useCallback((prefs: Partial<LearningPreferences>) => {

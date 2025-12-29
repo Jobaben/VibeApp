@@ -42,7 +42,5 @@ build/
 .env
 .env.local
 
-# Docker
-Dockerfile*
-docker-compose*
-.dockerignore
+# Docker (keep Dockerfiles in build context)
+# Note: Dockerfile* and docker-compose* intentionally NOT excluded

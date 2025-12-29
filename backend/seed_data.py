@@ -6,6 +6,7 @@ from decimal import Decimal
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from app.infrastructure.database import Base, engine
 from app.infrastructure.database.session import SessionLocal
 from app.features.stocks.models import (
     Stock,
@@ -20,6 +21,10 @@ from app.features.stocks.services.sector_service import SectorService
 
 def seed_stocks():
     """Seed the database with sample stocks and fundamentals."""
+    # Ensure tables exist before seeding
+    print("📦 Ensuring database tables exist...")
+    Base.metadata.create_all(bind=engine)
+
     db = SessionLocal()
 
     try:

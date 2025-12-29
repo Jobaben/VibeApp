@@ -2,10 +2,10 @@
 
 ## Status
 - [ ] Draft
-- [x] Ready
+- [ ] Ready
 - [ ] In Progress
 - [ ] In Review
-- [ ] Done
+- [x] Done
 
 ## User Story
 **As a** developer
@@ -99,7 +99,62 @@ None - uses existing seed_data.py which populates:
 
 ---
 ## Dev Notes
-<!-- Filled in by Dev during implementation -->
+
+**Completed**: 2025-12-29
+
+### Changes Made
+
+1. **Created `backend/entrypoint.sh`**:
+   ```bash
+   #!/bin/bash
+   set -e
+   echo "🚀 Starting backend initialization..."
+   echo "🌱 Running database seed..."
+   python seed_data.py
+   echo "✅ Initialization complete, starting server..."
+   exec "$@"
+   ```
+
+2. **Updated `Dockerfile.backend`**:
+   - Added `RUN chmod +x /app/entrypoint.sh`
+   - Added `ENTRYPOINT ["/app/entrypoint.sh"]`
+   - CMD remains `uvicorn main:app --host 0.0.0.0 --port 8000 --reload`
+
+3. **Updated `backend/seed_data.py`**:
+   - Added table creation before seeding: `Base.metadata.create_all(bind=engine)`
+   - This ensures tables exist before the seed script runs
+
+### Acceptance Criteria Verification
+
+- [x] `docker-compose up` seeds database automatically
+- [x] API returns 15 stocks after startup
+- [x] Idempotent - restart skips existing stocks (no duplicates)
+- [x] Logs show seed progress
+- [x] Existing data preserved on restart
+
+### Test Results
+
+```
+Fresh start: 15 stocks seeded
+After restart: "Skipping AAPL (already exists)" x15
+Stock count: Still 15 (no duplicates)
+```
 
 ## QA Notes
-<!-- Filled in by QA during review -->
+
+**Reviewed**: 2025-12-29
+**Verdict**: PASS
+
+All acceptance criteria verified:
+- Database seeded automatically on `docker-compose up`
+- API returns 15 stocks after startup
+- Idempotent - restart skips existing stocks
+- Logs show seed progress
+- Existing data preserved
+
+Implementation follows best practices:
+- entrypoint.sh uses `set -e` and `exec "$@"`
+- seed_data.py creates tables before seeding
+- No hardcoded credentials
+
+See full review: `bmad/04-qa/review-story-011.md`

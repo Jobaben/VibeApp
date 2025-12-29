@@ -2,420 +2,294 @@
 
 ## Overview
 
-This architecture document addresses the **stock card blank page issue** described in [PRD](../01-prd/PRD.md). Users clicking on stock cards are navigated to a blank white page instead of seeing the expected stock detail view.
+This architecture document addresses **Docker containerization** for VibeApp as described in [PRD](../01-prd/PRD.md). The goal is to enable a single-command development environment setup via `docker-compose up`.
 
 ### System Context
 
 VibeApp is a full-stack AI-powered stock analysis platform consisting of:
 - **Frontend**: React 18 + TypeScript SPA with Vite
 - **Backend**: FastAPI + SQLAlchemy REST API
-- **Database**: SQLite (dev) / PostgreSQL (prod)
+- **Database**: SQLite (current dev) / PostgreSQL (Docker)
 
-The stock detail page is a critical user journey that fetches data from 3 API endpoints in parallel.
+The Docker setup will provide isolated, reproducible development environments.
 
 ### Design Principles
 
-1. **API Contract Consistency**: Frontend and backend must agree on request/response schemas
-2. **Graceful Degradation**: Partial failures should not cause blank pages
-3. **Dark Theme Consistency**: Loading/error states match the app's dark theme
-4. **Defensive Programming**: Handle missing/malformed data without crashing
+1. **Zero Configuration**: `docker-compose up` should work after fresh clone
+2. **Development First**: Optimize for developer experience (hot reload, fast startup)
+3. **Minimal Changes**: Fix existing Docker scaffolding rather than rewrite
+4. **Parity**: Container environment should behave like local development
 
 ## Architecture
 
-### Component Diagram
+### Container Diagram
 
 ```
-┌────────────────────────────────────────────────────────────────────────────┐
-│                              USER BROWSER                                   │
-└────────────────────────────────────────────────────────────────────────────┘
-                                     │
-                                     ▼
-┌────────────────────────────────────────────────────────────────────────────┐
-│                            FRONTEND (React SPA)                             │
-│                                                                             │
-│  ┌─────────────┐     ┌──────────────┐     ┌───────────────────────────────┐│
-│  │  StockList  │────▶│  Navigation  │────▶│        StockDetail            ││
-│  │  Component  │     │   (Router)   │     │                               ││
-│  └─────────────┘     └──────────────┘     │  ┌─────────────────────────┐  ││
-│        │                                   │  │ useEffect: 3 API calls  │  ││
-│        │                                   │  └─────────────────────────┘  ││
-│        ▼                                   │             │                  ││
-│  ┌─────────────┐                          │             ▼                  ││
-│  │  StockCard  │                          │  ┌─────────────────────────┐  ││
-│  │  onClick()  │                          │  │   Loading/Error/Detail  │  ││
-│  └─────────────┘                          │  │       State Render      │  ││
-│                                           │  └─────────────────────────┘  ││
-│                                           └───────────────────────────────┘│
-└────────────────────────────────────────────────────────────────────────────┘
-                                     │
-                           ┌─────────┴─────────┐
-                           ▼                   ▼
-              ┌────────────────────┐  ┌────────────────────┐
-              │   API Client       │  │   API Client       │
-              │   (stockApi)       │  │   (stockApi)       │
-              └────────────────────┘  └────────────────────┘
-                           │                   │
-                           └─────────┬─────────┘
-                                     ▼
-┌────────────────────────────────────────────────────────────────────────────┐
-│                          BACKEND (FastAPI)                                  │
-│                                                                             │
-│  ┌──────────────────────────────────────────────────────────────────────┐  │
-│  │                      /api/stocks Router                               │  │
-│  │                                                                       │  │
-│  │  GET /                     - List stocks (paginated)                  │  │
-│  │  GET /{ticker}             - Stock details with fundamentals         │  │
-│  │  GET /{ticker}/score-breakdown  - Detailed score analysis            │  │
-│  │  GET /{ticker}/prices/historical - Price history + indicators        │  │
-│  └──────────────────────────────────────────────────────────────────────┘  │
-│                                     │                                       │
-│                                     ▼                                       │
-│  ┌──────────────────────────────────────────────────────────────────────┐  │
-│  │                    Services & Repositories                            │  │
-│  │                                                                       │  │
-│  │  StockRepository  │  ScoringService  │  PriceDataService             │  │
-│  └──────────────────────────────────────────────────────────────────────┘  │
-│                                     │                                       │
-│                                     ▼                                       │
-│  ┌──────────────────────────────────────────────────────────────────────┐  │
-│  │                         SQLAlchemy ORM                                │  │
-│  │                                                                       │  │
-│  │  Stock  │  StockFundamental  │  StockScore  │  StockPrice            │  │
-│  └──────────────────────────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────────────────────────┘
-                                     │
-                                     ▼
-                        ┌────────────────────────┐
-                        │   SQLite/PostgreSQL    │
-                        │      Database          │
-                        └────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           HOST MACHINE                                       │
+│                                                                              │
+│   ┌───────────────────────────────────────────────────────────────────────┐ │
+│   │                    Docker Compose Network                              │ │
+│   │                    (stock-finder-network)                              │ │
+│   │                                                                        │ │
+│   │   ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐  │ │
+│   │   │   frontend      │    │   backend       │    │       db        │  │ │
+│   │   │   (Node 22)     │    │   (Python 3.11) │    │  (PostgreSQL)   │  │ │
+│   │   │                 │    │                 │    │                 │  │ │
+│   │   │  Vite Dev       │───▶│  FastAPI        │───▶│  Data Storage   │  │ │
+│   │   │  Server         │    │  + Uvicorn      │    │                 │  │ │
+│   │   │                 │    │                 │    │                 │  │ │
+│   │   │  Port: 3000     │    │  Port: 8000     │    │  Port: 5432     │  │ │
+│   │   └────────┬────────┘    └────────┬────────┘    └────────┬────────┘  │ │
+│   │            │                      │                      │           │ │
+│   │            ▼                      ▼                      ▼           │ │
+│   │   ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐  │ │
+│   │   │  Volume Mount   │    │  Volume Mount   │    │  Named Volume   │  │ │
+│   │   │  ./frontend:/app│    │  ./backend:/app │    │  postgres_data  │  │ │
+│   │   │  (hot reload)   │    │  (hot reload)   │    │  (persistence)  │  │ │
+│   │   └─────────────────┘    └─────────────────┘    └─────────────────┘  │ │
+│   └───────────────────────────────────────────────────────────────────────┘ │
+│                                                                              │
+│   Exposed Ports:                                                             │
+│   • http://localhost:3000 → Frontend                                         │
+│   • http://localhost:8000 → Backend API                                      │
+│   • localhost:5432        → PostgreSQL (optional direct access)              │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Component Descriptions
 
-| Component | Responsibility | Technology |
-|-----------|---------------|------------|
-| StockList | Display paginated stock cards with filtering | React + Axios |
-| StockCard | Render individual stock preview, handle click | React + Tailwind CSS |
-| StockDetail | Display full stock details with tabs | React + Recharts |
-| API Client | HTTP communication with backend | Axios |
-| Router | SPA routing and navigation | React Router v6 |
-| FastAPI App | REST API endpoints and CORS | FastAPI + Uvicorn |
-| StockRepository | Data access layer for stocks | SQLAlchemy |
-| ScoringService | Calculate and explain stock scores | Python |
-| PriceDataService | Fetch and calculate technical indicators | Python + pandas |
+| Component | Responsibility | Base Image | Exposed Port |
+|-----------|---------------|------------|--------------|
+| frontend | Serve React dev server with HMR | node:22-alpine | 3000 |
+| backend | Serve FastAPI REST API | python:3.11-slim | 8000 |
+| db | PostgreSQL database | postgres:16-alpine | 5432 |
+
+### Service Dependencies
+
+```
+                ┌─────────┐
+                │   db    │
+                └────┬────┘
+                     │
+         ┌───────────┴───────────┐
+         │  depends_on:          │
+         │  condition:           │
+         │  service_healthy      │
+         ▼                       │
+    ┌─────────┐                  │
+    │ backend │                  │
+    └────┬────┘                  │
+         │                       │
+         │  depends_on:          │
+         │  backend              │
+         ▼                       │
+    ┌──────────┐                 │
+    │ frontend │                 │
+    └──────────┘                 │
+```
 
 ## Data Design
 
-### Data Models
+### Volume Strategy
 
-#### Stock (Primary Entity)
-```
-Stock
-├── id: UUID (PK)
-├── ticker: string (unique, indexed)
-├── name: string
-├── isin: string (optional)
-├── instrument_type: enum (STOCK, ETF, FUND)
-├── sector: string (optional)
-├── industry: string (optional)
-├── market_cap: decimal (optional)
-├── currency: string (default: SEK)
-├── exchange: string (optional)
-├── created_at: datetime
-├── last_updated: datetime
-└── Relationships:
-    ├── fundamentals: StockFundamental (1:1)
-    ├── scores: StockScore (1:1)
-    └── prices: StockPrice[] (1:N)
-```
+| Volume | Type | Purpose | Persistence |
+|--------|------|---------|-------------|
+| `./frontend:/app` | Bind mount | Hot reload for frontend code | Host filesystem |
+| `./backend:/app` | Bind mount | Hot reload for backend code | Host filesystem |
+| `/app/node_modules` | Anonymous | Isolate container node_modules | Container only |
+| `postgres_data` | Named volume | PostgreSQL data persistence | Survives `docker-compose down` |
 
-#### StockFundamental (1:1 with Stock)
-```
-StockFundamental
-├── id: UUID (PK)
-├── stock_id: UUID (FK)
-├── Valuation: pe_ratio, pb_ratio, peg_ratio, ev_ebitda, ps_ratio
-├── Profitability: roic, roe, gross_margin, operating_margin, net_margin
-├── Health: debt_equity, current_ratio, fcf_yield, interest_coverage
-├── Growth: revenue_growth, earnings_growth
-└── Dividends: dividend_yield, payout_ratio
-```
+### Database Configuration
 
-#### StockScore (1:1 with Stock)
-```
-StockScore
-├── id: UUID (PK)
-├── stock_id: UUID (FK)
-├── total_score: decimal (0-100)
-├── value_score: decimal (0-25)
-├── quality_score: decimal (0-25)
-├── momentum_score: decimal (0-25)
-├── health_score: decimal (0-25)
-├── signal: enum (STRONG_BUY, BUY, HOLD, SELL, STRONG_SELL)
-└── calculated_at: datetime
-```
-
-### Data Flow
+The backend will use PostgreSQL when running in Docker (via `DATABASE_URL` environment variable), falling back to SQLite for non-Docker development.
 
 ```
-USER CLICKS STOCK CARD
-        │
-        ▼
-    Navigate to /stock/{ticker}
-        │
-        ▼
-    StockDetail.useEffect() triggers
-        │
-        ├──────────────────────────────────────┐
-        │                                      │
-        ▼                                      ▼
-   ┌────────────────┐                  ┌────────────────┐
-   │ Promise.all([  │                  │ Set loading=   │
-   │   getStock()   │                  │    true        │
-   │   getScore()   │                  └────────────────┘
-   │   getPrices()  │
-   │ ])             │
-   └────────────────┘
-        │
-        ├─── SUCCESS ──────────────────────────┐
-        │                                      │
-        │                                      ▼
-        │                              ┌────────────────┐
-        │                              │ setStock(data) │
-        │                              │ setScore(data) │
-        │                              │ setPrice(data) │
-        │                              │ loading=false  │
-        │                              └────────────────┘
-        │                                      │
-        │                                      ▼
-        │                              ┌────────────────┐
-        │                              │ Render Detail  │
-        │                              │     Page       │
-        │                              └────────────────┘
-        │
-        └─── FAILURE ──────────────────────────┐
-                                               │
-                                               ▼
-                                       ┌────────────────┐
-                                       │ setError(msg)  │
-                                       │ loading=false  │
-                                       └────────────────┘
-                                               │
-                                               ▼
-                                       ┌────────────────┐
-                                       │ Render Error   │
-                                       │     State      │
-                                       └────────────────┘
-```
-
-## API Design
-
-### Stock Detail Page Endpoints
-
-| Endpoint | Method | Purpose | Response |
-|----------|--------|---------|----------|
-| `/api/stocks/{ticker}` | GET | Get stock with fundamentals | `StockDetailResponse` |
-| `/api/stocks/{ticker}/score-breakdown` | GET | Get detailed score analysis | `ScoreBreakdownResponse` |
-| `/api/stocks/{ticker}/prices/historical` | GET | Get price history + indicators | `HistoricalPricesResponse` |
-
-### Root Cause: API Contract Mismatch
-
-**CRITICAL ISSUE IDENTIFIED**: The frontend and backend have incompatible pagination contracts.
-
-#### Frontend Expectation (StockList.tsx:31-40)
-```typescript
-// Frontend sends:
-const params = {
-  page: currentPage,      // 1, 2, 3...
-  page_size: pageSize,    // 12
-  sector: selectedSector,
-};
-
-// Frontend expects response:
-interface StockListResponse {
-  items: Stock[];
-  total: number;
-  page: number;           // MISSING from backend
-  page_size: number;      // MISSING from backend
-  total_pages: number;    // MISSING from backend
-}
-```
-
-#### Backend Implementation (router.py:30-71)
-```python
-# Backend accepts:
-@router.get("/", response_model=StockListPaginatedResponse)
-async def list_stocks(
-    skip: int = Query(default=0),   # Different from 'page'
-    limit: int = Query(default=100), # Different from 'page_size'
-    ...
-)
-
-# Backend returns:
-class StockListPaginatedResponse(BaseModel):
-    items: List[StockListResponse]
-    total: int
-    skip: int              # Not 'page'
-    limit: int             # Not 'page_size'
-    has_more: bool         # Not 'total_pages'
-```
-
-#### Impact
-1. `response.total_pages` is `undefined` in frontend
-2. `setTotalPages(undefined)` causes pagination logic to fail
-3. May cause runtime JavaScript errors that prevent rendering
-4. Even if no crash, users see incorrect pagination behavior
-
-### Proposed API Alignment Solution
-
-**Approach: Backend Alignment (Recommended)**
-
-Update backend to accept and return page-based pagination while maintaining backward compatibility:
-
-```python
-# Updated backend endpoint
-@router.get("/", response_model=StockListPaginatedResponse)
-async def list_stocks(
-    page: int = Query(default=1, ge=1),
-    page_size: int = Query(default=12, le=100),
-    sector: Optional[str] = Query(default=None),
-    db: Session = Depends(get_db)
-):
-    skip = (page - 1) * page_size
-    total = repo.count(sector=sector)
-    total_pages = (total + page_size - 1) // page_size  # ceiling division
-
-    return StockListPaginatedResponse(
-        items=stocks,
-        total=total,
-        page=page,
-        page_size=page_size,
-        total_pages=total_pages
-    )
-```
-
-```python
-# Updated schema
-class StockListPaginatedResponse(BaseModel):
-    items: List[StockListResponse]
-    total: int
-    page: int
-    page_size: int
-    total_pages: int
+Docker:     DATABASE_URL=postgresql://stockfinder:stockfinder123@db:5432/stockfinder_db
+Non-Docker: DATABASE_URL=sqlite:///./stockfinder.db (default in config.py)
 ```
 
 ## Technology Stack
 
-| Layer | Technology | Rationale |
-|-------|------------|-----------|
-| Frontend Framework | React 18.3 + TypeScript | Modern, type-safe, component-based |
-| Build Tool | Vite 6.0 | Fast HMR, ESM-native |
-| Routing | React Router 6.28 | Standard SPA routing |
-| HTTP Client | Axios 1.7 | Interceptors, error handling |
-| State/Cache | TanStack Query 5.62 | Server state management |
-| Styling | Tailwind CSS 3.4 | Utility-first, dark theme |
-| Charts | Recharts | React-native charting |
-| Backend Framework | FastAPI | Async, auto-docs, validation |
-| ORM | SQLAlchemy 2.x | Mature, flexible ORM |
-| Validation | Pydantic 2.x | Type-safe request/response |
-| Database | SQLite/PostgreSQL | Simple dev, robust prod |
-
-## Security Considerations
-
-1. **Input Validation**: Ticker parameter validated server-side to prevent injection
-2. **CORS**: Backend configured to allow only frontend origin
-3. **Rate Limiting**: Consider adding for production to prevent API abuse
-4. **Error Messages**: Don't expose internal stack traces to clients
-
-## Performance Considerations
-
-1. **Parallel API Calls**: StockDetail fetches 3 endpoints concurrently via `Promise.all()`
-2. **Pagination**: Backend pagination prevents loading all stocks at once
-3. **Lazy Loading**: Tab content rendered only when active
-4. **Caching**: Consider adding React Query caching for repeated stock views
-
-## Deployment Architecture
-
-```
-┌────────────────────────────────────────────────────────────────┐
-│                        Development                              │
-│                                                                 │
-│   ┌─────────────────┐           ┌─────────────────────────┐    │
-│   │  Vite Dev       │    API    │  Uvicorn Dev Server     │    │
-│   │  localhost:5173 │ ◀──────▶  │  localhost:8000         │    │
-│   └─────────────────┘           └─────────────────────────┘    │
-│                                           │                     │
-│                                           ▼                     │
-│                                  ┌─────────────────┐           │
-│                                  │ SQLite (file)   │           │
-│                                  │ stockfinder.db  │           │
-│                                  └─────────────────┘           │
-└────────────────────────────────────────────────────────────────┘
-```
+| Layer | Technology | Version | Rationale |
+|-------|------------|---------|-----------|
+| Container Runtime | Docker | 20.10+ | Industry standard |
+| Orchestration | Docker Compose | 2.x | Multi-container dev environments |
+| Frontend Base | node:22-alpine | 22.x | Matches package.json engine requirement |
+| Backend Base | python:3.11-slim | 3.11 | Matches requirements.txt compatibility |
+| Database | postgres:16-alpine | 16 | Production-grade, matches existing schema |
 
 ## Architectural Decisions
 
-### ADR-001: Backend Pagination Alignment
-- **Status**: Proposed
-- **Context**: Frontend uses page-based pagination (page, page_size, total_pages) but backend uses offset-based pagination (skip, limit, has_more). This mismatch causes undefined values in the frontend.
-- **Decision**: Modify backend to accept and return page-based parameters while internally converting to offset-based queries.
+### ADR-001: Exclude Redis from Default Setup
+- **Status**: Accepted
+- **Context**: The existing docker-compose.yml includes Redis, but `config.py` shows `REDIS_ENABLED: bool = False` by default. Redis adds startup complexity without benefit for basic development.
+- **Decision**: Remove Redis service from docker-compose.yml for simplicity.
 - **Consequences**:
-  - Frontend code requires no changes
-  - Backend calculation overhead is minimal
-  - API is more intuitive for consumers
-  - Breaking change for any existing API consumers (none currently)
+  - Faster startup (fewer containers)
+  - Simpler dependencies
+  - Redis can be added back when caching is implemented
+  - Backend already handles `REDIS_ENABLED=False`
 
-### ADR-002: Defensive Frontend Error Handling
-- **Status**: Proposed
-- **Context**: StockDetail component can show blank page if any of the 3 API calls fail or return malformed data.
-- **Decision**: Add null checks and default values for all optional data. Show partial content when only some data is available.
+### ADR-002: Use Bind Mounts for Hot Reload
+- **Status**: Accepted
+- **Context**: Developers expect code changes to reflect immediately without rebuilding containers.
+- **Decision**: Mount `./frontend:/app` and `./backend:/app` as bind mounts.
 - **Consequences**:
-  - Users see meaningful content even with partial failures
-  - More complex conditional rendering logic
-  - Better user experience during API issues
+  - Changes reflect immediately via Vite HMR and uvicorn --reload
+  - Slight filesystem overhead on macOS/Windows
+  - Need to handle node_modules isolation
 
-### ADR-003: Consistent Loading State Theme
-- **Status**: Proposed
-- **Context**: Loading states should match the app's dark theme to prevent jarring visual transitions.
-- **Decision**: All loading spinners use dark background (already implemented in StockDetail).
+### ADR-003: Anonymous Volume for node_modules
+- **Status**: Accepted
+- **Context**: Bind mounting frontend/ would overwrite container's node_modules with host's (which may be empty or incompatible).
+- **Decision**: Use anonymous volume `/app/node_modules` to preserve container's installed dependencies.
 - **Consequences**:
-  - Consistent visual experience
-  - No "white flash" during page transitions
-  - Already implemented - just needs verification
+  - Container node_modules isolated from host
+  - `npm install` runs at build time, not runtime
+  - Adding new dependencies requires container rebuild
 
-## Integration Points
+### ADR-004: Health Checks for Startup Order
+- **Status**: Accepted
+- **Context**: Backend needs database ready before starting. Simple `depends_on` only waits for container start, not service readiness.
+- **Decision**: Use health checks with `condition: service_healthy`.
+- **Consequences**:
+  - Backend waits for PostgreSQL to accept connections
+  - Slightly longer initial startup
+  - More reliable startup sequence
 
-| External System | Integration Method | Purpose |
-|-----------------|-------------------|---------|
-| Yahoo Finance API | HTTP (via PriceDataService) | Fetch historical prices |
-| Browser localStorage | Direct access | Persist watchlists, learning progress |
+### ADR-005: Fix .dockerignore to Not Exclude Dockerfiles
+- **Status**: Accepted
+- **Context**: Current `.dockerignore` excludes `Dockerfile*` and `docker-compose*`, which is incorrect as these are needed in the build context.
+- **Decision**: Remove these exclusions from `.dockerignore`.
+- **Consequences**:
+  - Docker build works correctly
+  - Slightly larger build context (negligible)
 
-## Migration Strategy
+### ADR-006: Use yarn in Frontend Dockerfile
+- **Status**: Accepted
+- **Context**: Frontend Dockerfile uses `npm install` but project uses yarn (yarn.lock exists in root).
+- **Decision**: Update Dockerfile to use `yarn install` to match project conventions.
+- **Consequences**:
+  - Consistent with project's package manager
+  - Respects yarn.lock for deterministic installs
 
-This is a **bug fix**, not a new system replacement. No data migration required.
+### ADR-007: Database Auto-Migration
+- **Status**: Accepted
+- **Context**: Backend uses `Base.metadata.create_all(bind=engine)` in main.py which auto-creates tables.
+- **Decision**: Rely on existing auto-migration for development. No additional migration scripts needed.
+- **Consequences**:
+  - Zero-config database setup
+  - Tables created on first backend startup
+  - Sufficient for development (production would need proper migrations)
 
-### Implementation Order:
-1. Fix backend pagination schema (ADR-001)
-2. Add frontend defensive checks (ADR-002)
-3. Verify loading state theming (ADR-003)
-4. Test full user journey end-to-end
+## Files to Create/Modify
 
-## Files to Modify
+| File | Action | Description |
+|------|--------|-------------|
+| `docker-compose.yml` | Modify | Remove Redis, fix environment variables |
+| `Dockerfile.backend` | Modify | Add curl for healthcheck, verify paths |
+| `Dockerfile.frontend` | Modify | Use yarn instead of npm, fix CMD |
+| `.dockerignore` | Modify | Remove Dockerfile*/docker-compose* exclusions |
+| `README.md` | Modify | Add Docker usage section |
 
-| File | Change Type | Description |
-|------|-------------|-------------|
-| `backend/app/features/stocks/schemas/__init__.py` | Modify | Update `StockListPaginatedResponse` to use page/page_size/total_pages |
-| `backend/app/features/stocks/router.py` | Modify | Update list_stocks endpoint to accept page/page_size and calculate pagination |
-| `frontend/src/types/stock.ts` | Verify | Ensure TypeScript types match new API response |
-| `frontend/src/components/StockList.tsx` | Verify | Ensure component handles response correctly |
+## Detailed Changes
+
+### docker-compose.yml Changes
+
+```yaml
+# REMOVE: Redis service (per ADR-001)
+# KEEP: db, backend, frontend services
+# FIX: Backend healthcheck needs curl installed
+# FIX: Frontend VITE_API_URL for browser access
+```
+
+### Dockerfile.backend Changes
+
+```dockerfile
+# ADD: curl for healthcheck
+RUN apt-get update && apt-get install -y \
+    gcc \
+    postgresql-client \
+    curl \              # <-- ADD THIS
+    && rm -rf /var/lib/apt/lists/*
+```
+
+### Dockerfile.frontend Changes
+
+```dockerfile
+# CHANGE: npm → yarn
+COPY frontend/package.json frontend/yarn.lock ./
+RUN yarn install
+
+# FIX: CMD syntax for Vite host binding
+CMD ["yarn", "dev", "--host"]
+```
+
+### .dockerignore Changes
+
+```
+# REMOVE these lines:
+Dockerfile*
+docker-compose*
+.dockerignore
+```
+
+## Security Considerations
+
+1. **Database Credentials**: Using hardcoded dev credentials (acceptable for local dev only)
+2. **Port Exposure**: Database port exposed for dev convenience; would be internal-only in production
+3. **No Secrets in Images**: Credentials passed via environment variables, not baked into images
+
+## Performance Considerations
+
+1. **Alpine Images**: Using alpine variants for smaller image sizes
+2. **Layer Caching**: Dependencies installed before code copy to leverage Docker cache
+3. **Bind Mount Performance**: May be slower on macOS; consider docker-sync if needed
+4. **Health Check Intervals**: Balanced between responsiveness and resource usage
+
+## Startup Sequence
+
+```
+1. docker-compose up
+   │
+   ├─► db container starts
+   │   └─► PostgreSQL initializes (creates database)
+   │       └─► Healthcheck: pg_isready
+   │           └─► Status: healthy
+   │
+   ├─► backend container starts (waits for db healthy)
+   │   └─► pip install (cached from image)
+   │       └─► uvicorn starts
+   │           └─► create_all() creates tables
+   │               └─► Healthcheck: curl /health
+   │                   └─► Status: healthy
+   │
+   └─► frontend container starts (after backend)
+       └─► yarn dev --host
+           └─► Vite dev server on port 3000
+               └─► Ready for browser access
+```
+
+## Verification Checklist
+
+After implementation, verify:
+
+- [ ] `docker-compose up` completes without errors
+- [ ] http://localhost:3000 shows frontend
+- [ ] http://localhost:8000/health returns `{"status": "healthy"}`
+- [ ] http://localhost:8000/docs shows Swagger UI
+- [ ] Frontend can fetch stock data from backend
+- [ ] Editing `frontend/src/**/*.tsx` triggers hot reload
+- [ ] Editing `backend/**/*.py` triggers uvicorn reload
+- [ ] `docker-compose down && docker-compose up` preserves database data
 
 ---
 ## Checklist
 - [x] All PRD requirements addressable
 - [x] Components clearly defined
-- [x] Data models documented
-- [x] API contracts specified
+- [x] Data models documented (volumes)
+- [x] API contracts specified (port/service mapping)
 - [x] Technology choices justified
 - [x] Security addressed
 - [x] Performance considerations noted
@@ -425,14 +299,19 @@ This is a **bug fix**, not a new system replacement. No data migration required.
 
 | PRD Requirement | Architecture Component | ADR |
 |-----------------|----------------------|-----|
-| FR-01: Stock card navigation | Navigation flow, StockDetail | - |
-| FR-02: Display stock overview | StockDetail + /stocks/{ticker} API | - |
-| FR-03: Display score breakdown | ScoreBreakdown + /score-breakdown API | - |
-| FR-04: Display price chart | PriceChart + /prices/historical API | - |
-| FR-05: Loading state (dark) | StockDetail loading render | ADR-003 |
-| FR-06: Error state | StockDetail error render | ADR-002 |
-| FR-07: Tab navigation | StockDetail tab component | - |
-| NFR-01: Load time < 2s | Promise.all parallel fetch | - |
-| NFR-02: Graceful degradation | Defensive error handling | ADR-002 |
-| NFR-03: No JS errors | Pagination fix | ADR-001 |
-| NFR-04: Dark theme consistency | Loading/error states | ADR-003 |
+| FR-01: Single command startup | docker-compose.yml | - |
+| FR-02: Build backend container | Dockerfile.backend | ADR-006 |
+| FR-03: Build frontend container | Dockerfile.frontend | ADR-006 |
+| FR-04: Provision database | db service | ADR-001 |
+| FR-05: Backend-database connection | DATABASE_URL env var | ADR-007 |
+| FR-06: Frontend on port 3000 | frontend service ports | - |
+| FR-07: Backend on port 8000 | backend service ports | - |
+| FR-08: Frontend-backend communication | Docker network | - |
+| FR-09: Backend hot reload | Volume mount + --reload | ADR-002 |
+| FR-10: Frontend hot reload | Volume mount + Vite HMR | ADR-002, ADR-003 |
+| FR-11: Database persistence | postgres_data volume | - |
+| FR-12: Health checks | service healthchecks | ADR-004 |
+| FR-13: Startup order | depends_on + condition | ADR-004 |
+| NFR-01: Build time < 5min | Alpine images, layer caching | - |
+| NFR-03: Cross-platform | Docker abstraction | - |
+| NFR-05: Documentation | README.md update | - |

@@ -2,110 +2,121 @@
 
 ## Problem Statement
 
-Stakeholders report that **clicking on stock cards navigates to a blank white page** instead of showing stock details.
+**Developers must manually set up and run multiple services** to work with VibeApp:
+- Create and activate a Python virtual environment
+- Install Python dependencies via pip
+- Install Node.js dependencies via yarn
+- Start the backend server manually
+- Start the frontend dev server manually
 
-**Who has this problem**: All users trying to view detailed stock information.
+**Who has this problem**: All developers and users who want to run the application locally.
 
 ## Current State
 
-### Investigation Findings
+### How It's Currently Handled
 
-Code analysis shows the implementation is correct:
-
-1. **Stock Card Click Handler** (`StockList.tsx:80-82`):
-   ```typescript
-   const handleStockClick = (stock: Stock) => {
-     navigate(`/stock/${encodeURIComponent(stock.ticker)}`);
-   };
+1. **Backend Setup** (manual):
+   ```bash
+   cd backend
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   uvicorn main:app --reload
    ```
 
-2. **Route Definition** (`App.tsx:23`):
-   ```typescript
-   <Route path="/stock/:ticker" element={<StockDetail />} />
+2. **Frontend Setup** (manual):
+   ```bash
+   cd frontend
+   yarn install
+   yarn dev
    ```
 
-3. **StockDetail Component** (`pages/StockDetail.tsx`):
-   - Fetches data from 3 API endpoints:
-     - `/stocks/{ticker}` - stock details
-     - `/stocks/{ticker}/score-breakdown` - score analysis
-     - `/stocks/{ticker}/prices/historical` - price chart data
-   - Has proper loading and error states with dark backgrounds
+3. **Dependencies**: Requires Python 3.11+, Node.js 22+, and yarn installed locally
 
-4. **Backend Endpoints**: All required endpoints exist in `backend/app/features/stocks/router.py`
+### Pain Points
 
-### Likely Root Causes
+| Pain Point | Impact |
+|------------|--------|
+| Multiple terminal windows needed | Cognitive overhead |
+| Python/Node version conflicts | "Works on my machine" issues |
+| Manual dependency installation | Time-consuming onboarding |
+| No database/Redis in current setup | Missing infrastructure services |
+| Existing Docker files are untested scaffolding | False promise of container support |
 
-| Cause | Likelihood | Evidence Needed |
-|-------|------------|-----------------|
-| Backend server not running | High | Check if API is accessible |
-| API returning 500 error | Medium | Check browser console/network tab |
-| JavaScript error crashing React | Medium | Check browser console for errors |
-| CORS blocking API calls | Low | Check browser console for CORS errors |
-| Missing data in database | Low | Stock might not have scores/prices |
+### Existing Docker Files (Non-Functional)
 
-### Why "Blank White" Page?
-
-The StockDetail component has styled loading (`bg-gradient-to-br from-gray-950`) and error states. A blank **white** page suggests:
-
-1. **React crash** - A JavaScript error before render completes
-2. **CSS not loading** - Tailwind styles not applied
-3. **Component not mounting** - Route not matching or context issue
+The repository contains Docker-related files that were scaffolded but never made functional:
+- `docker-compose.yml` - Defines services but untested
+- `Dockerfile.backend` - May have incorrect paths or missing deps
+- `Dockerfile.frontend` - May not build correctly
+- `.dockerignore` - Exists but may need updates
 
 ## Desired Outcome
 
-1. Clicking a stock card shows the stock detail page with charts and scores
-2. Loading state shows spinner with dark background
-3. Error state shows friendly message with "Back to Home" button
+A single command (`docker-compose up`) that:
+1. Builds and starts all required services
+2. Sets up the database with initial schema
+3. Runs the backend API server
+4. Runs the frontend development server
+5. Handles all dependencies automatically
 
-**Measurement**: User can click any stock card and see detailed information.
+**Measurement**: New developer can clone repo and run `docker-compose up` with zero additional setup.
 
 ## Scope
 
 ### In Scope
-- Diagnose the actual cause of blank page (requires running the app)
-- Fix the root cause
-- Verify stock detail page renders correctly
+- Fix/validate existing Dockerfiles
+- Fix/validate docker-compose.yml
+- Ensure backend container builds and runs
+- Ensure frontend container builds and runs
+- Database initialization and connectivity
+- Service health checks and startup order
+- Documentation for Docker usage
 
 ### Out of Scope
-- Redesigning the stock detail page
-- Adding new features to stock detail
+- Production-grade Docker configuration (multi-stage builds, security hardening)
+- Kubernetes/orchestration support
+- CI/CD Docker integration
+- Cloud deployment configurations
 
 ## Stakeholders
 
 | Stakeholder | Interest |
 |-------------|----------|
-| End Users | Core functionality broken |
-| Product | Major user journey blocked |
+| Developers | Faster onboarding, consistent environment |
+| Contributors | Lower barrier to entry |
+| Reviewers | Easy way to test PRs locally |
 
 ## Constraints
 
-- Need to reproduce the issue to diagnose (requires running frontend + backend)
-- Cannot determine exact cause without browser console access
+| Constraint | Description |
+|------------|-------------|
+| Existing file structure | Must work with current backend/ and frontend/ layout |
+| Development focus | Optimized for dev experience, not production |
+| Port availability | Default ports 8000 (API), 3000 (frontend), 5432 (DB) |
 
 ## Risks
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| Multiple causes | Medium | Medium | Test systematically |
-| Data issue vs code issue | Medium | Medium | Check multiple stocks |
+| Hot reload may not work in containers | Medium | Medium | Configure volume mounts correctly |
+| Database data persistence | Low | Medium | Use named volumes |
+| Build time on first run | Low | Low | Document expected wait time |
+| Port conflicts with local services | Medium | Low | Document how to change ports |
 
 ## Success Criteria
 
-- [ ] Root cause identified
-- [ ] Stock detail page loads when clicking stock card
-- [ ] Loading spinner visible during data fetch
-- [ ] Error message visible if data fetch fails
-- [ ] All tabs (Overview, Charts, Fundamentals, Score) work
+- [ ] `docker-compose up` builds all images without errors
+- [ ] Backend container starts and responds to health checks
+- [ ] Frontend container starts and is accessible at localhost:3000
+- [ ] Frontend can communicate with backend API
+- [ ] Database is initialized and accessible
+- [ ] Hot reload works for both frontend and backend code changes
+- [ ] Documentation updated with Docker usage instructions
 
 ## Next Steps
 
-To diagnose this issue, we need to:
-1. Start the backend server (`cd backend && uvicorn main:app --reload`)
-2. Start the frontend (`cd frontend && npm run dev`)
-3. Click a stock card and check:
-   - Browser console for JavaScript errors
-   - Network tab for API failures
-   - Terminal for backend errors
+Proceed to `/pm` to define product requirements for the Docker support feature.
 
 ---
 ## Checklist

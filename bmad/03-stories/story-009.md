@@ -1,10 +1,10 @@
 # Story: [STORY-009] Add Docker Documentation to README
 
 ## Status
-- [x] Ready
+- [ ] Ready
 - [ ] In Progress
 - [ ] In Review
-- [ ] Done
+- [x] Done
 
 ## User Story
 **As a** new developer
@@ -15,14 +15,14 @@
 Add a comprehensive Docker section to the README.md that explains how to start the app, common commands, troubleshooting tips, and requirements. This is the final story that makes the Docker setup discoverable.
 
 ## Acceptance Criteria
-- [ ] README has "Getting Started with Docker" section
-- [ ] Prerequisites listed (Docker, Docker Compose versions)
-- [ ] Quick start command documented (`docker-compose up`)
-- [ ] Common commands documented (up, down, rebuild, logs)
-- [ ] Port usage documented (3000, 8000, 5432)
-- [ ] Troubleshooting section with common issues
-- [ ] Hot reload behavior explained
-- [ ] How to add new dependencies documented
+- [x] README has "Getting Started with Docker" section
+- [x] Prerequisites listed (Docker, Docker Compose versions)
+- [x] Quick start command documented (`docker-compose up`)
+- [x] Common commands documented (up, down, rebuild, logs)
+- [x] Port usage documented (3000, 8000, 5432)
+- [x] Troubleshooting section with common issues
+- [x] Hot reload behavior explained
+- [x] How to add new dependencies documented
 
 ## Technical Notes
 
@@ -94,7 +94,40 @@ docker-compose up --build
 
 ---
 ## Dev Notes
-<!-- Filled in by Dev during implementation -->
+
+**Completed**: 2025-12-29
+
+### Changes Made
+
+Added "🐳 Getting Started with Docker" section to README.md with:
+
+1. **Prerequisites**: Docker 20.10+, Docker Compose 2.x
+2. **Quick Start**: Clone and `docker-compose up`
+3. **Service Ports Table**: Frontend (3000), Backend (8000), PostgreSQL (5432)
+4. **Common Commands**: up, down, rebuild, logs, shell access
+5. **Hot Reload**: Explained backend (uvicorn) and frontend (Vite HMR)
+6. **Adding Dependencies**: Rebuild after package.json/requirements.txt changes
+7. **Troubleshooting Table**: Port conflicts, build fails, database issues, container issues
+8. **Environment Variables**: DATABASE_URL, CORS_ORIGINS, VITE_API_URL
+
+### Location
+
+Inserted after the manual "Getting Started" section (line 207) to provide Docker as an alternative setup option.
 
 ## QA Notes
-<!-- Filled in by QA during review -->
+
+**Reviewed**: 2025-12-29
+**Verdict**: ✅ PASS
+
+All acceptance criteria verified:
+- Docker section with prerequisites ✅
+- Quick start documented ✅
+- Common commands (10+) documented ✅
+- Port usage table ✅
+- Troubleshooting section (5 issues) ✅
+- Hot reload explained ✅
+- Adding dependencies documented ✅
+
+Documentation is accurate, well-structured, and complete.
+
+See full review: `bmad/04-qa/review-story-009.md`

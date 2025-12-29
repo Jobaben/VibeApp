@@ -204,6 +204,106 @@ npm run dev
 
 ---
 
+## 🐳 Getting Started with Docker
+
+For a simpler setup experience, you can use Docker to run the entire stack with a single command.
+
+### Prerequisites
+
+- **Docker 20.10+**
+- **Docker Compose 2.x**
+
+### Quick Start
+
+```bash
+# Clone and enter the repository
+git clone https://github.com/Jobaben/VibeApp.git
+cd VibeApp
+
+# Start everything
+docker-compose up
+```
+
+Then open http://localhost:3000
+
+### Service Ports
+
+| Service | Port | URL |
+|---------|------|-----|
+| Frontend | 3000 | http://localhost:3000 |
+| Backend API | 8000 | http://localhost:8000 |
+| Swagger Docs | 8000 | http://localhost:8000/docs |
+| PostgreSQL | 5432 | localhost:5432 |
+
+### Common Commands
+
+```bash
+# Start all services
+docker-compose up
+
+# Start in background (detached mode)
+docker-compose up -d
+
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes (reset database)
+docker-compose down -v
+
+# Rebuild containers (after dependency changes)
+docker-compose up --build
+
+# View logs
+docker-compose logs -f              # All services
+docker-compose logs -f backend      # Backend only
+docker-compose logs -f frontend     # Frontend only
+
+# Shell access
+docker exec -it avanza-stock-finder-backend sh
+docker exec -it avanza-stock-finder-frontend sh
+docker exec -it avanza-stock-finder-db psql -U stockfinder -d stockfinder_db
+```
+
+### Hot Reload
+
+Code changes are automatically reflected without restarting containers:
+
+- **Backend:** Changes in `backend/` trigger uvicorn auto-reload
+- **Frontend:** Changes in `frontend/src/` trigger Vite HMR (Hot Module Replacement)
+
+### Adding Dependencies
+
+After modifying `package.json` (frontend) or `requirements.txt` (backend):
+
+```bash
+# Rebuild containers to install new dependencies
+docker-compose up --build
+```
+
+### Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| Port already in use | Change ports in `docker-compose.yml` or stop conflicting services |
+| Build fails | Run `docker-compose build --no-cache` to rebuild from scratch |
+| Database issues | Run `docker-compose down -v` to reset database (loses data) |
+| Container won't start | Check logs: `docker-compose logs [service]` |
+| Stale containers | Run `docker-compose down && docker-compose up --build` |
+
+### Environment Variables
+
+Docker Compose automatically sets these environment variables:
+
+**Backend:**
+- `DATABASE_URL` - PostgreSQL connection string
+- `CORS_ORIGINS` - Allowed frontend origins
+- `DEBUG` - Debug mode enabled
+
+**Frontend:**
+- `VITE_API_URL` - Backend API URL
+
+---
+
 ## 📚 API Documentation
 
 Once the backend is running, interactive API documentation is available at:

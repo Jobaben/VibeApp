@@ -3,11 +3,11 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Copy package files
-COPY frontend/package*.json ./
+# Copy package files (yarn.lock for deterministic installs)
+COPY frontend/package.json frontend/yarn.lock ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies using yarn
+RUN yarn install --frozen-lockfile
 
 # Copy application code
 COPY frontend/ .
@@ -15,5 +15,5 @@ COPY frontend/ .
 # Expose port
 EXPOSE 3000
 
-# Run the development server
-CMD ["npm", "run", "dev", "--", "--host"]
+# Run the development server with host binding for Docker
+CMD ["yarn", "dev", "--host"]

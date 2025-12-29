@@ -165,6 +165,57 @@ Per brief, the following are explicitly out of scope:
 | 2 | How should database migrations be handled? | Medium - affects initial setup | To be determined by Architect |
 
 ---
+
+## Addendum: User Experience Fixes (2025-12-29)
+
+**Source**: [bmad/00-brief/brief-learning-mode-and-empty-stocks.md](../00-brief/brief-learning-mode-and-empty-stocks.md)
+
+### Problem Summary
+
+Two usability issues prevent new users from having a good first experience:
+1. Learning Mode activates unexpectedly on app start
+2. No stocks are displayed when using Docker setup
+
+### Additional Functional Requirements
+
+| ID | Requirement | Priority | Acceptance Criteria |
+|----|-------------|----------|---------------------|
+| FR-14 | Learning Mode shall default to OFF | Must | New users see Learning Mode toggle in OFF state on first visit |
+| FR-15 | Learning Mode state shall only persist when user explicitly enables it | Must | localStorage only affects Learning Mode if user actively toggled it ON |
+| FR-16 | Database shall be seeded with sample data on Docker startup | Must | Running `docker-compose up` results in stocks being available |
+| FR-17 | Seed script execution shall be idempotent | Should | Running seed multiple times does not create duplicates |
+
+### Additional Acceptance Criteria
+
+#### AC-07: Learning Mode Default State
+- Given a new user visiting the app for the first time
+- When the app loads
+- Then Learning Mode toggle shows as OFF
+- And no learning prompts or overlays appear
+
+#### AC-08: Learning Mode Persistence
+- Given a user who has never enabled Learning Mode
+- When the user has localStorage from a previous session
+- Then Learning Mode remains OFF (does not auto-enable)
+
+- Given a user who explicitly enabled Learning Mode
+- When the user returns in a new session
+- Then their choice to have Learning Mode ON is preserved
+
+#### AC-09: Database Auto-Seeding
+- Given a fresh Docker environment with empty database
+- When `docker-compose up` completes
+- Then the stocks API returns sample data
+- And the frontend displays stocks in the list
+
+### User Stories (Additional)
+
+| Story | Description |
+|-------|-------------|
+| US-06 | As a new user, I want Learning Mode to be OFF by default so I can explore the app without tutorials |
+| US-07 | As any developer, I want the database seeded automatically so I can test the app immediately after Docker setup |
+
+---
 ## Checklist
 - [x] All functional requirements documented
 - [x] Non-functional requirements defined
@@ -172,3 +223,4 @@ Per brief, the following are explicitly out of scope:
 - [x] Acceptance criteria specified
 - [x] Dependencies listed
 - [x] Links back to brief.md
+- [x] Addendum for UX fixes added (2025-12-29)

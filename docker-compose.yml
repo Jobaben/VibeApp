@@ -10,27 +10,11 @@ services:
       - POSTGRES_PASSWORD=stockfinder123
       - POSTGRES_DB=stockfinder_db
     ports:
-      - "5432:5432"  # Exposed for AI direct access if needed
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U stockfinder"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - stock-finder-network
-
-  # Redis Cache (for future use with Celery and caching)
-  redis:
-    image: redis:7-alpine
-    container_name: avanza-stock-finder-redis
-    ports:
-      - "6379:6379"  # Exposed for AI direct access if needed
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -47,7 +31,6 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgresql://stockfinder:stockfinder123@db:5432/stockfinder_db
-      - REDIS_URL=redis://redis:6379/0
       - DEBUG=True
       - ENVIRONMENT=development
       - ENABLE_AI_ENDPOINTS=true
@@ -55,11 +38,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      redis:
-        condition: service_healthy
     volumes:
       - ./backend:/app
-      - ./data:/app/data  # Persistent data for analysis
+      - ./data:/app/data
     networks:
       - stock-finder-network
     healthcheck:
@@ -89,8 +70,6 @@ services:
 
 volumes:
   postgres_data:
-    driver: local
-  redis_data:
     driver: local
 
 networks:

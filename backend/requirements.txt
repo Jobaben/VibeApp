@@ -26,9 +26,10 @@ requests==2.31.0
 yfinance>=0.2.38  # Yahoo Finance for real stock data
 avanza-api>=15.0.0  # Avanza API (unofficial) - https://github.com/Qluxzz/avanza
 
-# Background Jobs (for Phase 6)
-# celery==5.3.4  # TODO: Uncomment when implementing background jobs
-# flower==2.0.1  # Celery monitoring
+# Background Jobs
+celery==5.3.4
+flower==2.0.1
+pytz==2024.1
 
 # Authentication
 python-jose[cryptography]==3.3.0

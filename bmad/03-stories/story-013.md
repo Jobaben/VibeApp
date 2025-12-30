@@ -2,10 +2,10 @@
 
 ## Status
 - [ ] Draft
-- [x] Ready
+- [ ] Ready
 - [ ] In Progress
 - [ ] In Review
-- [ ] Done
+- [x] Done
 
 ## User Story
 **As a** user of VibeApp

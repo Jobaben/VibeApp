@@ -18,9 +18,11 @@ class Settings(BaseSettings):
     # Set DATABASE_URL env var to use PostgreSQL: postgresql://user:pass@localhost:5432/dbname
     DATABASE_URL: str = "sqlite:///./stockfinder.db"
 
-    # Redis (optional - only needed for caching in production)
+    # Redis Caching
     REDIS_URL: str = "redis://localhost:6379/0"
-    REDIS_ENABLED: bool = False  # Set to True if Redis is available
+    REDIS_ENABLED: bool = False  # Set to True via docker-compose env
+    CACHE_TTL_DEFAULT: int = 300  # 5 minutes
+    CACHE_TTL_SCORES: int = 600  # 10 minutes for leaderboards/scores
 
     # AI Features
     ENABLE_AI_ENDPOINTS: bool = True

@@ -5,6 +5,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.infrastructure.database.session import get_db
+from app.infrastructure.cache import get_cache_service, CacheService
+from app.infrastructure.cache.redis_cache import generate_cache_key, hash_params
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 from app.infrastructure.repositories import get_stock_repository, StockRepository
@@ -49,6 +52,22 @@ async def list_stocks(
     Returns:
         Paginated list of stocks
     """
+    # Check cache first
+    cache = get_cache_service()
+    cache_key = generate_cache_key(
+        "stocks", "list",
+        hash_params(
+            page=page,
+            page_size=page_size,
+            instrument_type=instrument_type.value if instrument_type else None,
+            sector=sector
+        )
+    )
+
+    cached = cache.get(cache_key)
+    if cached:
+        return StockListPaginatedResponse(**cached)
+
     repo = get_stock_repository(db)
 
     # Convert page-based to offset-based pagination
@@ -68,13 +87,18 @@ async def list_stocks(
     # Calculate total pages (ceiling division)
     total_pages = (total + page_size - 1) // page_size if total > 0 else 0
 
-    return StockListPaginatedResponse(
+    response = StockListPaginatedResponse(
         items=stocks,
         total=total,
         page=page,
         page_size=page_size,
         total_pages=total_pages
     )
+
+    # Cache the response
+    cache.set(cache_key, response.model_dump(), ttl_seconds=settings.CACHE_TTL_DEFAULT)
+
+    return response
 
 
 @router.get("/search", response_model=StockSearchResponse)
@@ -128,6 +152,17 @@ async def get_top_stocks(
     Returns:
         List of top-scored stocks
     """
+    # Check cache first
+    cache = get_cache_service()
+    cache_key = generate_cache_key(
+        "stocks", "top",
+        hash_params(limit=limit, instrument_type=instrument_type.value if instrument_type else None)
+    )
+
+    cached = cache.get(cache_key)
+    if cached:
+        return [StockDetailResponse(**item) for item in cached]
+
     repo = get_stock_repository(db)
 
     stocks = repo.get_top_scored_stocks(
@@ -135,7 +170,17 @@ async def get_top_stocks(
         instrument_type=instrument_type
     )
 
-    return stocks
+    # Convert to Pydantic models for caching
+    response = [StockDetailResponse.model_validate(s) for s in stocks]
+
+    # Cache the response
+    cache.set(
+        cache_key,
+        [s.model_dump() for s in response],
+        ttl_seconds=settings.CACHE_TTL_SCORES
+    )
+
+    return response
 
 
 @router.get("/sectors", response_model=list[str])
@@ -171,6 +216,14 @@ async def get_stock(
     Raises:
         HTTPException: 404 if stock not found
     """
+    # Check cache first
+    cache = get_cache_service()
+    cache_key = generate_cache_key("stocks", "detail", ticker.upper())
+
+    cached = cache.get(cache_key)
+    if cached:
+        return StockDetailResponse(**cached)
+
     repo = get_stock_repository(db)
 
     # Try to find by ticker
@@ -184,7 +237,13 @@ async def get_stock(
     # Load full data with relationships
     stock = repo.get_with_full_data(stock_basic.id)
 
-    return stock
+    # Convert to Pydantic model for caching
+    response = StockDetailResponse.model_validate(stock)
+
+    # Cache the response
+    cache.set(cache_key, response.model_dump(), ttl_seconds=settings.CACHE_TTL_DEFAULT)
+
+    return response
 
 
 @router.get("/id/{stock_id}", response_model=StockDetailResponse)
@@ -649,6 +708,17 @@ async def get_leaderboard(
     Returns:
         List of top-scoring stocks with their scores
     """
+    # Check cache first
+    cache = get_cache_service()
+    cache_key = generate_cache_key(
+        "leaderboard", "top",
+        hash_params(limit=limit, sector=sector)
+    )
+
+    cached = cache.get(cache_key)
+    if cached:
+        return cached
+
     from app.features.stocks.models import StockScore
 
     query = (
@@ -662,7 +732,7 @@ async def get_leaderboard(
 
     results = query.limit(limit).all()
 
-    return [
+    response = [
         {
             "ticker": stock.ticker,
             "name": stock.name,
@@ -676,6 +746,11 @@ async def get_leaderboard(
         }
         for stock, score in results
     ]
+
+    # Cache the response
+    cache.set(cache_key, response, ttl_seconds=settings.CACHE_TTL_SCORES)
+
+    return response
 
 
 @router.get("/leaderboard/by-signal/{signal}")

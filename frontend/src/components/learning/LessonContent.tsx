@@ -4,6 +4,7 @@ import { useLearningMode } from '../../contexts/LearningModeContext';
 export function LessonContent() {
   const {
     isEnabled,
+    isSidebarOpen,
     currentLesson,
     currentModule,
     completeLesson,
@@ -350,7 +351,10 @@ export function LessonContent() {
   };
 
   return (
-    <div className="fixed inset-0 z-30 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div
+      className="fixed inset-0 z-30 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      style={{ paddingRight: isSidebarOpen ? '336px' : undefined }}
+    >
       <div className="w-full max-w-2xl max-h-[90vh] bg-gray-900 rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
         <div className="p-4 border-b border-white/10 bg-gradient-to-r from-amber-500/10 to-orange-500/10">

@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     CACHE_TTL_DEFAULT: int = 300  # 5 minutes
     CACHE_TTL_SCORES: int = 600  # 10 minutes for leaderboards/scores
 
+    # Celery Background Jobs
+    CELERY_BROKER_URL: str = "redis://localhost:6379/0"
+    CELERY_RESULT_BACKEND: str = "redis://localhost:6379/0"
+
     # AI Features
     ENABLE_AI_ENDPOINTS: bool = True
 

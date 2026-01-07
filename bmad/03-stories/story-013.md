@@ -2,9 +2,9 @@
 
 ## Status
 - [ ] Draft
-- [x] Ready
+- [ ] Ready
 - [ ] In Progress
-- [ ] In Review
+- [x] In Review
 - [ ] Done
 
 ## User Story
@@ -21,21 +21,21 @@ Implement Celery background job system for automated stock data refresh. This in
 5. Cache invalidation after data refresh
 
 ## Acceptance Criteria
-- [ ] Celery worker service added to docker-compose.yml
-- [ ] Celery beat service added to docker-compose.yml
-- [ ] Both services start with `docker-compose up`
-- [ ] Celery worker shows as healthy/connected in logs
-- [ ] `refresh_stock_data` task defined and registered
-- [ ] `snapshot_daily_scores` task defined and registered
-- [ ] `invalidate_cache` task defined and registered
-- [ ] Market hours check function works correctly (US Eastern Time)
-- [ ] Scheduled tasks appear in Celery Beat log output
-- [ ] Manual task trigger works via Python shell
-- [ ] Cache invalidated after data refresh
-- [ ] Task failures logged with traceback
-- [ ] Celery uses Redis as broker (from story-012)
-- [ ] Volume mount enables hot reload for task code
-- [ ] Flower monitoring available via `docker-compose --profile monitoring up`
+- [x] Celery worker service added to docker-compose.yml
+- [x] Celery beat service added to docker-compose.yml
+- [x] Both services start with `docker-compose up`
+- [x] Celery worker shows as healthy/connected in logs
+- [x] `refresh_stock_data` task defined and registered
+- [x] `snapshot_daily_scores` task defined and registered
+- [x] `invalidate_cache` task defined and registered
+- [x] Market hours check function works correctly (US Eastern Time)
+- [x] Scheduled tasks appear in Celery Beat log output
+- [x] Manual task trigger works via Python shell
+- [x] Cache invalidated after data refresh
+- [x] Task failures logged with traceback
+- [x] Celery uses Redis as broker (from story-012)
+- [x] Volume mount enables hot reload for task code
+- [x] Flower monitoring available via `docker-compose --profile monitoring up`
 
 ## Technical Notes
 
@@ -172,7 +172,70 @@ None (uses existing stock data models)
 
 ---
 ## Dev Notes
-<!-- Filled in by Dev during implementation -->
+
+### Implementation Summary (2026-01-07)
+
+Successfully implemented Celery background job system for automated stock data refresh.
+
+### Files Created
+- `backend/app/tasks/__init__.py` - Module exports
+- `backend/app/tasks/celery_app.py` - Celery configuration with Redis broker and beat schedule
+- `backend/app/tasks/stock_tasks.py` - `refresh_stock_data` and `invalidate_cache` tasks
+- `backend/app/tasks/score_tasks.py` - `snapshot_daily_scores` task
+- `backend/app/tasks/market_hours.py` - US market hours utility functions
+- `backend/tests/unit/test_celery_tasks.py` - Unit tests (20 tests, all passing)
+
+### Files Modified
+- `docker-compose.yml` - Added celery-worker, celery-beat, and flower services
+- `backend/requirements.txt` - Uncommented celery dependencies, added pytz
+- `backend/app/config.py` - Added CELERY_BROKER_URL and CELERY_RESULT_BACKEND settings
+
+### Key Implementation Details
+
+1. **Celery Configuration**
+   - Uses Redis as broker (from story-012)
+   - JSON serialization for tasks
+   - US/Eastern timezone for scheduling
+   - Retry configuration with backoff
+
+2. **Beat Schedule**
+   - `refresh-stock-data-hourly`: Runs every hour from 9 AM to 4 PM, Mon-Fri
+   - `snapshot-scores-daily`: Runs at 4:30 PM Mon-Fri (after market close)
+
+3. **Market Hours Logic**
+   - `is_market_hours()` checks 9:30 AM - 4:00 PM ET, Mon-Fri
+   - Tasks skip execution outside market hours (logs "market closed")
+   - Force parameter available to run regardless of market hours
+
+4. **Task Features**
+   - Auto-retry on failure (3 retries with exponential backoff)
+   - Task failures logged with full traceback
+   - Cache invalidation triggered after data refresh
+
+5. **Docker Services**
+   - `celery-worker`: Executes background tasks
+   - `celery-beat`: Schedules periodic tasks
+   - `flower`: Optional monitoring dashboard (via `--profile monitoring`)
+
+### Testing
+- 20 unit tests covering:
+  - Market hours logic
+  - Task registration
+  - Beat schedule configuration
+  - Module exports
+- All tests passing
+
+### Manual Testing Commands
+```bash
+# Trigger tasks manually via Python shell
+docker-compose exec backend python -c "from app.tasks import refresh_stock_data; refresh_stock_data.delay(force=True)"
+
+# View Celery worker logs
+docker-compose logs -f celery-worker
+
+# Start with Flower monitoring
+docker-compose --profile monitoring up
+```
 
 ## QA Notes
 <!-- Filled in by QA during review -->

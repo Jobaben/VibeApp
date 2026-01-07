@@ -70,6 +70,62 @@ services:
     networks:
       - stock-finder-network
 
+  # Celery Worker - Background job execution
+  celery-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: vibeapp-celery-worker
+    command: celery -A app.tasks worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://stockfinder:stockfinder123@db:5432/stockfinder_db
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_ENABLED=true
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    networks:
+      - stock-finder-network
+    restart: unless-stopped
+
+  # Celery Beat - Scheduled task scheduler
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: vibeapp-celery-beat
+    command: celery -A app.tasks beat --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://stockfinder:stockfinder123@db:5432/stockfinder_db
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_ENABLED=true
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    networks:
+      - stock-finder-network
+    restart: unless-stopped
+
+  # Flower - Celery task monitoring dashboard (optional)
+  flower:
+    image: mher/flower:0.9.7
+    container_name: vibeapp-flower
+    command: celery --broker=redis://redis:6379/0 flower --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+    networks:
+      - stock-finder-network
+    profiles:
+      - monitoring
+
   # Frontend
   frontend:
     build:

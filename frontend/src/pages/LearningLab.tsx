@@ -376,7 +376,7 @@ export default function LearningLab() {
       <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-6">
         <h2 className="text-2xl font-bold text-white">Learning Lab: Learn by Doing</h2>
         <p className="text-gray-300 mt-2">
-          Train with a live-data paper portfolio, document each thesis, and build a repeatable process before risking real money.
+          Train with a live-data paper portfolio. The lab teaches plain-language investing decisions first, then introduces the market terms after you use them.
         </p>
       </div>
 
@@ -700,10 +700,10 @@ export default function LearningLab() {
           <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
             <h3 className="text-lg text-white font-semibold mb-2">Learning Missions</h3>
             <ul className="space-y-2 text-sm text-gray-300 list-disc pl-4">
-              <li>Keep any one position ≤ 20% of your portfolio value.</li>
-              <li>Only take trades with a written thesis and invalidation level.</li>
-              <li>Reach 20 trades while maintaining a positive expectancy.</li>
-              <li>Review your last 5 trades and write one process improvement.</li>
+              <li>Complete 3 buys with a written reason, wrong signal, review condition, and max practice loss.</li>
+              <li>Keep each new position within the suggested practice size or write down why you accepted more risk.</li>
+              <li>Close 3 positions with a sell review before judging your results.</li>
+              <li>Find your most common mistake and write one process improvement in the journal.</li>
             </ul>
           </div>
 
@@ -713,7 +713,7 @@ export default function LearningLab() {
               value={state.journal}
               onChange={(e) => setState((prev) => ({ ...prev, journal: e.target.value }))}
               className="w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2 min-h-40"
-              placeholder="What did you learn this week? Which setups worked? What risk mistakes will you avoid next week?"
+              placeholder="What pattern do you notice in your decisions? What will you do differently in the next practice trade?"
             />
           </div>
         </div>

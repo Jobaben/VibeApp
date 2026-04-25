@@ -1735,3 +1735,14 @@ frontend/
 3. Should we gate any app features behind Learning Mode completion?
 4. Do we want to add gamification (points, streaks, leaderboards)?
 5. Should lessons be available in Swedish as well as English?
+
+## Learning Lab Practical Loop
+
+The Learning Lab is the practical application layer for Learning Mode. It teaches beginner investors through plain-language decisions before introducing jargon:
+
+- "Why might this company become more valuable?" -> investment thesis
+- "What would tell you your idea was wrong?" -> invalidation point
+- "How much are you willing to lose if wrong?" -> risk per trade
+- "How many shares keeps that loss small?" -> position sizing
+
+The first implementation keeps data in localStorage and focuses on practice quality: completed plans, sell reviews, plan-following rate, average win/loss, and common mistake types.

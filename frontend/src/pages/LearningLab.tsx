@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { stockApi } from '../services/api';
-import type { SimulatorState, TradePlan, TradePlanForm } from '../types/learningLab';
+import type { SellReviewForm, SimulatorState, TradePlan, TradePlanForm } from '../types/learningLab';
 import type { LeaderboardStock } from '../types/stock';
 import {
   STARTING_CASH,
   calculatePositionSize,
   calculatePortfolioValue,
+  calculateRealizedPnl,
   createDefaultLearningLabState,
   formatMoneyForLearningLab,
   isTradePlanComplete,
@@ -20,6 +21,12 @@ const createDefaultPlanForm = (): TradePlanForm => ({
   maxPracticeLoss: '1',
   maxPracticeLossType: 'percent',
   plannedWrongPrice: '',
+});
+const createDefaultSellReviewForm = (): SellReviewForm => ({
+  outcome: 'unclear',
+  followedPlan: true,
+  lessonLearned: '',
+  mistakeType: '',
 });
 const formatMoney = formatMoneyForLearningLab;
 
@@ -44,6 +51,7 @@ export default function LearningLab() {
   const [selectedTicker, setSelectedTicker] = useState('');
   const [sharesInput, setSharesInput] = useState('10');
   const [planForm, setPlanForm] = useState<TradePlanForm>(createDefaultPlanForm());
+  const [sellReviewForm, setSellReviewForm] = useState<SellReviewForm>(createDefaultSellReviewForm());
   const [loadingIdeas, setLoadingIdeas] = useState(true);
   const [actionMessage, setActionMessage] = useState('');
   const [isExecutingTrade, setIsExecutingTrade] = useState(false);
@@ -165,6 +173,7 @@ export default function LearningLab() {
 
     const shares = Number(sharesInput);
     const submittedPlanForm = planForm;
+    const submittedSellReviewForm = sellReviewForm;
     if (!selectedTicker || !Number.isFinite(shares) || shares <= 0) {
       setActionMessage('Pick a ticker and valid share amount.');
       return;
@@ -184,6 +193,11 @@ export default function LearningLab() {
     const stock = marketIdeas.find((item) => item.ticker === selectedTicker);
     if (!stock) {
       setActionMessage('Ticker not available right now.');
+      return;
+    }
+
+    if (type === 'SELL' && submittedSellReviewForm.lessonLearned.trim().length === 0) {
+      setActionMessage('Write one lesson learned before selling. This makes the paper trade useful practice.');
       return;
     }
 
@@ -291,14 +305,27 @@ export default function LearningLab() {
         return;
       }
 
+      const realizedPnl = calculateRealizedPnl(latestExistingPosition, shares, executionPrice);
+      const sellTradeId = tradeId;
+      const review = {
+        tradeId: sellTradeId,
+        outcome: submittedSellReviewForm.outcome,
+        followedPlan: submittedSellReviewForm.followedPlan,
+        lessonLearned: submittedSellReviewForm.lessonLearned.trim(),
+        mistakeType: submittedSellReviewForm.mistakeType || undefined,
+        reviewedAt: timestamp,
+      };
       const trade = {
-        id: tradeId,
+        id: sellTradeId,
         ticker: selectedTicker,
         type,
         shares,
         price: executionPrice,
         timestamp,
-        reason: 'Sell order',
+        reason: review.lessonLearned,
+        planId: latestExistingPosition.planId,
+        review,
+        realizedPnl,
       };
 
       setState((prev) => {
@@ -324,6 +351,7 @@ export default function LearningLab() {
           trades: [trade, ...prev.trades],
         };
       });
+      setSellReviewForm(createDefaultSellReviewForm());
       setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
     } finally {
       isExecutingTradeRef.current = false;
@@ -490,6 +518,68 @@ export default function LearningLab() {
                   </p>
                 )}
               </div>
+            </div>
+            <div className="rounded-xl bg-gray-950/50 border border-amber-400/20 p-4 space-y-3">
+              <div>
+                <h4 className="text-white font-semibold">Before selling: what happened?</h4>
+                <p className="text-sm text-gray-400 mt-1">
+                  Selling records a review so the lab can teach from your decisions, not only from profit or loss.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <label className="block">
+                  <span className="text-sm text-gray-200">Did your original idea work?</span>
+                  <select
+                    value={sellReviewForm.outcome}
+                    onChange={(e) => setSellReviewForm((prev) => ({ ...prev, outcome: e.target.value as SellReviewForm['outcome'] }))}
+                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
+                  >
+                    <option value="worked">Worked</option>
+                    <option value="failed">Failed</option>
+                    <option value="unclear">Still unclear</option>
+                  </select>
+                </label>
+
+                <label className="block">
+                  <span className="text-sm text-gray-200">Did you follow your plan?</span>
+                  <select
+                    value={sellReviewForm.followedPlan ? 'yes' : 'no'}
+                    onChange={(e) => setSellReviewForm((prev) => ({ ...prev, followedPlan: e.target.value === 'yes' }))}
+                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
+                  >
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </label>
+
+                <label className="block">
+                  <span className="text-sm text-gray-200">Mistake type, if any</span>
+                  <select
+                    value={sellReviewForm.mistakeType}
+                    onChange={(e) => setSellReviewForm((prev) => ({ ...prev, mistakeType: e.target.value as SellReviewForm['mistakeType'] }))}
+                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
+                  >
+                    <option value="">No mistake selected</option>
+                    <option value="no_reason">No clear reason</option>
+                    <option value="too_large">Position too large</option>
+                    <option value="ignored_warning">Ignored warning sign</option>
+                    <option value="emotional_sell">Sold emotionally</option>
+                    <option value="score_only">Bought only because score was high</option>
+                    <option value="other">Other</option>
+                  </select>
+                </label>
+              </div>
+
+              <label className="block">
+                <span className="text-sm text-gray-200">What did you learn?</span>
+                <textarea
+                  value={sellReviewForm.lessonLearned}
+                  onChange={(e) => setSellReviewForm((prev) => ({ ...prev, lessonLearned: e.target.value }))}
+                  className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2 min-h-16"
+                  placeholder="Example: I bought before I understood the risk, or the plan worked but the position was too large."
+                />
+              </label>
             </div>
             <div className="flex flex-wrap gap-2">
               <button

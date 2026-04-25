@@ -142,6 +142,22 @@ export default function LearningLab() {
     () => new Map(state.plans.map((plan) => [plan.id, plan])),
     [state.plans]
   );
+  const tickerOptions = useMemo(() => {
+    const options = new Map<string, { ticker: string; name: string }>();
+    marketIdeas.forEach((idea) => options.set(idea.ticker, { ticker: idea.ticker, name: idea.name }));
+    state.positions.forEach((position) => {
+      if (!options.has(position.ticker)) {
+        options.set(position.ticker, { ticker: position.ticker, name: position.name });
+      }
+    });
+    return [...options.values()];
+  }, [marketIdeas, state.positions]);
+
+  useEffect(() => {
+    if (!selectedTicker && state.positions.length > 0) {
+      setSelectedTicker(state.positions[0].ticker);
+    }
+  }, [selectedTicker, state.positions]);
 
   const refreshPositionPrices = async () => {
     if (isExecutingTradeRef.current) {
@@ -211,14 +227,15 @@ export default function LearningLab() {
       return;
     }
 
-    const stock = marketIdeas.find((item) => item.ticker === selectedTicker);
-    if (!stock) {
-      setActionMessage('Ticker not available right now.');
-      return;
-    }
+    const existingPosition = stateRef.current.positions.find((position) => position.ticker === selectedTicker);
 
     if (type === 'SELL' && submittedSellReviewForm.lessonLearned.trim().length === 0) {
       setActionMessage('Write one lesson learned before selling. This makes the paper trade useful practice.');
+      return;
+    }
+
+    if (type === 'SELL' && !existingPosition) {
+      setActionMessage('You cannot sell more shares than you own.');
       return;
     }
 
@@ -249,6 +266,17 @@ export default function LearningLab() {
       const tradeId = `${Date.now()}-${Math.random()}`;
 
       if (type === 'BUY') {
+        if (existingPosition) {
+          setActionMessage('Close or review the existing practice position before starting a new plan for this ticker.');
+          return;
+        }
+
+        const stock = marketIdeas.find((item) => item.ticker === selectedTicker);
+        if (!stock) {
+          setActionMessage('Ticker not available right now.');
+          return;
+        }
+
         const plan: TradePlan = {
           id: `${Date.now()}-${Math.random()}-plan`,
           ticker: selectedTicker,
@@ -283,7 +311,11 @@ export default function LearningLab() {
           trade,
         });
         if (!result.applied) {
-          setActionMessage('Not enough cash. Reduce size or sell another position.');
+          setActionMessage(
+            result.reason === 'position_exists'
+              ? 'Close or review the existing practice position before starting a new plan for this ticker.'
+              : 'Not enough cash. Reduce size or sell another position.'
+          );
           return;
         }
 
@@ -396,10 +428,10 @@ export default function LearningLab() {
                 onChange={(e) => setSelectedTicker(e.target.value)}
                 className="bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
               >
-                {loadingIdeas ? (
+                {loadingIdeas && tickerOptions.length === 0 ? (
                   <option>Loading...</option>
                 ) : (
-                  marketIdeas.map((idea) => (
+                  tickerOptions.map((idea) => (
                     <option key={idea.ticker} value={idea.ticker}>
                       {idea.ticker} · {idea.name}
                     </option>

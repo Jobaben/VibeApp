@@ -175,40 +175,33 @@ interface ApplyLearningLabSellTradeInput {
 interface LearningLabTradeApplicationResult {
   state: SimulatorState;
   applied: boolean;
+  reason?: 'insufficient_cash' | 'insufficient_shares' | 'position_exists';
 }
 
 export function applyLearningLabBuyTrade(
   state: SimulatorState,
   input: ApplyLearningLabBuyTradeInput
 ): LearningLabTradeApplicationResult {
-  if (input.tradeValue > state.cash) {
-    return { state, applied: false };
-  }
-
   const positions = [...state.positions];
   const existingIndex = positions.findIndex((p) => p.ticker === input.selectedTicker);
   const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
 
   if (existing) {
-    const totalShares = existing.shares + input.shares;
-    const newAvgCost = (existing.avgCost * existing.shares + input.executionPrice * input.shares) / totalShares;
-    positions[existingIndex] = {
-      ...existing,
-      shares: totalShares,
-      avgCost: newAvgCost,
-      currentPrice: input.executionPrice,
-      planId: input.plan.id,
-    };
-  } else {
-    positions.push({
-      ticker: input.selectedTicker,
-      name: input.stockName,
-      shares: input.shares,
-      avgCost: input.executionPrice,
-      currentPrice: input.executionPrice,
-      planId: input.plan.id,
-    });
+    return { state, applied: false, reason: 'position_exists' };
   }
+
+  if (input.tradeValue > state.cash) {
+    return { state, applied: false, reason: 'insufficient_cash' };
+  }
+
+  positions.push({
+    ticker: input.selectedTicker,
+    name: input.stockName,
+    shares: input.shares,
+    avgCost: input.executionPrice,
+    currentPrice: input.executionPrice,
+    planId: input.plan.id,
+  });
 
   return {
     state: {
@@ -231,7 +224,7 @@ export function applyLearningLabSellTrade(
   const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
 
   if (!existing || existing.shares < input.shares) {
-    return { state, applied: false };
+    return { state, applied: false, reason: 'insufficient_shares' };
   }
 
   const remainingShares = existing.shares - input.shares;

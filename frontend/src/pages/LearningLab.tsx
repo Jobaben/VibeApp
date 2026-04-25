@@ -4,6 +4,7 @@ import type { SellReviewForm, SimulatorState, TradePlan, TradePlanForm } from '.
 import type { LeaderboardStock } from '../types/stock';
 import {
   STARTING_CASH,
+  calculateDashboardMetrics,
   calculatePositionSize,
   calculatePortfolioValue,
   calculateRealizedPnl,
@@ -131,6 +132,11 @@ export default function LearningLab() {
   const requestedShares = Number(sharesInput);
   const isOversizedTrade = positionSize.suggestedShares > 0 && requestedShares > positionSize.suggestedShares;
   const totalPnl = portfolioValue - STARTING_CASH;
+  const dashboardMetrics = useMemo(() => calculateDashboardMetrics(state.trades), [state.trades]);
+  const plansById = useMemo(
+    () => new Map(state.plans.map((plan) => [plan.id, plan])),
+    [state.plans]
+  );
 
   const refreshPositionPrices = async () => {
     if (state.positions.length === 0) {
@@ -390,8 +396,8 @@ export default function LearningLab() {
           </p>
         </div>
         <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
-          <p className="text-gray-400 text-xs">Trades Logged</p>
-          <p className="text-xl text-white font-semibold">{state.trades.length}</p>
+          <p className="text-gray-400 text-xs">Plan Following</p>
+          <p className="text-xl text-white font-semibold">{dashboardMetrics.planFollowingRate}%</p>
         </div>
       </div>
 
@@ -628,15 +634,32 @@ export default function LearningLab() {
               <div className="space-y-2">
                 {state.positions.map((position) => {
                   const unrealized = (position.currentPrice - position.avgCost) * position.shares;
+                  const plan = position.planId ? plansById.get(position.planId) : undefined;
+                  const plannedWrongPrice = plan?.plannedWrongPrice;
+                  const withinPlannedRisk = plannedWrongPrice == null || position.currentPrice >= plannedWrongPrice;
                   return (
                     <div key={position.ticker} className="bg-gray-800/70 border border-white/10 rounded-lg p-3">
-                      <div className="flex justify-between">
+                      <div className="flex justify-between gap-4">
                         <p className="text-white font-medium">{position.ticker} · {position.name}</p>
                         <p className={unrealized >= 0 ? 'text-emerald-400' : 'text-red-400'}>{formatMoney(unrealized)}</p>
                       </div>
                       <p className="text-xs text-gray-400 mt-1">
                         {position.shares} shares · Avg {formatMoney(position.avgCost)} · Last {formatMoney(position.currentPrice)}
                       </p>
+                      {plan ? (
+                        <div className="mt-3 space-y-2 text-xs">
+                          <p className="text-gray-300"><span className="text-cyan-300">Reason:</span> {plan.reasonForBuying}</p>
+                          <p className="text-gray-300"><span className="text-cyan-300">Wrong signal:</span> {plan.wrongSignal}</p>
+                          <p className="text-gray-300"><span className="text-cyan-300">Review:</span> {plan.reviewCondition}</p>
+                          <p className={withinPlannedRisk ? 'text-emerald-300' : 'text-amber-300'}>
+                            {withinPlannedRisk ? 'Still inside the planned risk area.' : 'Price is beyond your planned wrong-price. Review the position.'}
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-amber-300 mt-3">
+                          This is unplanned practice history from before the guided lab. Future trades should include a plan.
+                        </p>
+                      )}
                     </div>
                   );
                 })}
@@ -646,6 +669,34 @@ export default function LearningLab() {
         </div>
 
         <div className="space-y-4">
+          <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
+            <h3 className="text-lg text-white font-semibold mb-3">Learning Dashboard</h3>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="rounded-lg bg-gray-800/70 p-3">
+                <p className="text-gray-400">Completed plans</p>
+                <p className="text-white text-lg font-semibold">{dashboardMetrics.completedPlans}</p>
+              </div>
+              <div className="rounded-lg bg-gray-800/70 p-3">
+                <p className="text-gray-400">Closed reviews</p>
+                <p className="text-white text-lg font-semibold">{dashboardMetrics.closedReviews}</p>
+              </div>
+              <div className="rounded-lg bg-gray-800/70 p-3">
+                <p className="text-gray-400">Average win</p>
+                <p className="text-emerald-400 text-lg font-semibold">{formatMoney(dashboardMetrics.averageWin)}</p>
+              </div>
+              <div className="rounded-lg bg-gray-800/70 p-3">
+                <p className="text-gray-400">Average loss</p>
+                <p className="text-red-400 text-lg font-semibold">{formatMoney(dashboardMetrics.averageLoss)}</p>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400 mt-3">
+              Common mistake: {dashboardMetrics.commonMistake ? dashboardMetrics.commonMistake.replace(/_/g, ' ') : 'none recorded yet'}
+            </p>
+            <p className="text-xs text-gray-500 mt-2">
+              This is practice feedback, not financial advice or a promise of future returns.
+            </p>
+          </div>
+
           <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
             <h3 className="text-lg text-white font-semibold mb-2">Learning Missions</h3>
             <ul className="space-y-2 text-sm text-gray-300 list-disc pl-4">
@@ -683,6 +734,12 @@ export default function LearningLab() {
                   <p className="text-gray-400 text-xs">{new Date(trade.timestamp).toLocaleString()}</p>
                 </div>
                 <p className="text-xs text-gray-300 mt-1">Reason: {trade.reason}</p>
+                {trade.review && (
+                  <p className="text-xs text-cyan-300 mt-1">
+                    Review: idea {trade.review.outcome}, {trade.review.followedPlan ? 'followed plan' : 'did not follow plan'}
+                    {trade.realizedPnl != null ? ` · Realized ${formatMoney(trade.realizedPnl)}` : ''}
+                  </p>
+                )}
               </div>
             ))}
           </div>

@@ -3,6 +3,8 @@ import type {
   MistakeType,
   Position,
   PositionSizeResult,
+  TradePlan,
+  TradeReview,
   SimulatorState,
   Trade,
   TradePlanForm,
@@ -31,8 +33,8 @@ export function migrateLearningLabState(raw: string | null): SimulatorState {
     return {
       cash: typeof parsed.cash === 'number' && Number.isFinite(parsed.cash) ? parsed.cash : STARTING_CASH,
       positions: Array.isArray(parsed.positions) ? parsed.positions.map(sanitizePosition).filter(isPosition) : [],
-      trades: Array.isArray(parsed.trades) ? parsed.trades : [],
-      plans: Array.isArray(parsed.plans) ? parsed.plans : [],
+      trades: Array.isArray(parsed.trades) ? parsed.trades.map(sanitizeTrade).filter(isTrade) : [],
+      plans: Array.isArray(parsed.plans) ? parsed.plans.map(sanitizeTradePlan).filter(isTradePlan) : [],
       journal: typeof parsed.journal === 'string' ? parsed.journal : '',
     };
   } catch {
@@ -217,6 +219,171 @@ function isPosition(position: Position | null): position is Position {
   return position !== null;
 }
 
+function sanitizeTradePlan(plan: unknown): TradePlan | null {
+  if (!plan || typeof plan !== 'object') {
+    return null;
+  }
+
+  const candidate = plan as Partial<TradePlan>;
+  if (
+    typeof candidate.id !== 'string' ||
+    typeof candidate.ticker !== 'string' ||
+    typeof candidate.reasonForBuying !== 'string' ||
+    typeof candidate.wrongSignal !== 'string' ||
+    typeof candidate.reviewCondition !== 'string' ||
+    typeof candidate.maxPracticeLoss !== 'number' ||
+    !Number.isFinite(candidate.maxPracticeLoss) ||
+    candidate.maxPracticeLoss <= 0 ||
+    !isMaxPracticeLossType(candidate.maxPracticeLossType) ||
+    typeof candidate.plannedEntryPrice !== 'number' ||
+    !Number.isFinite(candidate.plannedEntryPrice) ||
+    candidate.plannedEntryPrice <= 0 ||
+    typeof candidate.createdAt !== 'string'
+  ) {
+    return null;
+  }
+
+  const sanitized: TradePlan = {
+    id: candidate.id,
+    ticker: candidate.ticker,
+    reasonForBuying: candidate.reasonForBuying,
+    wrongSignal: candidate.wrongSignal,
+    reviewCondition: candidate.reviewCondition,
+    maxPracticeLoss: candidate.maxPracticeLoss,
+    maxPracticeLossType: candidate.maxPracticeLossType,
+    plannedEntryPrice: candidate.plannedEntryPrice,
+    createdAt: candidate.createdAt,
+  };
+
+  if (
+    typeof candidate.plannedWrongPrice === 'number' &&
+    Number.isFinite(candidate.plannedWrongPrice) &&
+    candidate.plannedWrongPrice > 0
+  ) {
+    sanitized.plannedWrongPrice = candidate.plannedWrongPrice;
+  }
+
+  if (
+    typeof candidate.suggestedShares === 'number' &&
+    Number.isFinite(candidate.suggestedShares) &&
+    candidate.suggestedShares > 0
+  ) {
+    sanitized.suggestedShares = candidate.suggestedShares;
+  }
+
+  return sanitized;
+}
+
+function isTradePlan(plan: TradePlan | null): plan is TradePlan {
+  return plan !== null;
+}
+
+function sanitizeTrade(trade: unknown): Trade | null {
+  if (!trade || typeof trade !== 'object') {
+    return null;
+  }
+
+  const candidate = trade as Partial<Trade>;
+  if (
+    typeof candidate.id !== 'string' ||
+    typeof candidate.ticker !== 'string' ||
+    !isTradeType(candidate.type) ||
+    typeof candidate.shares !== 'number' ||
+    !Number.isFinite(candidate.shares) ||
+    candidate.shares <= 0 ||
+    typeof candidate.price !== 'number' ||
+    !Number.isFinite(candidate.price) ||
+    candidate.price < 0 ||
+    typeof candidate.timestamp !== 'string' ||
+    typeof candidate.reason !== 'string'
+  ) {
+    return null;
+  }
+
+  const sanitized: Trade = {
+    id: candidate.id,
+    ticker: candidate.ticker,
+    type: candidate.type,
+    shares: candidate.shares,
+    price: candidate.price,
+    timestamp: candidate.timestamp,
+    reason: candidate.reason,
+  };
+
+  if (typeof candidate.planId === 'string') {
+    sanitized.planId = candidate.planId;
+  }
+
+  if (typeof candidate.realizedPnl === 'number' && Number.isFinite(candidate.realizedPnl)) {
+    sanitized.realizedPnl = candidate.realizedPnl;
+  }
+
+  const review = sanitizeTradeReview(candidate.review);
+  if (review) {
+    sanitized.review = review;
+  }
+
+  return sanitized;
+}
+
+function isTrade(trade: Trade | null): trade is Trade {
+  return trade !== null;
+}
+
+function sanitizeTradeReview(review: unknown): TradeReview | null {
+  if (!review || typeof review !== 'object') {
+    return null;
+  }
+
+  const candidate = review as Partial<TradeReview>;
+  if (
+    typeof candidate.tradeId !== 'string' ||
+    !isTradeOutcome(candidate.outcome) ||
+    typeof candidate.followedPlan !== 'boolean' ||
+    typeof candidate.lessonLearned !== 'string' ||
+    typeof candidate.reviewedAt !== 'string'
+  ) {
+    return null;
+  }
+
+  const sanitized: TradeReview = {
+    tradeId: candidate.tradeId,
+    outcome: candidate.outcome,
+    followedPlan: candidate.followedPlan,
+    lessonLearned: candidate.lessonLearned,
+    reviewedAt: candidate.reviewedAt,
+  };
+
+  if (isMistakeType(candidate.mistakeType)) {
+    sanitized.mistakeType = candidate.mistakeType;
+  }
+
+  return sanitized;
+}
+
+function isMaxPracticeLossType(value: unknown): value is TradePlan['maxPracticeLossType'] {
+  return value === 'amount' || value === 'percent';
+}
+
+function isTradeType(value: unknown): value is Trade['type'] {
+  return value === 'BUY' || value === 'SELL';
+}
+
+function isTradeOutcome(value: unknown): value is TradeReview['outcome'] {
+  return value === 'worked' || value === 'failed' || value === 'unclear';
+}
+
+function isMistakeType(value: unknown): value is MistakeType {
+  return (
+    value === 'no_reason' ||
+    value === 'too_large' ||
+    value === 'ignored_warning' ||
+    value === 'emotional_sell' ||
+    value === 'score_only' ||
+    value === 'other'
+  );
+}
+
 function hasValidPositionFields(position: unknown): position is Position {
   if (!position || typeof position !== 'object') {
     return false;
@@ -244,5 +411,5 @@ export function formatMoneyForLearningLab(amount: number): string {
     style: 'currency',
     currency: 'USD',
     maximumFractionDigits: 2,
-  }).format(amount);
+  }).format(Number.isFinite(amount) ? amount : 0);
 }

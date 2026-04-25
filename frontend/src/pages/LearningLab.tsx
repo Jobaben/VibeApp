@@ -1,16 +1,26 @@
 import { useEffect, useMemo, useState } from 'react';
 import { stockApi } from '../services/api';
-import type { Position, SimulatorState } from '../types/learningLab';
+import type { Position, SimulatorState, TradePlan, TradePlanForm } from '../types/learningLab';
 import type { LeaderboardStock } from '../types/stock';
 import {
   STARTING_CASH,
+  calculatePositionSize,
   calculatePortfolioValue,
   createDefaultLearningLabState,
   formatMoneyForLearningLab,
+  isTradePlanComplete,
   migrateLearningLabState,
 } from '../utils/learningLab';
 
 const STORAGE_KEY = 'learning-lab-simulator-v1';
+const createDefaultPlanForm = (): TradePlanForm => ({
+  reasonForBuying: '',
+  wrongSignal: '',
+  reviewCondition: '',
+  maxPracticeLoss: '1',
+  maxPracticeLossType: 'percent',
+  plannedWrongPrice: '',
+});
 const formatMoney = formatMoneyForLearningLab;
 
 function loadState(): SimulatorState {
@@ -22,7 +32,7 @@ export default function LearningLab() {
   const [state, setState] = useState<SimulatorState>(createDefaultLearningLabState());
   const [selectedTicker, setSelectedTicker] = useState('');
   const [sharesInput, setSharesInput] = useState('10');
-  const [reasonInput, setReasonInput] = useState('');
+  const [planForm, setPlanForm] = useState<TradePlanForm>(createDefaultPlanForm());
   const [loadingIdeas, setLoadingIdeas] = useState(true);
   const [actionMessage, setActionMessage] = useState('');
 
@@ -88,6 +98,13 @@ export default function LearningLab() {
     () => calculatePortfolioValue(state.cash, state.positions),
     [state.cash, state.positions]
   );
+  const positionSize = useMemo(
+    () => calculatePositionSize(planForm, watchPrice, portfolioValue),
+    [planForm, portfolioValue, watchPrice]
+  );
+  const planComplete = isTradePlanComplete(planForm);
+  const requestedShares = Number(sharesInput);
+  const isOversizedTrade = positionSize.suggestedShares > 0 && requestedShares > positionSize.suggestedShares;
   const totalPnl = portfolioValue - STARTING_CASH;
 
   const refreshPositionPrices = async () => {
@@ -121,6 +138,11 @@ export default function LearningLab() {
       return;
     }
 
+    if (type === 'BUY' && !planComplete) {
+      setActionMessage('Complete the practice plan before buying. The goal is to learn the process, not just place trades.');
+      return;
+    }
+
     const stock = marketIdeas.find((item) => item.ticker === selectedTicker);
     if (!stock) {
       setActionMessage('Ticker not available right now.');
@@ -139,7 +161,17 @@ export default function LearningLab() {
     }
 
     const tradeValue = shares * executionPrice;
-    const reason = reasonInput.trim() || 'No reason recorded';
+    const currentExistingPosition = state.positions.find((p) => p.ticker === selectedTicker);
+
+    if (type === 'BUY' && tradeValue > state.cash) {
+      setActionMessage('Not enough cash. Reduce size or sell another position.');
+      return;
+    }
+
+    if (type === 'SELL' && (!currentExistingPosition || currentExistingPosition.shares < shares)) {
+      setActionMessage('You cannot sell more shares than you own.');
+      return;
+    }
 
     setState((prev) => {
       const positions = [...prev.positions];
@@ -152,6 +184,20 @@ export default function LearningLab() {
           return prev;
         }
 
+        const plan: TradePlan = {
+          id: `${Date.now()}-${Math.random()}-plan`,
+          ticker: selectedTicker,
+          reasonForBuying: planForm.reasonForBuying.trim(),
+          wrongSignal: planForm.wrongSignal.trim(),
+          reviewCondition: planForm.reviewCondition.trim(),
+          maxPracticeLoss: Number(planForm.maxPracticeLoss),
+          maxPracticeLossType: planForm.maxPracticeLossType,
+          plannedEntryPrice: executionPrice,
+          plannedWrongPrice: Number(planForm.plannedWrongPrice),
+          suggestedShares: positionSize.suggestedShares,
+          createdAt: new Date().toISOString(),
+        };
+
         if (existing) {
           const totalShares = existing.shares + shares;
           const newAvgCost = (existing.avgCost * existing.shares + executionPrice * shares) / totalShares;
@@ -160,6 +206,7 @@ export default function LearningLab() {
             shares: totalShares,
             avgCost: newAvgCost,
             currentPrice: executionPrice,
+            planId: plan.id,
           };
         } else {
           positions.push({
@@ -168,6 +215,7 @@ export default function LearningLab() {
             shares,
             avgCost: executionPrice,
             currentPrice: executionPrice,
+            planId: plan.id,
           });
         }
 
@@ -183,10 +231,12 @@ export default function LearningLab() {
               shares,
               price: executionPrice,
               timestamp: new Date().toISOString(),
-              reason,
+              reason: plan.reasonForBuying,
+              planId: plan.id,
             },
             ...prev.trades,
           ],
+          plans: [plan, ...prev.plans],
         };
       }
 
@@ -214,14 +264,16 @@ export default function LearningLab() {
             shares,
             price: executionPrice,
             timestamp: new Date().toISOString(),
-            reason,
+            reason: 'Sell order',
           },
           ...prev.trades,
         ],
       };
     });
 
-    setReasonInput('');
+    if (type === 'BUY') {
+      setPlanForm(createDefaultPlanForm());
+    }
     setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
   };
 
@@ -293,17 +345,106 @@ export default function LearningLab() {
                 Est. price: {formatMoney(watchPrice || 0)}
               </div>
             </div>
-            <textarea
-              value={reasonInput}
-              onChange={(e) => setReasonInput(e.target.value)}
-              placeholder="Why this trade? (signal, setup, risk/reward, stop-loss)"
-              className="w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2 min-h-20"
-            />
+            <div className="rounded-xl bg-gray-950/50 border border-cyan-400/20 p-4 space-y-4">
+              <div>
+                <h4 className="text-white font-semibold">Your practice plan</h4>
+                <p className="text-sm text-gray-400 mt-1">
+                  Start with plain answers. The investing terms are shown after each prompt so you learn them by doing.
+                </p>
+              </div>
+
+              <label className="block">
+                <span className="text-sm text-gray-200">Why might this company become more valuable?</span>
+                <span className="block text-xs text-cyan-300 mt-1">Investors call this your investment thesis.</span>
+                <textarea
+                  value={planForm.reasonForBuying}
+                  onChange={(e) => setPlanForm((prev) => ({ ...prev, reasonForBuying: e.target.value }))}
+                  className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2 min-h-20"
+                  placeholder="Example: Revenue is growing, debt is manageable, and the stock is cheaper than similar companies."
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-sm text-gray-200">What would tell you your idea was wrong?</span>
+                <span className="block text-xs text-cyan-300 mt-1">Investors call this an invalidation point.</span>
+                <textarea
+                  value={planForm.wrongSignal}
+                  onChange={(e) => setPlanForm((prev) => ({ ...prev, wrongSignal: e.target.value }))}
+                  className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2 min-h-16"
+                  placeholder="Example: Price falls below my wrong-price level or the company reports weaker earnings."
+                />
+              </label>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <label className="block md:col-span-1">
+                  <span className="text-sm text-gray-200">Your "I was wrong" price</span>
+                  <span className="block text-xs text-cyan-300 mt-1">Used for position sizing.</span>
+                  <input
+                    value={planForm.plannedWrongPrice}
+                    onChange={(e) => setPlanForm((prev) => ({ ...prev, plannedWrongPrice: e.target.value }))}
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
+                    placeholder="80.00"
+                  />
+                </label>
+
+                <label className="block md:col-span-1">
+                  <span className="text-sm text-gray-200">Max practice loss</span>
+                  <span className="block text-xs text-cyan-300 mt-1">How much you accept losing if wrong.</span>
+                  <input
+                    value={planForm.maxPracticeLoss}
+                    onChange={(e) => setPlanForm((prev) => ({ ...prev, maxPracticeLoss: e.target.value }))}
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
+                  />
+                </label>
+
+                <label className="block md:col-span-1">
+                  <span className="text-sm text-gray-200">Loss type</span>
+                  <span className="block text-xs text-cyan-300 mt-1">Amount or portfolio percent.</span>
+                  <select
+                    value={planForm.maxPracticeLossType}
+                    onChange={(e) => setPlanForm((prev) => ({ ...prev, maxPracticeLossType: e.target.value as TradePlanForm['maxPracticeLossType'] }))}
+                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
+                  >
+                    <option value="percent">% of portfolio</option>
+                    <option value="amount">Dollar amount</option>
+                  </select>
+                </label>
+              </div>
+
+              <label className="block">
+                <span className="text-sm text-gray-200">When will you check if this is working?</span>
+                <span className="block text-xs text-cyan-300 mt-1">Investors call this a review condition.</span>
+                <input
+                  value={planForm.reviewCondition}
+                  onChange={(e) => setPlanForm((prev) => ({ ...prev, reviewCondition: e.target.value }))}
+                  className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
+                  placeholder="Example: Review after 30 days or after the next earnings report."
+                />
+              </label>
+
+              <div className="rounded-lg bg-cyan-500/10 border border-cyan-400/20 p-3">
+                <p className="text-sm text-cyan-100">{positionSize.explanation}</p>
+                {isOversizedTrade && (
+                  <p className="text-sm text-amber-300 mt-2">
+                    Your share amount is larger than the suggested practice size. You can continue, but this is riskier than your plan.
+                  </p>
+                )}
+              </div>
+            </div>
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => executeTrade('BUY')}
-                className="px-4 py-2 rounded-lg bg-emerald-500/80 hover:bg-emerald-500 text-white font-medium"
+                disabled={!planComplete}
+                className={`px-4 py-2 rounded-lg text-white font-medium ${
+                  planComplete ? 'bg-emerald-500/80 hover:bg-emerald-500' : 'bg-gray-700 cursor-not-allowed opacity-60'
+                }`}
               >
                 Buy
               </button>

@@ -304,7 +304,11 @@ export default function LearningLab() {
       setState((prev) => {
         const positions = [...prev.positions];
         const existingIndex = positions.findIndex((p) => p.ticker === selectedTicker);
-        const existing = positions[existingIndex];
+        const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
+
+        if (!existing || existing.shares < shares) {
+          return prev;
+        }
 
         const remainingShares = existing.shares - shares;
         if (remainingShares === 0) {

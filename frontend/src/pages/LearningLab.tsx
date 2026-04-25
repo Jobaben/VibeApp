@@ -168,26 +168,16 @@ export default function LearningLab() {
 
     const tradeValue = shares * executionPrice;
     const executionPositionSize = calculatePositionSize(planForm, executionPrice, portfolioValue);
-    const currentExistingPosition = state.positions.find((p) => p.ticker === selectedTicker);
 
     if (type === 'BUY' && executionPositionSize.suggestedShares <= 0) {
       setActionMessage('Adjust the plan so the app can estimate a safer practice size before buying.');
       return;
     }
 
-    if (type === 'BUY' && tradeValue > state.cash) {
-      setActionMessage('Not enough cash. Reduce size or sell another position.');
-      return;
-    }
-
-    if (type === 'SELL' && (!currentExistingPosition || currentExistingPosition.shares < shares)) {
-      setActionMessage('You cannot sell more shares than you own.');
-      return;
-    }
-
-    const positions = [...state.positions];
-    const existingIndex = positions.findIndex((p) => p.ticker === selectedTicker);
-    const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
+    let didExecute = false;
+    let failureMessage = '';
+    const timestamp = new Date().toISOString();
+    const tradeId = `${Date.now()}-${Math.random()}`;
 
     if (type === 'BUY') {
       const plan: TradePlan = {
@@ -203,82 +193,110 @@ export default function LearningLab() {
         suggestedShares: executionPositionSize.suggestedShares,
         createdAt: new Date().toISOString(),
       };
+      const trade = {
+        id: tradeId,
+        ticker: selectedTicker,
+        type,
+        shares,
+        price: executionPrice,
+        timestamp,
+        reason: plan.reasonForBuying,
+        planId: plan.id,
+      };
 
-      if (existing) {
-        const totalShares = existing.shares + shares;
-        const newAvgCost = (existing.avgCost * existing.shares + executionPrice * shares) / totalShares;
-        positions[existingIndex] = {
-          ...existing,
-          shares: totalShares,
-          avgCost: newAvgCost,
-          currentPrice: executionPrice,
-          planId: plan.id,
+      setState((prev) => {
+        const positions = [...prev.positions];
+        const existingIndex = positions.findIndex((p) => p.ticker === selectedTicker);
+        const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
+
+        if (tradeValue > prev.cash) {
+          didExecute = false;
+          failureMessage = 'Not enough cash. Reduce size or sell another position.';
+          return prev;
+        }
+
+        if (existing) {
+          const totalShares = existing.shares + shares;
+          const newAvgCost = (existing.avgCost * existing.shares + executionPrice * shares) / totalShares;
+          positions[existingIndex] = {
+            ...existing,
+            shares: totalShares,
+            avgCost: newAvgCost,
+            currentPrice: executionPrice,
+            planId: plan.id,
+          };
+        } else {
+          positions.push({
+            ticker: selectedTicker,
+            name: stock.name,
+            shares,
+            avgCost: executionPrice,
+            currentPrice: executionPrice,
+            planId: plan.id,
+          });
+        }
+
+        didExecute = true;
+        failureMessage = '';
+        return {
+          ...prev,
+          cash: prev.cash - tradeValue,
+          positions,
+          trades: [trade, ...prev.trades],
+          plans: [plan, ...prev.plans],
         };
-      } else {
-        positions.push({
-          ticker: selectedTicker,
-          name: stock.name,
-          shares,
-          avgCost: executionPrice,
-          currentPrice: executionPrice,
-          planId: plan.id,
-        });
+      });
+      if (didExecute) {
+        setPlanForm(createDefaultPlanForm());
+        setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
+      } else if (failureMessage) {
+        setActionMessage(failureMessage);
+      }
+      return;
+    }
+
+    const trade = {
+      id: tradeId,
+      ticker: selectedTicker,
+      type,
+      shares,
+      price: executionPrice,
+      timestamp,
+      reason: 'Sell order',
+    };
+
+    setState((prev) => {
+      const positions = [...prev.positions];
+      const existingIndex = positions.findIndex((p) => p.ticker === selectedTicker);
+      const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
+
+      if (!existing || existing.shares < shares) {
+        didExecute = false;
+        failureMessage = 'You cannot sell more shares than you own.';
+        return prev;
       }
 
-      setState({
-        ...state,
-        cash: state.cash - tradeValue,
+      const remainingShares = existing.shares - shares;
+      if (remainingShares === 0) {
+        positions.splice(existingIndex, 1);
+      } else {
+        positions[existingIndex] = { ...existing, shares: remainingShares, currentPrice: executionPrice };
+      }
+
+      didExecute = true;
+      failureMessage = '';
+      return {
+        ...prev,
+        cash: prev.cash + tradeValue,
         positions,
-        trades: [
-          {
-            id: `${Date.now()}-${Math.random()}`,
-            ticker: selectedTicker,
-            type,
-            shares,
-            price: executionPrice,
-            timestamp: new Date().toISOString(),
-            reason: plan.reasonForBuying,
-            planId: plan.id,
-          },
-          ...state.trades,
-        ],
-        plans: [plan, ...state.plans],
-      });
-      setPlanForm(createDefaultPlanForm());
-      setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
-      return;
-    }
-
-    if (!existing) {
-      setActionMessage('You cannot sell more shares than you own.');
-      return;
-    }
-
-    const remainingShares = existing.shares - shares;
-    if (remainingShares === 0) {
-      positions.splice(existingIndex, 1);
-    } else {
-      positions[existingIndex] = { ...existing, shares: remainingShares, currentPrice: executionPrice };
-    }
-
-    setState({
-      ...state,
-      cash: state.cash + tradeValue,
-      positions,
-      trades: [
-        {
-          id: `${Date.now()}-${Math.random()}`,
-          ticker: selectedTicker,
-          type,
-          shares,
-          price: executionPrice,
-          timestamp: new Date().toISOString(),
-          reason: 'Sell order',
-        },
-        ...state.trades,
-      ],
+        trades: [trade, ...prev.trades],
+      };
     });
-    setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
+    if (didExecute) {
+      setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
+    } else if (failureMessage) {
+      setActionMessage(failureMessage);
+    }
   };
 
   const resetSimulator = () => {

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { stockApi } from '../services/api';
-import type { Position, SimulatorState, TradePlan, TradePlanForm } from '../types/learningLab';
+import type { SimulatorState, TradePlan, TradePlanForm } from '../types/learningLab';
 import type { LeaderboardStock } from '../types/stock';
 import {
   STARTING_CASH,
@@ -46,7 +46,9 @@ export default function LearningLab() {
   const [planForm, setPlanForm] = useState<TradePlanForm>(createDefaultPlanForm());
   const [loadingIdeas, setLoadingIdeas] = useState(true);
   const [actionMessage, setActionMessage] = useState('');
+  const [isExecutingTrade, setIsExecutingTrade] = useState(false);
   const stateRef = useRef(state);
+  const isExecutingTradeRef = useRef(false);
 
   useEffect(() => {
     const initial = loadState();
@@ -127,26 +129,40 @@ export default function LearningLab() {
       return;
     }
 
-    const updated: Position[] = await Promise.all(
-      state.positions.map(async (position) => {
+    const positionsToRefresh = state.positions;
+    const updatedPrices = new Map<string, number>();
+
+    await Promise.all(
+      positionsToRefresh.map(async (position) => {
         try {
           const historical = await stockApi.getHistoricalPrices(position.ticker, '1mo', false);
           const latest = historical.data[historical.data.length - 1];
           if (latest?.close) {
-            return { ...position, currentPrice: latest.close };
+            updatedPrices.set(position.ticker, latest.close);
           }
-          return position;
         } catch {
-          return position;
+          // Keep the existing price when a refresh fails for one ticker.
         }
       })
     );
 
-    setState((prev) => ({ ...prev, positions: updated }));
+    setState((prev) => ({
+      ...prev,
+      positions: prev.positions.map((position) =>
+        updatedPrices.has(position.ticker)
+          ? { ...position, currentPrice: updatedPrices.get(position.ticker)! }
+          : position
+      ),
+    }));
     setActionMessage('Portfolio prices refreshed from market data.');
   };
 
   const executeTrade = async (type: 'BUY' | 'SELL') => {
+    if (isExecutingTrade || isExecutingTradeRef.current) {
+      setActionMessage('A practice order is already being processed.');
+      return;
+    }
+
     const shares = Number(sharesInput);
     const submittedPlanForm = planForm;
     if (!selectedTicker || !Number.isFinite(shares) || shares <= 0) {
@@ -171,48 +187,110 @@ export default function LearningLab() {
       return;
     }
 
-    let executionPrice = watchPrice;
+    isExecutingTradeRef.current = true;
+    setIsExecutingTrade(true);
+
     try {
-      const historical = await stockApi.getHistoricalPrices(selectedTicker, '1mo', false);
-      const latest = historical.data[historical.data.length - 1];
-      if (latest?.close) {
-        executionPrice = latest.close;
+      let executionPrice = watchPrice;
+      try {
+        const historical = await stockApi.getHistoricalPrices(selectedTicker, '1mo', false);
+        const latest = historical.data[historical.data.length - 1];
+        if (latest?.close) {
+          executionPrice = latest.close;
+        }
+      } catch {
+        // fallback to score-based synthetic price in demo mode
       }
-    } catch {
-      // fallback to score-based synthetic price in demo mode
-    }
 
-    const tradeValue = shares * executionPrice;
-    const executionPositionSize = calculatePositionSize(submittedPlanForm, executionPrice, portfolioValue);
+      const tradeValue = shares * executionPrice;
+      const executionPositionSize = calculatePositionSize(submittedPlanForm, executionPrice, portfolioValue);
 
-    if (type === 'BUY' && executionPositionSize.suggestedShares <= 0) {
-      setActionMessage('Adjust the plan so the app can estimate a safer practice size before buying.');
-      return;
-    }
-
-    const latestState = stateRef.current;
-    const timestamp = new Date().toISOString();
-    const tradeId = `${Date.now()}-${Math.random()}`;
-
-    if (type === 'BUY') {
-      if (tradeValue > latestState.cash) {
-        setActionMessage('Not enough cash. Reduce size or sell another position.');
+      if (type === 'BUY' && executionPositionSize.suggestedShares <= 0) {
+        setActionMessage('Adjust the plan so the app can estimate a safer practice size before buying.');
         return;
       }
 
-      const plan: TradePlan = {
-        id: `${Date.now()}-${Math.random()}-plan`,
-        ticker: selectedTicker,
-        reasonForBuying: submittedPlanForm.reasonForBuying.trim(),
-        wrongSignal: submittedPlanForm.wrongSignal.trim(),
-        reviewCondition: submittedPlanForm.reviewCondition.trim(),
-        maxPracticeLoss: Number(submittedPlanForm.maxPracticeLoss),
-        maxPracticeLossType: submittedPlanForm.maxPracticeLossType,
-        plannedEntryPrice: executionPrice,
-        plannedWrongPrice: Number(submittedPlanForm.plannedWrongPrice),
-        suggestedShares: executionPositionSize.suggestedShares,
-        createdAt: new Date().toISOString(),
-      };
+      const latestState = stateRef.current;
+      const timestamp = new Date().toISOString();
+      const tradeId = `${Date.now()}-${Math.random()}`;
+
+      if (type === 'BUY') {
+        if (tradeValue > latestState.cash) {
+          setActionMessage('Not enough cash. Reduce size or sell another position.');
+          return;
+        }
+
+        const plan: TradePlan = {
+          id: `${Date.now()}-${Math.random()}-plan`,
+          ticker: selectedTicker,
+          reasonForBuying: submittedPlanForm.reasonForBuying.trim(),
+          wrongSignal: submittedPlanForm.wrongSignal.trim(),
+          reviewCondition: submittedPlanForm.reviewCondition.trim(),
+          maxPracticeLoss: Number(submittedPlanForm.maxPracticeLoss),
+          maxPracticeLossType: submittedPlanForm.maxPracticeLossType,
+          plannedEntryPrice: executionPrice,
+          plannedWrongPrice: Number(submittedPlanForm.plannedWrongPrice),
+          suggestedShares: executionPositionSize.suggestedShares,
+          createdAt: new Date().toISOString(),
+        };
+        const trade = {
+          id: tradeId,
+          ticker: selectedTicker,
+          type,
+          shares,
+          price: executionPrice,
+          timestamp,
+          reason: plan.reasonForBuying,
+          planId: plan.id,
+        };
+
+        setState((prev) => {
+          const positions = [...prev.positions];
+          const existingIndex = positions.findIndex((p) => p.ticker === selectedTicker);
+          const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
+
+          if (existing) {
+            const totalShares = existing.shares + shares;
+            const newAvgCost = (existing.avgCost * existing.shares + executionPrice * shares) / totalShares;
+            positions[existingIndex] = {
+              ...existing,
+              shares: totalShares,
+              avgCost: newAvgCost,
+              currentPrice: executionPrice,
+              planId: plan.id,
+            };
+          } else {
+            positions.push({
+              ticker: selectedTicker,
+              name: stock.name,
+              shares,
+              avgCost: executionPrice,
+              currentPrice: executionPrice,
+              planId: plan.id,
+            });
+          }
+
+          return {
+            ...prev,
+            cash: prev.cash - tradeValue,
+            positions,
+            trades: [trade, ...prev.trades],
+            plans: [plan, ...prev.plans],
+          };
+        });
+        setPlanForm((current) =>
+          areTradePlanFormsEqual(current, submittedPlanForm) ? createDefaultPlanForm() : current
+        );
+        setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
+        return;
+      }
+
+      const latestExistingPosition = latestState.positions.find((p) => p.ticker === selectedTicker);
+      if (!latestExistingPosition || latestExistingPosition.shares < shares) {
+        setActionMessage('You cannot sell more shares than you own.');
+        return;
+      }
+
       const trade = {
         id: tradeId,
         ticker: selectedTicker,
@@ -220,87 +298,33 @@ export default function LearningLab() {
         shares,
         price: executionPrice,
         timestamp,
-        reason: plan.reasonForBuying,
-        planId: plan.id,
+        reason: 'Sell order',
       };
 
       setState((prev) => {
         const positions = [...prev.positions];
         const existingIndex = positions.findIndex((p) => p.ticker === selectedTicker);
-        const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
+        const existing = positions[existingIndex];
 
-        if (existing) {
-          const totalShares = existing.shares + shares;
-          const newAvgCost = (existing.avgCost * existing.shares + executionPrice * shares) / totalShares;
-          positions[existingIndex] = {
-            ...existing,
-            shares: totalShares,
-            avgCost: newAvgCost,
-            currentPrice: executionPrice,
-            planId: plan.id,
-          };
+        const remainingShares = existing.shares - shares;
+        if (remainingShares === 0) {
+          positions.splice(existingIndex, 1);
         } else {
-          positions.push({
-            ticker: selectedTicker,
-            name: stock.name,
-            shares,
-            avgCost: executionPrice,
-            currentPrice: executionPrice,
-            planId: plan.id,
-          });
+          positions[existingIndex] = { ...existing, shares: remainingShares, currentPrice: executionPrice };
         }
 
         return {
           ...prev,
-          cash: prev.cash - tradeValue,
+          cash: prev.cash + tradeValue,
           positions,
           trades: [trade, ...prev.trades],
-          plans: [plan, ...prev.plans],
         };
       });
-      setPlanForm((current) =>
-        areTradePlanFormsEqual(current, submittedPlanForm) ? createDefaultPlanForm() : current
-      );
       setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
-      return;
+    } finally {
+      isExecutingTradeRef.current = false;
+      setIsExecutingTrade(false);
     }
-
-    const latestExistingPosition = latestState.positions.find((p) => p.ticker === selectedTicker);
-    if (!latestExistingPosition || latestExistingPosition.shares < shares) {
-      setActionMessage('You cannot sell more shares than you own.');
-      return;
-    }
-
-    const trade = {
-      id: tradeId,
-      ticker: selectedTicker,
-      type,
-      shares,
-      price: executionPrice,
-      timestamp,
-      reason: 'Sell order',
-    };
-
-    setState((prev) => {
-      const positions = [...prev.positions];
-      const existingIndex = positions.findIndex((p) => p.ticker === selectedTicker);
-      const existing = positions[existingIndex];
-
-      const remainingShares = existing.shares - shares;
-      if (remainingShares === 0) {
-        positions.splice(existingIndex, 1);
-      } else {
-        positions[existingIndex] = { ...existing, shares: remainingShares, currentPrice: executionPrice };
-      }
-
-      return {
-        ...prev,
-        cash: prev.cash + tradeValue,
-        positions,
-        trades: [trade, ...prev.trades],
-      };
-    });
-    setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
   };
 
   const resetSimulator = () => {
@@ -467,9 +491,9 @@ export default function LearningLab() {
               <button
                 type="button"
                 onClick={() => executeTrade('BUY')}
-                disabled={!canBuy}
+                disabled={!canBuy || isExecutingTrade}
                 className={`px-4 py-2 rounded-lg text-white font-medium ${
-                  canBuy ? 'bg-emerald-500/80 hover:bg-emerald-500' : 'bg-gray-700 cursor-not-allowed opacity-60'
+                  canBuy && !isExecutingTrade ? 'bg-emerald-500/80 hover:bg-emerald-500' : 'bg-gray-700 cursor-not-allowed opacity-60'
                 }`}
               >
                 Buy
@@ -477,7 +501,10 @@ export default function LearningLab() {
               <button
                 type="button"
                 onClick={() => executeTrade('SELL')}
-                className="px-4 py-2 rounded-lg bg-red-500/80 hover:bg-red-500 text-white font-medium"
+                disabled={isExecutingTrade}
+                className={`px-4 py-2 rounded-lg text-white font-medium ${
+                  isExecutingTrade ? 'bg-gray-700 cursor-not-allowed opacity-60' : 'bg-red-500/80 hover:bg-red-500'
+                }`}
               >
                 Sell
               </button>

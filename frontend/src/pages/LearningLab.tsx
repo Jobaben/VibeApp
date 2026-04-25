@@ -103,6 +103,7 @@ export default function LearningLab() {
     [planForm, portfolioValue, watchPrice]
   );
   const planComplete = isTradePlanComplete(planForm);
+  const canBuy = planComplete && positionSize.suggestedShares > 0;
   const requestedShares = Number(sharesInput);
   const isOversizedTrade = positionSize.suggestedShares > 0 && requestedShares > positionSize.suggestedShares;
   const totalPnl = portfolioValue - STARTING_CASH;
@@ -143,6 +144,11 @@ export default function LearningLab() {
       return;
     }
 
+    if (type === 'BUY' && positionSize.suggestedShares <= 0) {
+      setActionMessage('Adjust the plan so the app can estimate a safer practice size before buying.');
+      return;
+    }
+
     const stock = marketIdeas.find((item) => item.ticker === selectedTicker);
     if (!stock) {
       setActionMessage('Ticker not available right now.');
@@ -161,7 +167,13 @@ export default function LearningLab() {
     }
 
     const tradeValue = shares * executionPrice;
+    const executionPositionSize = calculatePositionSize(planForm, executionPrice, portfolioValue);
     const currentExistingPosition = state.positions.find((p) => p.ticker === selectedTicker);
+
+    if (type === 'BUY' && executionPositionSize.suggestedShares <= 0) {
+      setActionMessage('Adjust the plan so the app can estimate a safer practice size before buying.');
+      return;
+    }
 
     if (type === 'BUY' && tradeValue > state.cash) {
       setActionMessage('Not enough cash. Reduce size or sell another position.');
@@ -173,88 +185,49 @@ export default function LearningLab() {
       return;
     }
 
-    setState((prev) => {
-      const positions = [...prev.positions];
-      const existingIndex = positions.findIndex((p) => p.ticker === selectedTicker);
-      const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
+    const positions = [...state.positions];
+    const existingIndex = positions.findIndex((p) => p.ticker === selectedTicker);
+    const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
 
-      if (type === 'BUY') {
-        if (tradeValue > prev.cash) {
-          setActionMessage('Not enough cash. Reduce size or sell another position.');
-          return prev;
-        }
+    if (type === 'BUY') {
+      const plan: TradePlan = {
+        id: `${Date.now()}-${Math.random()}-plan`,
+        ticker: selectedTicker,
+        reasonForBuying: planForm.reasonForBuying.trim(),
+        wrongSignal: planForm.wrongSignal.trim(),
+        reviewCondition: planForm.reviewCondition.trim(),
+        maxPracticeLoss: Number(planForm.maxPracticeLoss),
+        maxPracticeLossType: planForm.maxPracticeLossType,
+        plannedEntryPrice: executionPrice,
+        plannedWrongPrice: Number(planForm.plannedWrongPrice),
+        suggestedShares: executionPositionSize.suggestedShares,
+        createdAt: new Date().toISOString(),
+      };
 
-        const plan: TradePlan = {
-          id: `${Date.now()}-${Math.random()}-plan`,
-          ticker: selectedTicker,
-          reasonForBuying: planForm.reasonForBuying.trim(),
-          wrongSignal: planForm.wrongSignal.trim(),
-          reviewCondition: planForm.reviewCondition.trim(),
-          maxPracticeLoss: Number(planForm.maxPracticeLoss),
-          maxPracticeLossType: planForm.maxPracticeLossType,
-          plannedEntryPrice: executionPrice,
-          plannedWrongPrice: Number(planForm.plannedWrongPrice),
-          suggestedShares: positionSize.suggestedShares,
-          createdAt: new Date().toISOString(),
+      if (existing) {
+        const totalShares = existing.shares + shares;
+        const newAvgCost = (existing.avgCost * existing.shares + executionPrice * shares) / totalShares;
+        positions[existingIndex] = {
+          ...existing,
+          shares: totalShares,
+          avgCost: newAvgCost,
+          currentPrice: executionPrice,
+          planId: plan.id,
         };
-
-        if (existing) {
-          const totalShares = existing.shares + shares;
-          const newAvgCost = (existing.avgCost * existing.shares + executionPrice * shares) / totalShares;
-          positions[existingIndex] = {
-            ...existing,
-            shares: totalShares,
-            avgCost: newAvgCost,
-            currentPrice: executionPrice,
-            planId: plan.id,
-          };
-        } else {
-          positions.push({
-            ticker: selectedTicker,
-            name: stock.name,
-            shares,
-            avgCost: executionPrice,
-            currentPrice: executionPrice,
-            planId: plan.id,
-          });
-        }
-
-        return {
-          ...prev,
-          cash: prev.cash - tradeValue,
-          positions,
-          trades: [
-            {
-              id: `${Date.now()}-${Math.random()}`,
-              ticker: selectedTicker,
-              type,
-              shares,
-              price: executionPrice,
-              timestamp: new Date().toISOString(),
-              reason: plan.reasonForBuying,
-              planId: plan.id,
-            },
-            ...prev.trades,
-          ],
-          plans: [plan, ...prev.plans],
-        };
-      }
-
-      if (!existing || existing.shares < shares) {
-        setActionMessage('You cannot sell more shares than you own.');
-        return prev;
-      }
-
-      const remainingShares = existing.shares - shares;
-      if (remainingShares === 0) {
-        positions.splice(existingIndex, 1);
       } else {
-        positions[existingIndex] = { ...existing, shares: remainingShares, currentPrice: executionPrice };
+        positions.push({
+          ticker: selectedTicker,
+          name: stock.name,
+          shares,
+          avgCost: executionPrice,
+          currentPrice: executionPrice,
+          planId: plan.id,
+        });
       }
 
-      return {
-        ...prev,
-        cash: prev.cash + tradeValue,
+      setState({
+        ...state,
+        cash: state.cash - tradeValue,
         positions,
         trades: [
           {
@@ -264,16 +237,47 @@ export default function LearningLab() {
             shares,
             price: executionPrice,
             timestamp: new Date().toISOString(),
-            reason: 'Sell order',
+            reason: plan.reasonForBuying,
+            planId: plan.id,
           },
-          ...prev.trades,
+          ...state.trades,
         ],
-      };
-    });
-
-    if (type === 'BUY') {
+        plans: [plan, ...state.plans],
+      });
       setPlanForm(createDefaultPlanForm());
+      setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
+      return;
     }
+
+    if (!existing) {
+      setActionMessage('You cannot sell more shares than you own.');
+      return;
+    }
+
+    const remainingShares = existing.shares - shares;
+    if (remainingShares === 0) {
+      positions.splice(existingIndex, 1);
+    } else {
+      positions[existingIndex] = { ...existing, shares: remainingShares, currentPrice: executionPrice };
+    }
+
+    setState({
+      ...state,
+      cash: state.cash + tradeValue,
+      positions,
+      trades: [
+        {
+          id: `${Date.now()}-${Math.random()}`,
+          ticker: selectedTicker,
+          type,
+          shares,
+          price: executionPrice,
+          timestamp: new Date().toISOString(),
+          reason: 'Sell order',
+        },
+        ...state.trades,
+      ],
+    });
     setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
   };
 
@@ -441,9 +445,9 @@ export default function LearningLab() {
               <button
                 type="button"
                 onClick={() => executeTrade('BUY')}
-                disabled={!planComplete}
+                disabled={!canBuy}
                 className={`px-4 py-2 rounded-lg text-white font-medium ${
-                  planComplete ? 'bg-emerald-500/80 hover:bg-emerald-500' : 'bg-gray-700 cursor-not-allowed opacity-60'
+                  canBuy ? 'bg-emerald-500/80 hover:bg-emerald-500' : 'bg-gray-700 cursor-not-allowed opacity-60'
                 }`}
               >
                 Buy

@@ -154,6 +154,104 @@ export function calculateRealizedPnl(position: Position, sharesSold: number, sel
   return (sellPrice - position.avgCost) * sharesSold;
 }
 
+interface ApplyLearningLabBuyTradeInput {
+  selectedTicker: string;
+  stockName: string;
+  shares: number;
+  tradeValue: number;
+  executionPrice: number;
+  plan: TradePlan;
+  trade: Trade;
+}
+
+interface ApplyLearningLabSellTradeInput {
+  selectedTicker: string;
+  shares: number;
+  tradeValue: number;
+  executionPrice: number;
+  trade: Trade;
+}
+
+interface LearningLabTradeApplicationResult {
+  state: SimulatorState;
+  applied: boolean;
+}
+
+export function applyLearningLabBuyTrade(
+  state: SimulatorState,
+  input: ApplyLearningLabBuyTradeInput
+): LearningLabTradeApplicationResult {
+  if (input.tradeValue > state.cash) {
+    return { state, applied: false };
+  }
+
+  const positions = [...state.positions];
+  const existingIndex = positions.findIndex((p) => p.ticker === input.selectedTicker);
+  const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
+
+  if (existing) {
+    const totalShares = existing.shares + input.shares;
+    const newAvgCost = (existing.avgCost * existing.shares + input.executionPrice * input.shares) / totalShares;
+    positions[existingIndex] = {
+      ...existing,
+      shares: totalShares,
+      avgCost: newAvgCost,
+      currentPrice: input.executionPrice,
+      planId: input.plan.id,
+    };
+  } else {
+    positions.push({
+      ticker: input.selectedTicker,
+      name: input.stockName,
+      shares: input.shares,
+      avgCost: input.executionPrice,
+      currentPrice: input.executionPrice,
+      planId: input.plan.id,
+    });
+  }
+
+  return {
+    state: {
+      ...state,
+      cash: state.cash - input.tradeValue,
+      positions,
+      trades: [input.trade, ...state.trades],
+      plans: [input.plan, ...state.plans],
+    },
+    applied: true,
+  };
+}
+
+export function applyLearningLabSellTrade(
+  state: SimulatorState,
+  input: ApplyLearningLabSellTradeInput
+): LearningLabTradeApplicationResult {
+  const positions = [...state.positions];
+  const existingIndex = positions.findIndex((p) => p.ticker === input.selectedTicker);
+  const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
+
+  if (!existing || existing.shares < input.shares) {
+    return { state, applied: false };
+  }
+
+  const remainingShares = existing.shares - input.shares;
+  if (remainingShares === 0) {
+    positions.splice(existingIndex, 1);
+  } else {
+    positions[existingIndex] = { ...existing, shares: remainingShares, currentPrice: input.executionPrice };
+  }
+
+  return {
+    state: {
+      ...state,
+      cash: state.cash + input.tradeValue,
+      positions,
+      trades: [input.trade, ...state.trades],
+    },
+    applied: true,
+  };
+}
+
 export function calculateDashboardMetrics(trades: Trade[]): LearningDashboardMetrics {
   const buyTradesWithPlans = trades.filter((trade) => trade.type === 'BUY' && trade.planId);
   const reviewedSellTrades = trades.filter((trade) => trade.type === 'SELL' && trade.review);

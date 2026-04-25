@@ -4,6 +4,8 @@ import type { SellReviewForm, SimulatorState, TradePlan, TradePlanForm } from '.
 import type { LeaderboardStock } from '../types/stock';
 import {
   STARTING_CASH,
+  applyLearningLabBuyTrade,
+  applyLearningLabSellTrade,
   calculateDashboardMetrics,
   calculatePositionSize,
   calculatePortfolioValue,
@@ -58,6 +60,11 @@ export default function LearningLab() {
   const [isExecutingTrade, setIsExecutingTrade] = useState(false);
   const stateRef = useRef(state);
   const isExecutingTradeRef = useRef(false);
+
+  const commitSimulatorState = (nextState: SimulatorState) => {
+    stateRef.current = nextState;
+    setState(nextState);
+  };
 
   useEffect(() => {
     const initial = loadState();
@@ -139,11 +146,16 @@ export default function LearningLab() {
   );
 
   const refreshPositionPrices = async () => {
-    if (state.positions.length === 0) {
+    if (isExecutingTradeRef.current) {
+      setActionMessage('Wait for the current practice order to finish before refreshing prices.');
       return;
     }
 
-    const positionsToRefresh = state.positions;
+    if (stateRef.current.positions.length === 0) {
+      return;
+    }
+
+    const positionsToRefresh = stateRef.current.positions;
     const updatedPrices = new Map<string, number>();
 
     await Promise.all(
@@ -160,14 +172,14 @@ export default function LearningLab() {
       })
     );
 
-    setState((prev) => ({
-      ...prev,
-      positions: prev.positions.map((position) =>
+    commitSimulatorState({
+      ...stateRef.current,
+      positions: stateRef.current.positions.map((position) =>
         updatedPrices.has(position.ticker)
           ? { ...position, currentPrice: updatedPrices.get(position.ticker)! }
           : position
       ),
-    }));
+    });
     setActionMessage('Portfolio prices refreshed from market data.');
   };
 
@@ -230,16 +242,10 @@ export default function LearningLab() {
         return;
       }
 
-      const latestState = stateRef.current;
       const timestamp = new Date().toISOString();
       const tradeId = `${Date.now()}-${Math.random()}`;
 
       if (type === 'BUY') {
-        if (tradeValue > latestState.cash) {
-          setActionMessage('Not enough cash. Reduce size or sell another position.');
-          return;
-        }
-
         const plan: TradePlan = {
           id: `${Date.now()}-${Math.random()}-plan`,
           ticker: selectedTicker,
@@ -264,40 +270,21 @@ export default function LearningLab() {
           planId: plan.id,
         };
 
-        setState((prev) => {
-          const positions = [...prev.positions];
-          const existingIndex = positions.findIndex((p) => p.ticker === selectedTicker);
-          const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
-
-          if (existing) {
-            const totalShares = existing.shares + shares;
-            const newAvgCost = (existing.avgCost * existing.shares + executionPrice * shares) / totalShares;
-            positions[existingIndex] = {
-              ...existing,
-              shares: totalShares,
-              avgCost: newAvgCost,
-              currentPrice: executionPrice,
-              planId: plan.id,
-            };
-          } else {
-            positions.push({
-              ticker: selectedTicker,
-              name: stock.name,
-              shares,
-              avgCost: executionPrice,
-              currentPrice: executionPrice,
-              planId: plan.id,
-            });
-          }
-
-          return {
-            ...prev,
-            cash: prev.cash - tradeValue,
-            positions,
-            trades: [trade, ...prev.trades],
-            plans: [plan, ...prev.plans],
-          };
+        const result = applyLearningLabBuyTrade(stateRef.current, {
+          selectedTicker,
+          stockName: stock.name,
+          shares,
+          tradeValue,
+          executionPrice,
+          plan,
+          trade,
         });
+        if (!result.applied) {
+          setActionMessage('Not enough cash. Reduce size or sell another position.');
+          return;
+        }
+
+        commitSimulatorState(result.state);
         setPlanForm((current) =>
           areTradePlanFormsEqual(current, submittedPlanForm) ? createDefaultPlanForm() : current
         );
@@ -305,7 +292,7 @@ export default function LearningLab() {
         return;
       }
 
-      const latestExistingPosition = latestState.positions.find((p) => p.ticker === selectedTicker);
+      const latestExistingPosition = stateRef.current.positions.find((p) => p.ticker === selectedTicker);
       if (!latestExistingPosition || latestExistingPosition.shares < shares) {
         setActionMessage('You cannot sell more shares than you own.');
         return;
@@ -334,29 +321,19 @@ export default function LearningLab() {
         realizedPnl,
       };
 
-      setState((prev) => {
-        const positions = [...prev.positions];
-        const existingIndex = positions.findIndex((p) => p.ticker === selectedTicker);
-        const existing = existingIndex >= 0 ? positions[existingIndex] : undefined;
-
-        if (!existing || existing.shares < shares) {
-          return prev;
-        }
-
-        const remainingShares = existing.shares - shares;
-        if (remainingShares === 0) {
-          positions.splice(existingIndex, 1);
-        } else {
-          positions[existingIndex] = { ...existing, shares: remainingShares, currentPrice: executionPrice };
-        }
-
-        return {
-          ...prev,
-          cash: prev.cash + tradeValue,
-          positions,
-          trades: [trade, ...prev.trades],
-        };
+      const result = applyLearningLabSellTrade(stateRef.current, {
+        selectedTicker,
+        shares,
+        tradeValue,
+        executionPrice,
+        trade,
       });
+      if (!result.applied) {
+        setActionMessage('You cannot sell more shares than you own.');
+        return;
+      }
+
+      commitSimulatorState(result.state);
       setSellReviewForm(createDefaultSellReviewForm());
       setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
     } finally {
@@ -366,8 +343,13 @@ export default function LearningLab() {
   };
 
   const resetSimulator = () => {
+    if (isExecutingTradeRef.current) {
+      setActionMessage('Wait for the current practice order to finish before resetting the simulator.');
+      return;
+    }
+
     const next = createDefaultLearningLabState();
-    setState(next);
+    commitSimulatorState(next);
     setActionMessage('Simulator reset. Start your next learning sprint.');
   };
 

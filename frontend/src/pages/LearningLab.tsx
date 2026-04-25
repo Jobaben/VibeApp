@@ -1,34 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { stockApi } from '../services/api';
+import type { Position, SimulatorState } from '../types/learningLab';
 import type { LeaderboardStock } from '../types/stock';
-
-interface Position {
-  ticker: string;
-  name: string;
-  shares: number;
-  avgCost: number;
-  currentPrice: number;
-}
-
-interface Trade {
-  id: string;
-  ticker: string;
-  type: 'BUY' | 'SELL';
-  shares: number;
-  price: number;
-  timestamp: string;
-  reason: string;
-}
-
-interface SimulatorState {
-  cash: number;
-  positions: Position[];
-  trades: Trade[];
-  journal: string;
-}
 
 const STARTING_CASH = 100000;
 const STORAGE_KEY = 'learning-lab-simulator-v1';
+
+const createDefaultState = (): SimulatorState => ({
+  cash: STARTING_CASH,
+  positions: [],
+  trades: [],
+  plans: [],
+  journal: '',
+});
 
 const formatMoney = (amount: number) =>
   new Intl.NumberFormat('en-US', {
@@ -40,19 +24,19 @@ const formatMoney = (amount: number) =>
 function loadState(): SimulatorState {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (!stored) {
-    return { cash: STARTING_CASH, positions: [], trades: [], journal: '' };
+    return createDefaultState();
   }
 
   try {
     return JSON.parse(stored) as SimulatorState;
   } catch {
-    return { cash: STARTING_CASH, positions: [], trades: [], journal: '' };
+    return createDefaultState();
   }
 }
 
 export default function LearningLab() {
   const [marketIdeas, setMarketIdeas] = useState<LeaderboardStock[]>([]);
-  const [state, setState] = useState<SimulatorState>({ cash: STARTING_CASH, positions: [], trades: [], journal: '' });
+  const [state, setState] = useState<SimulatorState>(createDefaultState());
   const [selectedTicker, setSelectedTicker] = useState('');
   const [sharesInput, setSharesInput] = useState('10');
   const [reasonInput, setReasonInput] = useState('');
@@ -125,7 +109,7 @@ export default function LearningLab() {
       return;
     }
 
-    const updated = await Promise.all(
+    const updated: Position[] = await Promise.all(
       state.positions.map(async (position) => {
         try {
           const historical = await stockApi.getHistoricalPrices(position.ticker, '1mo', false);
@@ -256,7 +240,7 @@ export default function LearningLab() {
   };
 
   const resetSimulator = () => {
-    const next = { cash: STARTING_CASH, positions: [], trades: [], journal: '' };
+    const next = createDefaultState();
     setState(next);
     setActionMessage('Simulator reset. Start your next learning sprint.');
   };

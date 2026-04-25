@@ -14,6 +14,7 @@ import {
   formatMoneyForLearningLab,
   isTradePlanComplete,
   migrateLearningLabState,
+  updateLearningLabJournal,
 } from '../utils/learningLab';
 
 const STORAGE_KEY = 'learning-lab-simulator-v1';
@@ -171,6 +172,11 @@ export default function LearningLab() {
         }
       })
     );
+
+    if (isExecutingTradeRef.current) {
+      setActionMessage('Wait for the current practice order to finish before refreshing prices.');
+      return;
+    }
 
     commitSimulatorState({
       ...stateRef.current,
@@ -593,14 +599,20 @@ export default function LearningLab() {
               <button
                 type="button"
                 onClick={refreshPositionPrices}
-                className="px-4 py-2 rounded-lg bg-cyan-500/80 hover:bg-cyan-500 text-white font-medium"
+                disabled={isExecutingTrade}
+                className={`px-4 py-2 rounded-lg text-white font-medium ${
+                  isExecutingTrade ? 'bg-gray-700 cursor-not-allowed opacity-60' : 'bg-cyan-500/80 hover:bg-cyan-500'
+                }`}
               >
                 Refresh Prices
               </button>
               <button
                 type="button"
                 onClick={resetSimulator}
-                className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white font-medium"
+                disabled={isExecutingTrade}
+                className={`px-4 py-2 rounded-lg text-white font-medium ${
+                  isExecutingTrade ? 'bg-gray-700 cursor-not-allowed opacity-60' : 'bg-gray-700 hover:bg-gray-600'
+                }`}
               >
                 Reset
               </button>
@@ -693,7 +705,7 @@ export default function LearningLab() {
             <h3 className="text-lg text-white font-semibold mb-2">Trading Journal</h3>
             <textarea
               value={state.journal}
-              onChange={(e) => setState((prev) => ({ ...prev, journal: e.target.value }))}
+              onChange={(e) => commitSimulatorState(updateLearningLabJournal(stateRef.current, e.target.value))}
               className="w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2 min-h-40"
               placeholder="What pattern do you notice in your decisions? What will you do differently in the next practice trade?"
             />

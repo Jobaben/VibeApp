@@ -252,6 +252,13 @@ export function applyLearningLabSellTrade(
   };
 }
 
+export function updateLearningLabJournal(state: SimulatorState, journal: string): SimulatorState {
+  return {
+    ...state,
+    journal,
+  };
+}
+
 export function calculateDashboardMetrics(trades: Trade[]): LearningDashboardMetrics {
   const buyTradesWithPlans = trades.filter((trade) => trade.type === 'BUY' && trade.planId);
   const reviewedSellTrades = trades.filter((trade) => trade.type === 'SELL' && trade.review);

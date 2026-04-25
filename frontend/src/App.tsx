@@ -5,6 +5,7 @@ import StockDetail from './pages/StockDetail';
 import Leaderboard from './pages/Leaderboard';
 import Watchlists from './pages/Watchlists';
 import WeeklyChanges from './pages/WeeklyChanges';
+import LearningLab from './pages/LearningLab';
 import { WatchlistProvider } from './contexts/WatchlistContext';
 import { LearningModeProvider } from './contexts/LearningModeContext';
 import { LearningModeToggle, LessonSidebar, LessonContent } from './components/learning';
@@ -35,6 +36,7 @@ function App() {
 
   const isHomePage = location.pathname === '/';
   const isScreenerPage = location.pathname === '/screener';
+  const isLearningLabPage = location.pathname === '/learning-lab';
 
   return (
     <LearningModeProvider>
@@ -94,6 +96,19 @@ function App() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
                 </svg>
                 Strategy Screener
+              </Link>
+              <Link
+                to="/learning-lab"
+                className={`px-6 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${
+                  isLearningLabPage
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25'
+                    : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-3.314 0-6 2.014-6 4.5S8.686 17 12 17s6-2.014 6-4.5S15.314 8 12 8zm0 0V4m0 13v3m8-8h-3M7 12H4" />
+                </svg>
+                Learning Lab
               </Link>
               <Link
                 to="/leaderboard"
@@ -167,6 +182,7 @@ function App() {
               }
             />
             <Route path="/screener" element={<Screener />} />
+            <Route path="/learning-lab" element={<LearningLab />} />
           </Routes>
         </main>
 

@@ -28,7 +28,16 @@ function loadState(): SimulatorState {
   }
 
   try {
-    return JSON.parse(stored) as SimulatorState;
+    const parsed = JSON.parse(stored) as Partial<SimulatorState>;
+    return {
+      ...createDefaultState(),
+      ...parsed,
+      positions: Array.isArray(parsed.positions) ? parsed.positions : [],
+      trades: Array.isArray(parsed.trades) ? parsed.trades : [],
+      plans: Array.isArray(parsed.plans) ? parsed.plans : [],
+      journal: typeof parsed.journal === 'string' ? parsed.journal : '',
+      cash: typeof parsed.cash === 'number' ? parsed.cash : STARTING_CASH,
+    };
   } catch {
     return createDefaultState();
   }

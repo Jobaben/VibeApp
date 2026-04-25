@@ -29,8 +29,8 @@ export function migrateLearningLabState(raw: string | null): SimulatorState {
   try {
     const parsed = JSON.parse(raw) as Partial<SimulatorState>;
     return {
-      cash: typeof parsed.cash === 'number' ? parsed.cash : STARTING_CASH,
-      positions: Array.isArray(parsed.positions) ? parsed.positions : [],
+      cash: typeof parsed.cash === 'number' && Number.isFinite(parsed.cash) ? parsed.cash : STARTING_CASH,
+      positions: Array.isArray(parsed.positions) ? parsed.positions.map(sanitizePosition).filter(isPosition) : [],
       trades: Array.isArray(parsed.trades) ? parsed.trades : [],
       plans: Array.isArray(parsed.plans) ? parsed.plans : [],
       journal: typeof parsed.journal === 'string' ? parsed.journal : '',
@@ -41,7 +41,17 @@ export function migrateLearningLabState(raw: string | null): SimulatorState {
 }
 
 export function calculatePortfolioValue(cash: number, positions: Position[]): number {
-  return cash + positions.reduce((sum, position) => sum + position.shares * position.currentPrice, 0);
+  const usableCash = Number.isFinite(cash) ? cash : 0;
+  return (
+    usableCash +
+    positions.reduce((sum, position) => {
+      if (!hasValidPositionFields(position)) {
+        return sum;
+      }
+
+      return sum + position.shares * position.currentPrice;
+    }, 0)
+  );
 }
 
 export function calculatePositionSize(
@@ -82,10 +92,38 @@ export function calculatePositionSize(
     };
   }
 
+  if (form.maxPracticeLossType === 'percent' && (!Number.isFinite(portfolioValue) || portfolioValue <= 0)) {
+    return {
+      suggestedShares: 0,
+      plannedLossPerShare: 0,
+      maxLossAmount: 0,
+      explanation: 'Portfolio value is unavailable, so position size cannot be estimated yet.',
+      missingReason: 'missing_portfolio_value',
+    };
+  }
+
   const maxLossAmount =
     form.maxPracticeLossType === 'percent' ? portfolioValue * (maxPracticeLoss / 100) : maxPracticeLoss;
   const plannedLossPerShare = entryPrice - plannedWrongPrice;
-  const suggestedShares = Math.max(0, Math.floor(maxLossAmount / plannedLossPerShare));
+  const rawSuggestedShares = Math.floor(maxLossAmount / plannedLossPerShare);
+
+  if (
+    !Number.isFinite(maxLossAmount) ||
+    maxLossAmount <= 0 ||
+    !Number.isFinite(plannedLossPerShare) ||
+    plannedLossPerShare <= 0 ||
+    !Number.isFinite(rawSuggestedShares)
+  ) {
+    return {
+      suggestedShares: 0,
+      plannedLossPerShare: 0,
+      maxLossAmount: 0,
+      explanation: 'Position size cannot be estimated from the current risk inputs.',
+      missingReason: 'missing_max_loss',
+    };
+  }
+
+  const suggestedShares = Math.max(0, rawSuggestedShares);
 
   return {
     suggestedShares,
@@ -96,12 +134,17 @@ export function calculatePositionSize(
 }
 
 export function isTradePlanComplete(form: TradePlanForm): boolean {
+  const maxPracticeLoss = Number(form.maxPracticeLoss);
+  const plannedWrongPrice = Number(form.plannedWrongPrice);
+
   return (
     form.reasonForBuying.trim().length > 0 &&
     form.wrongSignal.trim().length > 0 &&
     form.reviewCondition.trim().length > 0 &&
-    Number(form.maxPracticeLoss) > 0 &&
-    Number(form.plannedWrongPrice) > 0
+    Number.isFinite(maxPracticeLoss) &&
+    maxPracticeLoss > 0 &&
+    Number.isFinite(plannedWrongPrice) &&
+    plannedWrongPrice > 0
   );
 }
 
@@ -147,6 +190,53 @@ function getCommonMistake(trades: Trade[]): MistakeType | null {
   });
 
   return commonMistake;
+}
+
+function sanitizePosition(position: unknown): Position | null {
+  if (!hasValidPositionFields(position)) {
+    return null;
+  }
+
+  const candidate = position;
+  const sanitized: Position = {
+    ticker: candidate.ticker,
+    name: candidate.name,
+    shares: candidate.shares,
+    avgCost: candidate.avgCost,
+    currentPrice: candidate.currentPrice,
+  };
+
+  if (typeof candidate.planId === 'string') {
+    sanitized.planId = candidate.planId;
+  }
+
+  return sanitized;
+}
+
+function isPosition(position: Position | null): position is Position {
+  return position !== null;
+}
+
+function hasValidPositionFields(position: unknown): position is Position {
+  if (!position || typeof position !== 'object') {
+    return false;
+  }
+
+  const candidate = position as Partial<Position>;
+
+  return (
+    typeof candidate.ticker === 'string' &&
+    typeof candidate.name === 'string' &&
+    typeof candidate.shares === 'number' &&
+    Number.isFinite(candidate.shares) &&
+    candidate.shares > 0 &&
+    typeof candidate.avgCost === 'number' &&
+    Number.isFinite(candidate.avgCost) &&
+    candidate.avgCost >= 0 &&
+    typeof candidate.currentPrice === 'number' &&
+    Number.isFinite(candidate.currentPrice) &&
+    candidate.currentPrice >= 0
+  );
 }
 
 export function formatMoneyForLearningLab(amount: number): string {

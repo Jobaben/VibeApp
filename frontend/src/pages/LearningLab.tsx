@@ -51,7 +51,7 @@ function loadState(): SimulatorState {
 
 export default function LearningLab() {
   const [marketIdeas, setMarketIdeas] = useState<LeaderboardStock[]>([]);
-  const [state, setState] = useState<SimulatorState>(createDefaultLearningLabState());
+  const [state, setState] = useState<SimulatorState>(() => loadState());
   const [selectedTicker, setSelectedTicker] = useState('');
   const [sharesInput, setSharesInput] = useState('10');
   const [planForm, setPlanForm] = useState<TradePlanForm>(createDefaultPlanForm());
@@ -68,11 +68,8 @@ export default function LearningLab() {
   };
 
   useEffect(() => {
-    const initial = loadState();
-    stateRef.current = initial;
-    setState(initial);
-    if (initial.recoveryMessage) {
-      setActionMessage(initial.recoveryMessage);
+    if (stateRef.current.recoveryMessage) {
+      setActionMessage(stateRef.current.recoveryMessage);
     }
   }, []);
 

@@ -2,50 +2,24 @@ import { useEffect, useMemo, useState } from 'react';
 import { stockApi } from '../services/api';
 import type { Position, SimulatorState } from '../types/learningLab';
 import type { LeaderboardStock } from '../types/stock';
+import {
+  STARTING_CASH,
+  calculatePortfolioValue,
+  createDefaultLearningLabState,
+  formatMoneyForLearningLab,
+  migrateLearningLabState,
+} from '../utils/learningLab';
 
-const STARTING_CASH = 100000;
 const STORAGE_KEY = 'learning-lab-simulator-v1';
-
-const createDefaultState = (): SimulatorState => ({
-  cash: STARTING_CASH,
-  positions: [],
-  trades: [],
-  plans: [],
-  journal: '',
-});
-
-const formatMoney = (amount: number) =>
-  new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 2,
-  }).format(amount);
+const formatMoney = formatMoneyForLearningLab;
 
 function loadState(): SimulatorState {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (!stored) {
-    return createDefaultState();
-  }
-
-  try {
-    const parsed = JSON.parse(stored) as Partial<SimulatorState>;
-    return {
-      ...createDefaultState(),
-      ...parsed,
-      positions: Array.isArray(parsed.positions) ? parsed.positions : [],
-      trades: Array.isArray(parsed.trades) ? parsed.trades : [],
-      plans: Array.isArray(parsed.plans) ? parsed.plans : [],
-      journal: typeof parsed.journal === 'string' ? parsed.journal : '',
-      cash: typeof parsed.cash === 'number' ? parsed.cash : STARTING_CASH,
-    };
-  } catch {
-    return createDefaultState();
-  }
+  return migrateLearningLabState(localStorage.getItem(STORAGE_KEY));
 }
 
 export default function LearningLab() {
   const [marketIdeas, setMarketIdeas] = useState<LeaderboardStock[]>([]);
-  const [state, setState] = useState<SimulatorState>(createDefaultState());
+  const [state, setState] = useState<SimulatorState>(createDefaultLearningLabState());
   const [selectedTicker, setSelectedTicker] = useState('');
   const [sharesInput, setSharesInput] = useState('10');
   const [reasonInput, setReasonInput] = useState('');
@@ -55,6 +29,9 @@ export default function LearningLab() {
   useEffect(() => {
     const initial = loadState();
     setState(initial);
+    if (initial.recoveryMessage) {
+      setActionMessage(initial.recoveryMessage);
+    }
   }, []);
 
   useEffect(() => {
@@ -108,7 +85,7 @@ export default function LearningLab() {
   }, [marketIdeas, selectedTicker, state.positions]);
 
   const portfolioValue = useMemo(
-    () => state.cash + state.positions.reduce((sum, p) => sum + p.shares * p.currentPrice, 0),
+    () => calculatePortfolioValue(state.cash, state.positions),
     [state.cash, state.positions]
   );
   const totalPnl = portfolioValue - STARTING_CASH;
@@ -249,7 +226,7 @@ export default function LearningLab() {
   };
 
   const resetSimulator = () => {
-    const next = createDefaultState();
+    const next = createDefaultLearningLabState();
     setState(next);
     setActionMessage('Simulator reset. Start your next learning sprint.');
   };

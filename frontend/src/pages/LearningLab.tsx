@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { PracticeIntroPanel } from '../components/learningLab';
 import { stockApi } from '../services/api';
 import type { SellReviewForm, SimulatorState, TradePlan, TradePlanForm } from '../types/learningLab';
 import type { LeaderboardStock } from '../types/stock';
@@ -390,12 +391,7 @@ export default function LearningLab() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-      <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-6">
-        <h2 className="text-2xl font-bold text-white">Learning Lab: Learn by Doing</h2>
-        <p className="text-gray-300 mt-2">
-          Train with a live-data paper portfolio. The lab teaches plain-language investing decisions first, then introduces the market terms after you use them.
-        </p>
-      </div>
+      <PracticeIntroPanel />
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">

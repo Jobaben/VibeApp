@@ -1,5 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { PracticeIntroPanel } from '../components/learningLab';
+import {
+  GuidedPracticeFlow,
+  LearningDashboardCard,
+  LearningLabCopy,
+  PracticeChecklist,
+  PracticeIntroPanel,
+  PracticePositions,
+  SellReviewPanel,
+} from '../components/learningLab';
 import { stockApi } from '../services/api';
 import type { SellReviewForm, SimulatorState, TradePlan, TradePlanForm } from '../types/learningLab';
 import type { LeaderboardStock } from '../types/stock';
@@ -60,6 +68,7 @@ export default function LearningLab() {
   const [loadingIdeas, setLoadingIdeas] = useState(true);
   const [actionMessage, setActionMessage] = useState('');
   const [isExecutingTrade, setIsExecutingTrade] = useState(false);
+  const [reviewingPositionTicker, setReviewingPositionTicker] = useState<string | null>(null);
   const stateRef = useRef(state);
   const isExecutingTradeRef = useRef(false);
 
@@ -121,7 +130,6 @@ export default function LearningLab() {
       return 0;
     }
 
-    // Use score as a rough confidence number when price isn't loaded yet.
     return Math.max(1, inIdeas.total_score);
   }, [marketIdeas, selectedTicker, state.positions]);
 
@@ -159,6 +167,22 @@ export default function LearningLab() {
       setSelectedTicker(state.positions[0].ticker);
     }
   }, [selectedTicker, state.positions]);
+
+  const openReviewForPosition = (ticker: string) => {
+    if (isExecutingTradeRef.current) {
+      setActionMessage('Wait for the current practice order to finish before reviewing a position.');
+      return;
+    }
+    const position = stateRef.current.positions.find((p) => p.ticker === ticker);
+    if (!position) {
+      return;
+    }
+    setReviewingPositionTicker(ticker);
+    setSharesInput(String(position.shares));
+    setSellReviewForm(createDefaultSellReviewForm());
+  };
+
+  const closeReview = () => setReviewingPositionTicker(null);
 
   const refreshPositionPrices = async () => {
     if (isExecutingTradeRef.current) {
@@ -212,7 +236,8 @@ export default function LearningLab() {
     const shares = Number(sharesInput);
     const submittedPlanForm = planForm;
     const submittedSellReviewForm = sellReviewForm;
-    if (!selectedTicker || !Number.isFinite(shares) || shares <= 0) {
+    const tradeTicker = type === 'SELL' ? reviewingPositionTicker ?? selectedTicker : selectedTicker;
+    if (!tradeTicker || !Number.isFinite(shares) || shares <= 0) {
       setActionMessage('Pick a ticker and valid share amount.');
       return;
     }
@@ -228,7 +253,7 @@ export default function LearningLab() {
       return;
     }
 
-    const existingPosition = stateRef.current.positions.find((position) => position.ticker === selectedTicker);
+    const existingPosition = stateRef.current.positions.find((position) => position.ticker === tradeTicker);
 
     if (type === 'SELL' && submittedSellReviewForm.lessonLearned.trim().length === 0) {
       setActionMessage('Write one lesson learned before selling. This makes the paper trade useful practice.');
@@ -246,7 +271,7 @@ export default function LearningLab() {
     try {
       let executionPrice = watchPrice;
       try {
-        const historical = await stockApi.getHistoricalPrices(selectedTicker, '1mo', false);
+        const historical = await stockApi.getHistoricalPrices(tradeTicker, '1mo', false);
         const latest = historical.data[historical.data.length - 1];
         if (latest?.close) {
           executionPrice = latest.close;
@@ -272,7 +297,7 @@ export default function LearningLab() {
           return;
         }
 
-        const stock = marketIdeas.find((item) => item.ticker === selectedTicker);
+        const stock = marketIdeas.find((item) => item.ticker === tradeTicker);
         if (!stock) {
           setActionMessage('Ticker not available right now.');
           return;
@@ -280,7 +305,7 @@ export default function LearningLab() {
 
         const plan: TradePlan = {
           id: `${Date.now()}-${Math.random()}-plan`,
-          ticker: selectedTicker,
+          ticker: tradeTicker,
           reasonForBuying: submittedPlanForm.reasonForBuying.trim(),
           wrongSignal: submittedPlanForm.wrongSignal.trim(),
           reviewCondition: submittedPlanForm.reviewCondition.trim(),
@@ -293,7 +318,7 @@ export default function LearningLab() {
         };
         const trade = {
           id: tradeId,
-          ticker: selectedTicker,
+          ticker: tradeTicker,
           type,
           shares,
           price: executionPrice,
@@ -303,7 +328,7 @@ export default function LearningLab() {
         };
 
         const result = applyLearningLabBuyTrade(stateRef.current, {
-          selectedTicker,
+          selectedTicker: tradeTicker,
           stockName: stock.name,
           shares,
           tradeValue,
@@ -324,11 +349,11 @@ export default function LearningLab() {
         setPlanForm((current) =>
           areTradePlanFormsEqual(current, submittedPlanForm) ? createDefaultPlanForm() : current
         );
-        setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
+        setActionMessage(`${type} order filled: ${shares} ${tradeTicker} @ ${formatMoney(executionPrice)}.`);
         return;
       }
 
-      const latestExistingPosition = stateRef.current.positions.find((p) => p.ticker === selectedTicker);
+      const latestExistingPosition = stateRef.current.positions.find((p) => p.ticker === tradeTicker);
       if (!latestExistingPosition || latestExistingPosition.shares < shares) {
         setActionMessage('You cannot sell more shares than you own.');
         return;
@@ -346,7 +371,7 @@ export default function LearningLab() {
       };
       const trade = {
         id: sellTradeId,
-        ticker: selectedTicker,
+        ticker: tradeTicker,
         type,
         shares,
         price: executionPrice,
@@ -358,7 +383,7 @@ export default function LearningLab() {
       };
 
       const result = applyLearningLabSellTrade(stateRef.current, {
-        selectedTicker,
+        selectedTicker: tradeTicker,
         shares,
         tradeValue,
         executionPrice,
@@ -371,7 +396,8 @@ export default function LearningLab() {
 
       commitSimulatorState(result.state);
       setSellReviewForm(createDefaultSellReviewForm());
-      setActionMessage(`${type} order filled: ${shares} ${selectedTicker} @ ${formatMoney(executionPrice)}.`);
+      setReviewingPositionTicker(null);
+      setActionMessage(`${type} order filled: ${shares} ${tradeTicker} @ ${formatMoney(executionPrice)}.`);
     } finally {
       isExecutingTradeRef.current = false;
       setIsExecutingTrade(false);
@@ -386,8 +412,13 @@ export default function LearningLab() {
 
     const next = createDefaultLearningLabState();
     commitSimulatorState(next);
+    setReviewingPositionTicker(null);
     setActionMessage('Simulator reset. Start your next learning sprint.');
   };
+
+  const reviewedPosition = reviewingPositionTicker
+    ? state.positions.find((p) => p.ticker === reviewingPositionTicker) ?? null
+    : null;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
@@ -395,353 +426,90 @@ export default function LearningLab() {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
-          <p className="text-gray-400 text-xs">Cash</p>
+          <p className="text-gray-400 text-xs">{LearningLabCopy.DASHBOARD.cashLabel}</p>
           <p className="text-xl text-white font-semibold">{formatMoney(state.cash)}</p>
         </div>
         <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
-          <p className="text-gray-400 text-xs">Portfolio Value</p>
+          <p className="text-gray-400 text-xs">{LearningLabCopy.DASHBOARD.portfolioValueLabel}</p>
           <p className="text-xl text-white font-semibold">{formatMoney(portfolioValue)}</p>
         </div>
         <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
-          <p className="text-gray-400 text-xs">Total P/L</p>
+          <p className="text-gray-400 text-xs">{LearningLabCopy.DASHBOARD.totalPnlLabel}</p>
           <p className={`text-xl font-semibold ${totalPnl >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
             {formatMoney(totalPnl)}
           </p>
         </div>
         <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
-          <p className="text-gray-400 text-xs">Plan Following</p>
+          <p className="text-gray-400 text-xs">{LearningLabCopy.DASHBOARD.planFollowingTopLabel}</p>
           <p className="text-xl text-white font-semibold">{dashboardMetrics.planFollowingRate}%</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-4">
-          <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4 space-y-4">
-            <h3 className="text-lg text-white font-semibold">Execution Console</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <select
-                value={selectedTicker}
-                onChange={(e) => setSelectedTicker(e.target.value)}
-                className="bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
-              >
-                {loadingIdeas && tickerOptions.length === 0 ? (
-                  <option>Loading...</option>
-                ) : (
-                  tickerOptions.map((idea) => (
-                    <option key={idea.ticker} value={idea.ticker}>
-                      {idea.ticker} · {idea.name}
-                    </option>
-                  ))
-                )}
-              </select>
-              <input
-                value={sharesInput}
-                onChange={(e) => setSharesInput(e.target.value)}
-                type="number"
-                min="1"
-                className="bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
-                placeholder="Shares"
-              />
-              <div className="bg-gray-800 text-cyan-300 border border-white/10 rounded-lg px-3 py-2 flex items-center">
-                Est. price: {formatMoney(watchPrice || 0)}
-              </div>
-            </div>
-            <div className="rounded-xl bg-gray-950/50 border border-cyan-400/20 p-4 space-y-4">
-              <div>
-                <h4 className="text-white font-semibold">Your practice plan</h4>
-                <p className="text-sm text-gray-400 mt-1">
-                  Start with plain answers. The investing terms are shown after each prompt so you learn them by doing.
-                </p>
-              </div>
+          <GuidedPracticeFlow
+            tickerOptions={tickerOptions}
+            selectedTicker={selectedTicker}
+            onSelectedTickerChange={setSelectedTicker}
+            loadingIdeas={loadingIdeas}
+            sharesInput={sharesInput}
+            onSharesInputChange={setSharesInput}
+            watchPriceLabel={formatMoney(watchPrice || 0)}
+            planForm={planForm}
+            onPlanFormChange={setPlanForm}
+            positionSize={positionSize}
+            isOversizedTrade={isOversizedTrade}
+            canBuy={canBuy}
+            isExecutingTrade={isExecutingTrade}
+            onBuy={() => executeTrade('BUY')}
+            onResetSimulator={resetSimulator}
+            onRefreshPrices={refreshPositionPrices}
+            actionMessage={actionMessage}
+          />
 
-              <label className="block">
-                <span className="text-sm text-gray-200">Why might this company become more valuable?</span>
-                <span className="block text-xs text-cyan-300 mt-1">Investors call this your investment thesis.</span>
-                <textarea
-                  value={planForm.reasonForBuying}
-                  onChange={(e) => setPlanForm((prev) => ({ ...prev, reasonForBuying: e.target.value }))}
-                  className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2 min-h-20"
-                  placeholder="Example: Revenue is growing, debt is manageable, and the stock is cheaper than similar companies."
-                />
-              </label>
+          {reviewedPosition && (
+            <SellReviewPanel
+              position={reviewedPosition}
+              sellReviewForm={sellReviewForm}
+              onSellReviewFormChange={setSellReviewForm}
+              sharesInput={sharesInput}
+              onSharesInputChange={setSharesInput}
+              isExecutingTrade={isExecutingTrade}
+              onConfirmSell={() => executeTrade('SELL')}
+              onCancel={closeReview}
+            />
+          )}
 
-              <label className="block">
-                <span className="text-sm text-gray-200">What would tell you your idea was wrong?</span>
-                <span className="block text-xs text-cyan-300 mt-1">Investors call this an invalidation point.</span>
-                <textarea
-                  value={planForm.wrongSignal}
-                  onChange={(e) => setPlanForm((prev) => ({ ...prev, wrongSignal: e.target.value }))}
-                  className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2 min-h-16"
-                  placeholder="Example: Price falls below my wrong-price level or the company reports weaker earnings."
-                />
-              </label>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <label className="block md:col-span-1">
-                  <span className="text-sm text-gray-200">Your "I was wrong" price</span>
-                  <span className="block text-xs text-cyan-300 mt-1">Used for position sizing.</span>
-                  <input
-                    value={planForm.plannedWrongPrice}
-                    onChange={(e) => setPlanForm((prev) => ({ ...prev, plannedWrongPrice: e.target.value }))}
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
-                    placeholder="80.00"
-                  />
-                </label>
-
-                <label className="block md:col-span-1">
-                  <span className="text-sm text-gray-200">Max practice loss</span>
-                  <span className="block text-xs text-cyan-300 mt-1">How much you accept losing if wrong.</span>
-                  <input
-                    value={planForm.maxPracticeLoss}
-                    onChange={(e) => setPlanForm((prev) => ({ ...prev, maxPracticeLoss: e.target.value }))}
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
-                  />
-                </label>
-
-                <label className="block md:col-span-1">
-                  <span className="text-sm text-gray-200">Loss type</span>
-                  <span className="block text-xs text-cyan-300 mt-1">Amount or portfolio percent.</span>
-                  <select
-                    value={planForm.maxPracticeLossType}
-                    onChange={(e) => setPlanForm((prev) => ({ ...prev, maxPracticeLossType: e.target.value as TradePlanForm['maxPracticeLossType'] }))}
-                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
-                  >
-                    <option value="percent">% of portfolio</option>
-                    <option value="amount">Dollar amount</option>
-                  </select>
-                </label>
-              </div>
-
-              <label className="block">
-                <span className="text-sm text-gray-200">When will you check if this is working?</span>
-                <span className="block text-xs text-cyan-300 mt-1">Investors call this a review condition.</span>
-                <input
-                  value={planForm.reviewCondition}
-                  onChange={(e) => setPlanForm((prev) => ({ ...prev, reviewCondition: e.target.value }))}
-                  className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
-                  placeholder="Example: Review after 30 days or after the next earnings report."
-                />
-              </label>
-
-              <div className="rounded-lg bg-cyan-500/10 border border-cyan-400/20 p-3">
-                <p className="text-sm text-cyan-100">{positionSize.explanation}</p>
-                {isOversizedTrade && (
-                  <p className="text-sm text-amber-300 mt-2">
-                    Your share amount is larger than the suggested practice size. You can continue, but this is riskier than your plan.
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="rounded-xl bg-gray-950/50 border border-amber-400/20 p-4 space-y-3">
-              <div>
-                <h4 className="text-white font-semibold">Before selling: what happened?</h4>
-                <p className="text-sm text-gray-400 mt-1">
-                  Selling records a review so the lab can teach from your decisions, not only from profit or loss.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <label className="block">
-                  <span className="text-sm text-gray-200">Did your original idea work?</span>
-                  <select
-                    value={sellReviewForm.outcome}
-                    onChange={(e) => setSellReviewForm((prev) => ({ ...prev, outcome: e.target.value as SellReviewForm['outcome'] }))}
-                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
-                  >
-                    <option value="worked">Worked</option>
-                    <option value="failed">Failed</option>
-                    <option value="unclear">Still unclear</option>
-                  </select>
-                </label>
-
-                <label className="block">
-                  <span className="text-sm text-gray-200">Did you follow your plan?</span>
-                  <select
-                    value={sellReviewForm.followedPlan ? 'yes' : 'no'}
-                    onChange={(e) => setSellReviewForm((prev) => ({ ...prev, followedPlan: e.target.value === 'yes' }))}
-                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
-                  >
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
-                </label>
-
-                <label className="block">
-                  <span className="text-sm text-gray-200">Mistake type, if any</span>
-                  <select
-                    value={sellReviewForm.mistakeType}
-                    onChange={(e) => setSellReviewForm((prev) => ({ ...prev, mistakeType: e.target.value as SellReviewForm['mistakeType'] }))}
-                    className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2"
-                  >
-                    <option value="">No mistake selected</option>
-                    <option value="no_reason">No clear reason</option>
-                    <option value="too_large">Position too large</option>
-                    <option value="ignored_warning">Ignored warning sign</option>
-                    <option value="emotional_sell">Sold emotionally</option>
-                    <option value="score_only">Bought only because score was high</option>
-                    <option value="other">Other</option>
-                  </select>
-                </label>
-              </div>
-
-              <label className="block">
-                <span className="text-sm text-gray-200">What did you learn?</span>
-                <textarea
-                  value={sellReviewForm.lessonLearned}
-                  onChange={(e) => setSellReviewForm((prev) => ({ ...prev, lessonLearned: e.target.value }))}
-                  className="mt-2 w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2 min-h-16"
-                  placeholder="Example: I bought before I understood the risk, or the plan worked but the position was too large."
-                />
-              </label>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => executeTrade('BUY')}
-                disabled={!canBuy || isExecutingTrade}
-                className={`px-4 py-2 rounded-lg text-white font-medium ${
-                  canBuy && !isExecutingTrade ? 'bg-emerald-500/80 hover:bg-emerald-500' : 'bg-gray-700 cursor-not-allowed opacity-60'
-                }`}
-              >
-                Buy
-              </button>
-              <button
-                type="button"
-                onClick={() => executeTrade('SELL')}
-                disabled={isExecutingTrade}
-                className={`px-4 py-2 rounded-lg text-white font-medium ${
-                  isExecutingTrade ? 'bg-gray-700 cursor-not-allowed opacity-60' : 'bg-red-500/80 hover:bg-red-500'
-                }`}
-              >
-                Sell
-              </button>
-              <button
-                type="button"
-                onClick={refreshPositionPrices}
-                disabled={isExecutingTrade}
-                className={`px-4 py-2 rounded-lg text-white font-medium ${
-                  isExecutingTrade ? 'bg-gray-700 cursor-not-allowed opacity-60' : 'bg-cyan-500/80 hover:bg-cyan-500'
-                }`}
-              >
-                Refresh Prices
-              </button>
-              <button
-                type="button"
-                onClick={resetSimulator}
-                disabled={isExecutingTrade}
-                className={`px-4 py-2 rounded-lg text-white font-medium ${
-                  isExecutingTrade ? 'bg-gray-700 cursor-not-allowed opacity-60' : 'bg-gray-700 hover:bg-gray-600'
-                }`}
-              >
-                Reset
-              </button>
-            </div>
-            {actionMessage && <p className="text-sm text-cyan-300">{actionMessage}</p>}
-          </div>
-
-          <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
-            <h3 className="text-lg text-white font-semibold mb-3">Open Positions</h3>
-            {state.positions.length === 0 ? (
-              <p className="text-gray-400">No positions yet. Start by placing your first trade.</p>
-            ) : (
-              <div className="space-y-2">
-                {state.positions.map((position) => {
-                  const unrealized = (position.currentPrice - position.avgCost) * position.shares;
-                  const plan = position.planId ? plansById.get(position.planId) : undefined;
-                  const plannedWrongPrice = plan?.plannedWrongPrice;
-                  const withinPlannedRisk = plannedWrongPrice == null || position.currentPrice >= plannedWrongPrice;
-                  return (
-                    <div key={position.ticker} className="bg-gray-800/70 border border-white/10 rounded-lg p-3">
-                      <div className="flex justify-between gap-4">
-                        <p className="text-white font-medium">{position.ticker} · {position.name}</p>
-                        <p className={unrealized >= 0 ? 'text-emerald-400' : 'text-red-400'}>{formatMoney(unrealized)}</p>
-                      </div>
-                      <p className="text-xs text-gray-400 mt-1">
-                        {position.shares} shares · Avg {formatMoney(position.avgCost)} · Last {formatMoney(position.currentPrice)}
-                      </p>
-                      {plan ? (
-                        <div className="mt-3 space-y-2 text-xs">
-                          <p className="text-gray-300"><span className="text-cyan-300">Reason:</span> {plan.reasonForBuying}</p>
-                          <p className="text-gray-300"><span className="text-cyan-300">Wrong signal:</span> {plan.wrongSignal}</p>
-                          <p className="text-gray-300"><span className="text-cyan-300">Review:</span> {plan.reviewCondition}</p>
-                          <p className={withinPlannedRisk ? 'text-emerald-300' : 'text-amber-300'}>
-                            {withinPlannedRisk ? 'Still inside the planned risk area.' : 'Price is beyond your planned wrong-price. Review the position.'}
-                          </p>
-                        </div>
-                      ) : (
-                        <p className="text-xs text-amber-300 mt-3">
-                          This is unplanned practice history from before the guided lab. Future trades should include a plan.
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          <PracticePositions
+            positions={state.positions}
+            plansById={plansById}
+            formatMoney={formatMoney}
+            onReviewAndSell={openReviewForPosition}
+            reviewingTicker={reviewingPositionTicker}
+          />
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
-            <h3 className="text-lg text-white font-semibold mb-3">Learning Dashboard</h3>
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="rounded-lg bg-gray-800/70 p-3">
-                <p className="text-gray-400">Completed plans</p>
-                <p className="text-white text-lg font-semibold">{dashboardMetrics.completedPlans}</p>
-              </div>
-              <div className="rounded-lg bg-gray-800/70 p-3">
-                <p className="text-gray-400">Closed reviews</p>
-                <p className="text-white text-lg font-semibold">{dashboardMetrics.closedReviews}</p>
-              </div>
-              <div className="rounded-lg bg-gray-800/70 p-3">
-                <p className="text-gray-400">Average win</p>
-                <p className="text-emerald-400 text-lg font-semibold">{formatMoney(dashboardMetrics.averageWin)}</p>
-              </div>
-              <div className="rounded-lg bg-gray-800/70 p-3">
-                <p className="text-gray-400">Average loss</p>
-                <p className="text-red-400 text-lg font-semibold">{formatMoney(dashboardMetrics.averageLoss)}</p>
-              </div>
-            </div>
-            <p className="text-xs text-gray-400 mt-3">
-              Common mistake: {dashboardMetrics.commonMistake ? dashboardMetrics.commonMistake.replace(/_/g, ' ') : 'none recorded yet'}
-            </p>
-            <p className="text-xs text-gray-500 mt-2">
-              This is practice feedback, not financial advice or a promise of future returns.
-            </p>
-          </div>
+          <LearningDashboardCard metrics={dashboardMetrics} formatMoney={formatMoney} />
+
+          <PracticeChecklist />
 
           <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
-            <h3 className="text-lg text-white font-semibold mb-2">Learning Missions</h3>
-            <ul className="space-y-2 text-sm text-gray-300 list-disc pl-4">
-              <li>Complete 3 buys with a written reason, wrong signal, review condition, and max practice loss.</li>
-              <li>Keep each new position within the suggested practice size or write down why you accepted more risk.</li>
-              <li>Close 3 positions with a sell review before judging your results.</li>
-              <li>Find your most common mistake and write one process improvement in the journal.</li>
-            </ul>
-          </div>
-
-          <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
-            <h3 className="text-lg text-white font-semibold mb-2">Trading Journal</h3>
+            <h3 className="text-lg text-white font-semibold mb-2">{LearningLabCopy.JOURNAL.sectionTitle}</h3>
             <textarea
               value={state.journal}
               onChange={(e) => commitSimulatorState(updateLearningLabJournal(stateRef.current, e.target.value))}
               className="w-full bg-gray-800 text-white border border-white/10 rounded-lg px-3 py-2 min-h-40"
-              placeholder="What pattern do you notice in your decisions? What will you do differently in the next practice trade?"
+              placeholder={LearningLabCopy.JOURNAL.placeholder}
             />
           </div>
         </div>
       </div>
 
       <div className="rounded-xl bg-gray-900/60 border border-white/10 p-4">
-        <h3 className="text-lg text-white font-semibold mb-3">Recent Trades</h3>
+        <h3 className="text-lg text-white font-semibold mb-3">{LearningLabCopy.RECENT_TRADES.sectionTitle}</h3>
         {state.trades.length === 0 ? (
-          <p className="text-gray-400">No trades logged yet.</p>
+          <p className="text-gray-400">{LearningLabCopy.RECENT_TRADES.emptyMessage}</p>
         ) : (
           <div className="space-y-2">
             {state.trades.slice(0, 10).map((trade) => (

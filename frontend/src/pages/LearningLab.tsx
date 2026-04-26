@@ -269,7 +269,10 @@ export default function LearningLab() {
     setIsExecutingTrade(true);
 
     try {
-      let executionPrice = watchPrice;
+      const positionForTradeTicker = stateRef.current.positions.find(
+        (p) => p.ticker === tradeTicker
+      );
+      let executionPrice = positionForTradeTicker?.currentPrice ?? watchPrice;
       try {
         const historical = await stockApi.getHistoricalPrices(tradeTicker, '1mo', false);
         const latest = historical.data[historical.data.length - 1];
@@ -277,7 +280,7 @@ export default function LearningLab() {
           executionPrice = latest.close;
         }
       } catch {
-        // fallback to score-based synthetic price in demo mode
+        // fallback to the ticker's last known price (or watchPrice for fresh BUYs)
       }
 
       const tradeValue = shares * executionPrice;

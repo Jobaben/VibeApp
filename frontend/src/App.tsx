@@ -1,5 +1,6 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { StockList } from './components/StockList';
+import PageShell from './components/PageShell';
 import Screener from './pages/Screener';
 import StockDetail from './pages/StockDetail';
 import Leaderboard from './pages/Leaderboard';
@@ -41,20 +42,13 @@ function App() {
   return (
     <LearningModeProvider>
     <WatchlistProvider>
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-      {/* Ambient background effects */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-purple-500/5 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="relative z-10">
+    <PageShell>
         {/* Modern Header */}
-        <header className="border-b border-white/10 backdrop-blur-xl bg-gray-900/50">
+        <header className="header-band">
           <div className="max-w-7xl mx-auto px-4 py-6">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold heading-gradient">
                   Avanza Stock Finder
                 </h1>
                 <p className="text-gray-400 mt-2 text-sm flex items-center gap-2">
@@ -76,10 +70,10 @@ function App() {
             <nav className="flex gap-2">
               <Link
                 to="/"
-                className={`px-6 py-2.5 rounded-lg font-medium transition-all duration-200 ${
+                className={`px-6 py-2.5 rounded-lg font-medium duration-200 ${
                   isHomePage
-                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/25'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                    ? 'btn-primary'
+                    : 'text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all'
                 }`}
               >
                 Browse Stocks
@@ -186,21 +180,20 @@ function App() {
           </Routes>
         </main>
 
-        {/* Modern Footer */}
-        <footer className="border-t border-white/10 mt-16 backdrop-blur-xl bg-gray-900/30">
-          <div className="max-w-7xl mx-auto px-4 py-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <p className="text-gray-400 text-sm">
-                Avanza Stock Finder - Built with
-                <span className="text-cyan-400 font-medium"> FastAPI</span>,
-                <span className="text-blue-400 font-medium"> React</span> &
-                <span className="text-purple-400 font-medium"> AI</span>
-              </p>
-            </div>
+      {/* Modern Footer */}
+      <footer className="border-t border-white/10 mt-16 backdrop-blur-xl bg-gray-900/30">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-gray-400 text-sm">
+              Avanza Stock Finder - Built with
+              <span className="text-cyan-400 font-medium"> FastAPI</span>,
+              <span className="text-blue-400 font-medium"> React</span> &
+              <span className="text-purple-400 font-medium"> AI</span>
+            </p>
           </div>
-        </footer>
-      </div>
-    </div>
+        </div>
+      </footer>
+    </PageShell>
     {/* Learning Mode Components */}
     <LessonSidebar />
     <LessonContent />

@@ -15,3 +15,35 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@layer components {
+  /* Standard dark page background used by detail pages and the app shell */
+  .page-shell {
+    @apply min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950;
+  }
+
+  /* Sticky/top header band over the page-shell */
+  .header-band {
+    @apply border-b border-white/10 backdrop-blur-xl bg-gray-900/50;
+  }
+
+  /* Brand gradient text — page titles, hero copy */
+  .heading-gradient {
+    @apply bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent;
+  }
+
+  /* Translucent dark surface — every card on the dark theme */
+  .glass-card {
+    @apply bg-gray-800/50 backdrop-blur-sm border border-white/10 rounded-lg;
+  }
+
+  /* Primary CTA — blue → cyan gradient with glow */
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all;
+  }
+
+  /* Secondary / cancel button */
+  .btn-secondary {
+    @apply bg-gray-700 text-gray-200 hover:bg-gray-600 transition-colors;
+  }
+}

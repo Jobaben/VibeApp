@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PageShell from '../components/PageShell';
 import { stockApi } from '../services/api';
 import type { LeaderboardStock, SectorLeaderboard } from '../types/stock';
 import { Signal } from '../types/stock';
@@ -76,54 +77,44 @@ export default function Leaderboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-      {/* Ambient background effects */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-purple-500/5 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="relative z-10">
-        {/* Header */}
-        <header className="border-b border-white/10 backdrop-blur-xl bg-gray-900/50">
-          <div className="max-w-7xl mx-auto px-4 py-6">
-            <button
-              onClick={() => navigate('/')}
-              className="flex items-center text-gray-400 hover:text-white transition-colors mb-4"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Back to Home
-            </button>
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                Stock Leaderboard
-              </h1>
-              <p className="text-gray-400 mt-2">Top-performing stocks ranked by our multi-factor scoring system</p>
-            </div>
-
-            {/* Tab Navigation */}
-            <nav className="flex gap-2 mt-6">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${
-                    activeTab === tab.id
-                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/25'
-                      : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
-                  }`}
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={tab.icon} />
-                  </svg>
-                  {tab.label}
-                </button>
-              ))}
-            </nav>
+    <PageShell>
+      <header className="header-band">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center text-gray-400 hover:text-white transition-colors mb-4"
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Home
+          </button>
+          <div>
+            <h1 className="text-4xl font-bold heading-gradient">Stock Leaderboard</h1>
+            <p className="text-gray-400 mt-2">Top-performing stocks ranked by our multi-factor scoring system</p>
           </div>
-        </header>
+
+          {/* Tab Navigation */}
+          <nav className="flex gap-2 mt-6">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2.5 rounded-lg font-medium duration-200 flex items-center gap-2 ${
+                  activeTab === tab.id
+                    ? 'btn-primary'
+                    : 'text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors'
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={tab.icon} />
+                </svg>
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </header>
 
         <main className="max-w-7xl mx-auto px-4 py-8">
           {error && (
@@ -175,7 +166,7 @@ export default function Leaderboard() {
               {loading ? (
                 <LoadingSpinner />
               ) : signalStocks.length === 0 ? (
-                <div className="bg-gray-800/50 border border-white/10 rounded-lg p-8 text-center">
+                <div className="glass-card p-8 text-center">
                   <p className="text-gray-400">No stocks found with {signalConfig[selectedSignal].label} signal</p>
                 </div>
               ) : (
@@ -199,7 +190,7 @@ export default function Leaderboard() {
               ) : sectorLeaderboard ? (
                 <div className="space-y-6">
                   {Object.entries(sectorLeaderboard).map(([sector, stocks]) => (
-                    <div key={sector} className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                    <div key={sector} className="glass-card p-6">
                       <h3 className="text-xl font-bold text-white mb-4 flex items-center">
                         <span className="w-2 h-2 rounded-full bg-blue-400 mr-3"></span>
                         {sector}
@@ -213,15 +204,14 @@ export default function Leaderboard() {
                   ))}
                 </div>
               ) : (
-                <div className="bg-gray-800/50 border border-white/10 rounded-lg p-8 text-center">
+                <div className="glass-card p-8 text-center">
                   <p className="text-gray-400">No sector data available</p>
                 </div>
               )}
             </div>
           )}
         </main>
-      </div>
-    </div>
+    </PageShell>
   );
 }
 

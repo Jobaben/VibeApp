@@ -43,8 +43,8 @@ export default function WatchlistManager({
     <div
       className={`p-4 rounded-lg border transition-all ${
         isSelected
-          ? 'border-blue-500 bg-blue-50'
-          : 'border-gray-200 bg-white hover:border-gray-300'
+          ? 'border-blue-500/50 bg-blue-500/10'
+          : 'border-white/10 bg-gray-900/40 hover:border-white/20 hover:bg-gray-800/60'
       }`}
     >
       <div className="flex items-center justify-between">
@@ -56,7 +56,7 @@ export default function WatchlistManager({
               onChange={(e) => setNewName(e.target.value)}
               onBlur={handleRename}
               onKeyDown={handleKeyDown}
-              className="w-full px-2 py-1 text-lg font-semibold border border-blue-500 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1 text-lg font-semibold bg-gray-900/60 text-white border border-blue-500/60 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               autoFocus
             />
           ) : (
@@ -64,10 +64,10 @@ export default function WatchlistManager({
               onClick={onSelect}
               className={`${onSelect ? 'cursor-pointer' : ''}`}
             >
-              <h3 className="text-lg font-semibold text-gray-900 truncate">
+              <h3 className="text-lg font-semibold text-white truncate">
                 {watchlist.name}
               </h3>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-400 mt-1">
                 {watchlist.tickers.length} {watchlist.tickers.length === 1 ? 'stock' : 'stocks'}
               </p>
             </div>
@@ -79,7 +79,7 @@ export default function WatchlistManager({
             <>
               <button
                 onClick={() => setIsEditing(true)}
-                className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
                 title="Rename watchlist"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,7 +88,7 @@ export default function WatchlistManager({
               </button>
               <button
                 onClick={() => setShowDeleteConfirm(true)}
-                className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
                 title="Delete watchlist"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,18 +102,16 @@ export default function WatchlistManager({
 
       {/* Delete confirmation modal */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm mx-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Delete Watchlist?
-            </h3>
-            <p className="text-gray-600 mb-4">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="glass-card p-6 max-w-sm mx-4 shadow-2xl">
+            <h3 className="text-lg font-semibold text-white mb-2">Delete Watchlist?</h3>
+            <p className="text-gray-400 mb-4">
               Are you sure you want to delete "{watchlist.name}"? This action cannot be undone.
             </p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                className="px-4 py-2 rounded-lg btn-secondary"
               >
                 Cancel
               </button>

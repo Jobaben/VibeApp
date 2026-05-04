@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import PageShell from '../components/PageShell';
 import { stockApi } from '../services/api';
 import type { MoversResponse, SignalChangesResponse } from '../types/stock';
 import { ScoreMoverCard } from '../components/ScoreMoverCard';
@@ -49,9 +50,8 @@ export function WeeklyChanges() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-10">
+    <PageShell>
+      <header className="header-band sticky top-0 z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -70,10 +70,10 @@ export function WeeklyChanges() {
                 <button
                   key={days}
                   onClick={() => setPeriod(days as TimePeriod)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-lg font-medium ${
                     period === days
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+                      ? 'btn-primary'
+                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white transition-colors'
                   }`}
                 >
                   {days}d
@@ -82,7 +82,7 @@ export function WeeklyChanges() {
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -116,7 +116,7 @@ export function WeeklyChanges() {
                   ))}
                 </div>
               ) : (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-8 text-center">
+                <div className="glass-card p-8 text-center">
                   <p className="text-gray-400">No gainers found for this period</p>
                 </div>
               )}
@@ -139,7 +139,7 @@ export function WeeklyChanges() {
                   ))}
                 </div>
               ) : (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-8 text-center">
+                <div className="glass-card p-8 text-center">
                   <p className="text-gray-400">No losers found for this period</p>
                 </div>
               )}
@@ -162,7 +162,7 @@ export function WeeklyChanges() {
                   ))}
                 </div>
               ) : (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-8 text-center">
+                <div className="glass-card p-8 text-center">
                   <p className="text-gray-400">No signal changes found for this period</p>
                 </div>
               )}
@@ -222,7 +222,7 @@ export function WeeklyChanges() {
           </div>
         )}
       </div>
-    </div>
+    </PageShell>
   );
 }
 

@@ -8,6 +8,7 @@ import VolumeChart from '../components/VolumeChart';
 import ScoreBreakdown from '../components/ScoreBreakdown';
 import AddToWatchlistButton from '../components/AddToWatchlistButton';
 import ScoreChangeIndicator from '../components/ScoreChangeIndicator';
+import PageShell from '../components/PageShell';
 import { EnhancedMetricCard } from '../components/learning';
 
 type Tab = 'overview' | 'charts' | 'fundamentals' | 'score';
@@ -79,34 +80,38 @@ export default function StockDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading stock data...</p>
+      <PageShell>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-gray-400">Loading stock data...</p>
+          </div>
         </div>
-      </div>
+      </PageShell>
     );
   }
 
   if (error || !stock) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center">
-        <div className="max-w-md w-full mx-4">
-          <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-6 text-center">
-            <svg className="w-12 h-12 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <h3 className="text-lg font-semibold text-red-400 mb-2">Error Loading Stock</h3>
-            <p className="text-gray-300 mb-4">{error || 'Stock not found'}</p>
-            <button
-              onClick={() => navigate('/')}
-              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
-            >
-              Back to Home
-            </button>
+      <PageShell>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="max-w-md w-full mx-4">
+            <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-6 text-center">
+              <svg className="w-12 h-12 text-red-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 className="text-lg font-semibold text-red-400 mb-2">Error Loading Stock</h3>
+              <p className="text-gray-300 mb-4">{error || 'Stock not found'}</p>
+              <button
+                onClick={() => navigate('/')}
+                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+              >
+                Back to Home
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </PageShell>
     );
   }
 
@@ -118,16 +123,9 @@ export default function StockDetail() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-      {/* Ambient background effects */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-purple-500/5 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="relative z-10">
+    <PageShell>
         {/* Header */}
-        <header className="border-b border-white/10 backdrop-blur-xl bg-gray-900/50">
+        <header className="header-band">
           <div className="max-w-7xl mx-auto px-4 py-6">
             <button
               onClick={() => navigate('/')}
@@ -171,10 +169,10 @@ export default function StockDetail() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${
+                  className={`px-4 py-2.5 rounded-lg font-medium duration-200 flex items-center gap-2 ${
                     activeTab === tab.id
-                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/25'
-                      : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                      ? 'btn-primary'
+                      : 'text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all'
                   }`}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,19 +192,19 @@ export default function StockDetail() {
               {/* Quick Stats */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {scoreBreakdown ? (
-                  <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                  <div className="glass-card p-4">
                     <p className="text-gray-400 text-sm mb-1">Total Score</p>
                     <p className="text-3xl font-bold text-white">{scoreBreakdown.total_score.toFixed(1)}</p>
                     <p className="text-xs text-gray-500 mt-1">out of 100</p>
                   </div>
                 ) : (
-                  <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                  <div className="glass-card p-4">
                     <p className="text-gray-400 text-sm mb-1">Total Score</p>
                     <p className="text-lg text-gray-500">Unavailable</p>
                   </div>
                 )}
                 {stock.market_cap && (
-                  <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                  <div className="glass-card p-4">
                     <p className="text-gray-400 text-sm mb-1">Market Cap</p>
                     <p className="text-2xl font-bold text-white">
                       ${formatNumber(Number(stock.market_cap) / 1e9, 1)}B
@@ -215,14 +213,14 @@ export default function StockDetail() {
                   </div>
                 )}
                 {stock.fundamentals?.pe_ratio && (
-                  <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                  <div className="glass-card p-4">
                     <p className="text-gray-400 text-sm mb-1">P/E Ratio</p>
                     <p className="text-2xl font-bold text-white">{formatNumber(stock.fundamentals.pe_ratio)}</p>
                     <p className="text-xs text-gray-500 mt-1">Price to Earnings</p>
                   </div>
                 )}
                 {stock.fundamentals?.dividend_yield && (
-                  <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                  <div className="glass-card p-4">
                     <p className="text-gray-400 text-sm mb-1">Dividend Yield</p>
                     <p className="text-2xl font-bold text-white">{formatNumber(stock.fundamentals.dividend_yield)}%</p>
                     <p className="text-xs text-gray-500 mt-1">Annual yield</p>
@@ -234,7 +232,7 @@ export default function StockDetail() {
               {scoreBreakdown ? (
                 <ScoreBreakdown breakdown={scoreBreakdown} />
               ) : (
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center">
+                <div className="glass-card p-6 text-center">
                   <svg className="w-12 h-12 text-gray-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
@@ -245,12 +243,12 @@ export default function StockDetail() {
 
               {/* Quick Price Chart */}
               {priceData && priceData.data.length > 0 ? (
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                <div className="glass-card p-6">
                   <h2 className="text-xl font-bold text-white mb-4">Price Chart (1 Year)</h2>
                   <PriceChart data={priceData.data} showMovingAverages={true} height={300} />
                 </div>
               ) : (
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center">
+                <div className="glass-card p-6 text-center">
                   <svg className="w-12 h-12 text-gray-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
                   </svg>
@@ -266,23 +264,23 @@ export default function StockDetail() {
             priceData && priceData.data.length > 0 ? (
               <div className="space-y-6">
                 {/* Price Chart */}
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                <div className="glass-card p-6">
                   <h2 className="text-xl font-bold text-white mb-4">Price & Moving Averages</h2>
                   <PriceChart data={priceData.data} showMovingAverages={true} height={400} />
                 </div>
 
                 {/* RSI Chart */}
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                <div className="glass-card p-6">
                   <RSIChart data={priceData.data} height={250} />
                 </div>
 
                 {/* Volume Chart */}
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                <div className="glass-card p-6">
                   <VolumeChart data={priceData.data} height={250} />
                 </div>
               </div>
             ) : (
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center">
+              <div className="glass-card p-6 text-center">
                 <svg className="w-16 h-16 text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
                 </svg>
@@ -298,7 +296,7 @@ export default function StockDetail() {
             stock.fundamentals ? (
             <div className="space-y-6">
               {/* Valuation Metrics */}
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+              <div className="glass-card p-6">
                 <h2 className="text-xl font-bold text-white mb-4 flex items-center">
                   <svg className="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -325,7 +323,7 @@ export default function StockDetail() {
               </div>
 
               {/* Profitability Metrics */}
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+              <div className="glass-card p-6">
                 <h2 className="text-xl font-bold text-white mb-4 flex items-center">
                   <svg className="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -355,7 +353,7 @@ export default function StockDetail() {
               </div>
 
               {/* Financial Health */}
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+              <div className="glass-card p-6">
                 <h2 className="text-xl font-bold text-white mb-4 flex items-center">
                   <svg className="w-5 h-5 mr-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -376,7 +374,7 @@ export default function StockDetail() {
               </div>
 
               {/* Growth & Dividends */}
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+              <div className="glass-card p-6">
                 <h2 className="text-xl font-bold text-white mb-4 flex items-center">
                   <svg className="w-5 h-5 mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -400,7 +398,7 @@ export default function StockDetail() {
               </div>
             </div>
             ) : (
-              <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center">
+              <div className="glass-card p-6 text-center">
                 <svg className="w-16 h-16 text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
@@ -417,7 +415,7 @@ export default function StockDetail() {
               {scoreBreakdown ? (
                 <ScoreBreakdown breakdown={scoreBreakdown} />
               ) : (
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center">
+                <div className="glass-card p-6 text-center">
                   <svg className="w-16 h-16 text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
@@ -429,7 +427,6 @@ export default function StockDetail() {
             </div>
           )}
         </main>
-      </div>
-    </div>
+    </PageShell>
   );
 }

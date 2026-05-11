@@ -6,6 +6,18 @@ from .market_hours import get_market_status
 logger = logging.getLogger(__name__)
 
 
+def _invalidate_ai_insight_cache() -> None:
+    """Best-effort invalidation; never re-raises (cache failures must not fail the recompute task)."""
+    try:
+        from app.infrastructure.cache import get_cache_service
+        cache_service = get_cache_service()
+        if cache_service.is_available:
+            cleared = cache_service.invalidate("ai:insight:*")
+            logger.info(f"Invalidated {cleared} AI insight cache entries after score recompute")
+    except Exception as e:
+        logger.warning(f"AI insight cache invalidation skipped: {e}")
+
+
 @celery_app.task(bind=True, max_retries=3, default_retry_delay=60)
 def snapshot_daily_scores(self):
     """Create daily snapshot of all stock scores.
@@ -83,15 +95,7 @@ def recalculate_all_scores(self):
             invalidate_cache.delay("stocks:top:*")
 
             # Invalidate AI insight cache after score recomputation
-            try:
-                from app.infrastructure.cache import get_cache_service
-                cache_service = get_cache_service()
-                if cache_service.is_available():
-                    cleared = cache_service.invalidate("ai:insight:*")
-                    logger.info(f"Invalidated {cleared} AI insight cache entries after score recompute")
-            except Exception as e:
-                # Cache invalidation failure must NOT fail the recompute task.
-                logger.warning(f"AI insight cache invalidation skipped: {e}")
+            _invalidate_ai_insight_cache()
 
             return {
                 "status": "completed",

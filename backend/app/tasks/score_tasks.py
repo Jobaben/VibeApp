@@ -82,6 +82,17 @@ def recalculate_all_scores(self):
             invalidate_cache.delay("leaderboard:*")
             invalidate_cache.delay("stocks:top:*")
 
+            # Invalidate AI insight cache after score recomputation
+            try:
+                from app.infrastructure.cache import get_cache_service
+                cache_service = get_cache_service()
+                if cache_service.is_available():
+                    cleared = cache_service.invalidate("ai:insight:*")
+                    logger.info(f"Invalidated {cleared} AI insight cache entries after score recompute")
+            except Exception as e:
+                # Cache invalidation failure must NOT fail the recompute task.
+                logger.warning(f"AI insight cache invalidation skipped: {e}")
+
             return {
                 "status": "completed",
                 "scored_count": scored_count,

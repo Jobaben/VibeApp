@@ -6,6 +6,7 @@ import pytest
 
 from app.features.ai.schemas import AIInsight
 from app.llm.anthropic_client import AnthropicClient
+from app.llm.errors import InsightGenerationError, InsightSchemaError
 
 
 def _fake_response(text: str) -> MagicMock:
@@ -77,3 +78,39 @@ def test_generate_insight_marks_system_and_schema_for_cache():
     # The user message must NOT carry cache_control
     user_msg = kwargs["messages"][0]
     assert "cache_control" not in user_msg
+
+
+def test_generate_insight_rejects_malformed_json():
+    fake_client = MagicMock()
+    fake_client.messages.create.return_value = _fake_response("not json at all")
+    client = AnthropicClient(api_key="ignored", client=fake_client)
+
+    with pytest.raises(InsightSchemaError) as exc:
+        client.generate_insight({"ticker": "X", "name": "X", "scores": {}, "fundamentals": {}})
+    assert "not json at all" in exc.value.raw_output
+
+
+def test_generate_insight_rejects_schema_violation():
+    bad = json.dumps({"strengths": "not a list", "weaknesses": [], "catalyst_watch": []})
+    fake_client = MagicMock()
+    fake_client.messages.create.return_value = _fake_response(bad)
+    client = AnthropicClient(api_key="ignored", client=fake_client)
+
+    with pytest.raises(InsightSchemaError):
+        client.generate_insight({"ticker": "X", "name": "X", "scores": {}, "fundamentals": {}})
+
+
+def test_generate_insight_rejects_overlong_items():
+    long_item = " ".join(["word"] * 25)  # 25 words, exceeds <=20 cap
+    bad = json.dumps({
+        "strengths": [long_item],
+        "weaknesses": ["ok"],
+        "catalyst_watch": ["ok"],
+    })
+    fake_client = MagicMock()
+    fake_client.messages.create.return_value = _fake_response(bad)
+    client = AnthropicClient(api_key="ignored", client=fake_client)
+
+    with pytest.raises(InsightSchemaError) as exc:
+        client.generate_insight({"ticker": "X", "name": "X", "scores": {}, "fundamentals": {}})
+    assert "word count" in str(exc.value).lower() or "20" in str(exc.value)

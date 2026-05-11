@@ -55,6 +55,22 @@ class AnthropicClient:
 
     @staticmethod
     def _parse(raw: str) -> AIInsight:
-        # Schema validation arrives in the next task; for now just parse JSON.
-        data = json.loads(raw)
-        return AIInsight(**data)
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError as e:
+            raise InsightSchemaError(f"LLM output is not valid JSON: {e}", raw_output=raw) from e
+
+        try:
+            insight = AIInsight(**data)
+        except Exception as e:     # pydantic ValidationError or TypeError
+            raise InsightSchemaError(f"LLM output failed AIInsight schema: {e}", raw_output=raw) from e
+
+        for field_name in ("strengths", "weaknesses", "catalyst_watch"):
+            for item in getattr(insight, field_name):
+                if len(item.split()) > 20:
+                    raise InsightSchemaError(
+                        f"Item in '{field_name}' exceeds 20-word count: {item!r}",
+                        raw_output=raw,
+                    )
+
+        return insight

@@ -278,6 +278,114 @@ class TestDeepAnalysisEndpoint:
         assert statuses[:5] == [200] * 5
         assert statuses[5] == 429
 
+    def test_deep_analysis_cache_hit_skips_llm_e2e(self, client, test_db):
+        """End-to-end: second call within TTL returns cached insight; LLM not re-invoked."""
+        from app.features.ai.dependencies import get_insight_service
+        from app.features.ai.schemas import (
+            AIInsight, Fundamentals, ScoreBreakdown, StockAnalysis,
+        )
+        from app.llm.insight_service import InsightService
+        from app.config import Settings
+        from main import app
+        from unittest.mock import MagicMock
+
+        fake_stock_base = StockAnalysis(
+            ticker="VOLV-B", name="Volvo Group", price=245.5, sector="Industrials",
+            scores=ScoreBreakdown(total=78, value=18, quality=22, momentum=20, health=18),
+            signal="BUY",
+            fundamentals=Fundamentals(pe_ratio=9.8, roic=21.3, roe=18.5, debt_equity=0.42, fcf_yield=7.1),
+            ai_insights=AIInsight(strengths=[], weaknesses=[], catalyst_watch=[]),
+        )
+
+        anthropic = MagicMock()
+        anthropic.generate_insight.return_value = AIInsight(
+            strengths=["A.", "B."],
+            weaknesses=["C."],
+            catalyst_watch=["D.", "E."],
+        )
+
+        # In-memory cache substitute
+        store: dict = {}
+        cache = MagicMock()
+        cache.get.side_effect = lambda k: store.get(k)
+        cache.set.side_effect = lambda k, v, ttl_seconds=None: store.__setitem__(k, v)
+
+        service = InsightService(
+            anthropic_client=anthropic,
+            cache_service=cache,
+            stock_provider=lambda ticker: fake_stock_base.model_copy(),
+            config=Settings(),
+        )
+
+        app.dependency_overrides[get_insight_service] = lambda: service
+        try:
+            r1 = client.get("/api/ai/stock/VOLV-B/deep-analysis")
+            r2 = client.get("/api/ai/stock/VOLV-B/deep-analysis")
+        finally:
+            app.dependency_overrides.pop(get_insight_service, None)
+
+        assert r1.status_code == 200
+        assert r2.status_code == 200
+        assert r1.json()["stock"]["ai_insights"]["strengths"] == ["A.", "B."]
+        assert r2.json()["stock"]["ai_insights"]["strengths"] == ["A.", "B."]
+        # The KEY assertion: LLM is invoked exactly once across both calls.
+        assert anthropic.generate_insight.call_count == 1
+
+    def test_deep_analysis_after_invalidate_calls_llm_again(self, client, test_db):
+        """After cache invalidation, the next call hits the LLM again."""
+        from app.features.ai.dependencies import get_insight_service
+        from app.features.ai.schemas import (
+            AIInsight, Fundamentals, ScoreBreakdown, StockAnalysis,
+        )
+        from app.llm.insight_service import InsightService
+        from app.config import Settings
+        from main import app
+        from unittest.mock import MagicMock
+
+        fake_stock_base = StockAnalysis(
+            ticker="VOLV-B", name="Volvo Group", price=245.5, sector="Industrials",
+            scores=ScoreBreakdown(total=78, value=18, quality=22, momentum=20, health=18),
+            signal="BUY",
+            fundamentals=Fundamentals(pe_ratio=9.8, roic=21.3, roe=18.5, debt_equity=0.42, fcf_yield=7.1),
+            ai_insights=AIInsight(strengths=[], weaknesses=[], catalyst_watch=[]),
+        )
+        anthropic = MagicMock()
+        anthropic.generate_insight.return_value = AIInsight(
+            strengths=["A."], weaknesses=["B."], catalyst_watch=["C."],
+        )
+        store: dict = {}
+        cache = MagicMock()
+        cache.get.side_effect = lambda k: store.get(k)
+        cache.set.side_effect = lambda k, v, ttl_seconds=None: store.__setitem__(k, v)
+
+        # Simulate CacheService.invalidate pattern by clearing matching keys.
+        def invalidate(pattern: str) -> int:
+            import fnmatch
+            matched = [k for k in list(store) if fnmatch.fnmatch(k, pattern)]
+            for k in matched:
+                del store[k]
+            return len(matched)
+        cache.invalidate.side_effect = invalidate
+
+        service = InsightService(
+            anthropic_client=anthropic,
+            cache_service=cache,
+            stock_provider=lambda t: fake_stock_base.model_copy(),
+            config=Settings(),
+        )
+
+        app.dependency_overrides[get_insight_service] = lambda: service
+        try:
+            client.get("/api/ai/stock/VOLV-B/deep-analysis")
+            client.get("/api/ai/stock/VOLV-B/deep-analysis")
+            cache.invalidate("ai:insight:*")
+            client.get("/api/ai/stock/VOLV-B/deep-analysis")
+        finally:
+            app.dependency_overrides.pop(get_insight_service, None)
+
+        # Two distinct LLM invocations: first call (cache miss) + post-invalidate call.
+        assert anthropic.generate_insight.call_count == 2
+
     def test_deep_analysis_disabled_mode_sets_header_and_sentinel(self, client, monkeypatch, test_db):
         from app.features.ai.dependencies import get_insight_service, get_settings
         from app.features.ai.schemas import (

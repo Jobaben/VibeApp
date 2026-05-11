@@ -19,6 +19,7 @@ from app.features.ai.dependencies import get_insight_service, get_settings
 from app.llm.insight_service import InsightService
 from app.config import Settings
 from app.shared.exceptions import NotFoundException
+from app.llm.errors import InsightGenerationError, InsightSchemaError
 
 router = APIRouter(prefix="/api/ai", tags=["AI"])
 
@@ -79,6 +80,20 @@ async def deep_analysis(
         stock = service.get_stock_with_insight(ticker)
     except NotFoundException:
         raise HTTPException(status_code=404, detail=f"Stock {ticker} not found")
+    except InsightGenerationError:
+        raise HTTPException(
+            status_code=503,
+            detail={"detail": "AI analysis temporarily unavailable", "code": "llm_unavailable"},
+        )
+    except InsightSchemaError as e:
+        import logging
+        logging.getLogger(__name__).error(
+            "LLM schema error ticker=%s raw=%r", ticker, (e.raw_output or "")[:1024]
+        )
+        raise HTTPException(
+            status_code=502,
+            detail={"detail": "AI analysis failed validation", "code": "llm_schema_error"},
+        )
 
     if not settings.LLM_ENABLED:
         response.headers["X-AI-Status"] = "disabled"

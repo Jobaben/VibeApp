@@ -202,6 +202,45 @@ class TestDeepAnalysisEndpoint:
         assert body["peer_comparison"] is None
 
 
+    def test_deep_analysis_503_on_llm_unavailable(self, client):
+        from app.features.ai.dependencies import get_insight_service
+        from app.llm.errors import InsightGenerationError
+        from main import app
+
+        class FailingService:
+            def get_stock_with_insight(self, ticker):
+                raise InsightGenerationError("upstream down")
+
+        app.dependency_overrides[get_insight_service] = lambda: FailingService()
+        try:
+            response = client.get("/api/ai/stock/VOLV-B/deep-analysis")
+        finally:
+            app.dependency_overrides.pop(get_insight_service, None)
+
+        assert response.status_code == 503
+        body = response.json()
+        assert body["detail"]["code"] == "llm_unavailable"
+
+    def test_deep_analysis_502_on_llm_schema_error(self, client):
+        from app.features.ai.dependencies import get_insight_service
+        from app.llm.errors import InsightSchemaError
+        from main import app
+
+        class FailingService:
+            def get_stock_with_insight(self, ticker):
+                raise InsightSchemaError("bad shape", raw_output='{"strengths": "oops"}')
+
+        app.dependency_overrides[get_insight_service] = lambda: FailingService()
+        try:
+            response = client.get("/api/ai/stock/VOLV-B/deep-analysis")
+        finally:
+            app.dependency_overrides.pop(get_insight_service, None)
+
+        assert response.status_code == 502
+        body = response.json()
+        assert body["detail"]["code"] == "llm_schema_error"
+
+
 class TestCompareStocksEndpoint:
     """Test POST /api/ai/compare-stocks endpoint."""
 

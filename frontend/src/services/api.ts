@@ -225,5 +225,5 @@ export const stockApi = {
 // AI API endpoints
 export const aiApi = {
   getDeepAnalysis: (ticker: string) =>
-    apiClient.get<DeepAnalysisResponse>(`/api/ai/stock/${ticker}/deep-analysis`),
+    apiClient.get<DeepAnalysisResponse>(`/ai/stock/${ticker}/deep-analysis`),
 };

@@ -278,6 +278,40 @@ class TestDeepAnalysisEndpoint:
         assert statuses[:5] == [200] * 5
         assert statuses[5] == 429
 
+    def test_deep_analysis_disabled_mode_sets_header_and_sentinel(self, client, monkeypatch, test_db):
+        from app.features.ai.dependencies import get_insight_service, get_settings
+        from app.features.ai.schemas import (
+            AIInsight, Fundamentals, ScoreBreakdown, StockAnalysis,
+        )
+        from main import app
+
+        sentinel = StockAnalysis(
+            ticker="VOLV-B", name="Volvo", price=1.0, sector="X",
+            scores=ScoreBreakdown(total=0, value=0, quality=0, momentum=0, health=0),
+            signal="HOLD",
+            fundamentals=Fundamentals(),
+            ai_insights=AIInsight(strengths=[], weaknesses=[], catalyst_watch=[]),
+        )
+
+        class FakeService:
+            def get_stock_with_insight(self, ticker):
+                return sentinel
+
+        class FakeSettings:
+            LLM_ENABLED = False
+
+        app.dependency_overrides[get_insight_service] = lambda: FakeService()
+        app.dependency_overrides[get_settings] = lambda: FakeSettings()
+        try:
+            response = client.get("/api/ai/stock/VOLV-B/deep-analysis")
+        finally:
+            app.dependency_overrides.pop(get_insight_service, None)
+            app.dependency_overrides.pop(get_settings, None)
+
+        assert response.status_code == 200
+        assert response.headers.get("X-AI-Status") == "disabled"
+        assert response.json()["stock"]["ai_insights"]["strengths"] == []
+
 
 class TestCompareStocksEndpoint:
     """Test POST /api/ai/compare-stocks endpoint."""

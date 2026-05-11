@@ -10,6 +10,7 @@ import AddToWatchlistButton from '../components/AddToWatchlistButton';
 import ScoreChangeIndicator from '../components/ScoreChangeIndicator';
 import PageShell from '../components/PageShell';
 import { EnhancedMetricCard } from '../components/learning';
+import { AIAnalysisPanel } from '../components/AIAnalysisPanel';
 
 type Tab = 'overview' | 'charts' | 'fundamentals' | 'score';
 
@@ -240,6 +241,9 @@ export default function StockDetail() {
                   <p className="text-sm text-gray-500 mt-1">Unable to load score breakdown at this time</p>
                 </div>
               )}
+
+              {/* AI Analysis Panel */}
+              {ticker && <AIAnalysisPanel ticker={ticker} />}
 
               {/* Quick Price Chart */}
               {priceData && priceData.data.length > 0 ? (

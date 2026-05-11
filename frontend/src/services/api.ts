@@ -18,6 +18,7 @@ import type {
   MoversResponse,
   SignalChangesResponse
 } from '../types/stock';
+import type { DeepAnalysisResponse } from '../types/ai';
 
 const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8000/api';
 
@@ -219,4 +220,10 @@ export const stockApi = {
     });
     return response.data;
   },
+};
+
+// AI API endpoints
+export const aiApi = {
+  getDeepAnalysis: (ticker: string) =>
+    apiClient.get<DeepAnalysisResponse>(`/api/ai/stock/${ticker}/deep-analysis`),
 };

@@ -42,13 +42,18 @@ class AnthropicClient:
         ]
         messages = [{"role": "user", "content": user_text}]
 
-        response = self._client.messages.create(
-            model=self._model,
-            max_tokens=self._max_tokens,
-            temperature=self._temperature,
-            system=system_blocks,
-            messages=messages,
-        )
+        try:
+            response = self._client.messages.create(
+                model=self._model,
+                max_tokens=self._max_tokens,
+                temperature=self._temperature,
+                system=system_blocks,
+                messages=messages,
+            )
+        except (anthropic.APIConnectionError, anthropic.APITimeoutError) as e:
+            raise InsightGenerationError(f"LLM transport error: {e}") from e
+        except anthropic.APIStatusError as e:
+            raise InsightGenerationError(f"LLM HTTP error: {e}") from e
 
         raw = "".join(block.text for block in response.content if hasattr(block, "text"))
         return self._parse(raw)

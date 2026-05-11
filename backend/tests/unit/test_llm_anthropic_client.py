@@ -2,6 +2,7 @@
 import json
 from unittest.mock import MagicMock
 
+import anthropic
 import pytest
 
 from app.features.ai.schemas import AIInsight
@@ -114,3 +115,44 @@ def test_generate_insight_rejects_overlong_items():
     with pytest.raises(InsightSchemaError) as exc:
         client.generate_insight({"ticker": "X", "name": "X", "scores": {}, "fundamentals": {}})
     assert "word count" in str(exc.value).lower() or "20" in str(exc.value)
+
+
+def test_generate_insight_maps_connection_error():
+    fake_client = MagicMock()
+    fake_client.messages.create.side_effect = anthropic.APIConnectionError(request=MagicMock())
+    client = AnthropicClient(api_key="ignored", client=fake_client)
+    with pytest.raises(InsightGenerationError):
+        client.generate_insight({"ticker": "X", "name": "X", "scores": {}, "fundamentals": {}})
+
+
+def test_generate_insight_maps_timeout_error():
+    fake_client = MagicMock()
+    fake_client.messages.create.side_effect = anthropic.APITimeoutError(request=MagicMock())
+    client = AnthropicClient(api_key="ignored", client=fake_client)
+    with pytest.raises(InsightGenerationError):
+        client.generate_insight({"ticker": "X", "name": "X", "scores": {}, "fundamentals": {}})
+
+
+def test_generate_insight_maps_5xx_status_error():
+    fake_client = MagicMock()
+    fake_client.messages.create.side_effect = anthropic.APIStatusError(
+        message="bad gateway", response=MagicMock(status_code=502), body=None
+    )
+    client = AnthropicClient(api_key="ignored", client=fake_client)
+    with pytest.raises(InsightGenerationError):
+        client.generate_insight({"ticker": "X", "name": "X", "scores": {}, "fundamentals": {}})
+
+
+def test_constructor_forwards_timeout_and_retries_to_sdk(monkeypatch):
+    captured = {}
+
+    class FakeAnthropic:
+        def __init__(self, *, api_key, timeout, max_retries):
+            captured.update(api_key=api_key, timeout=timeout, max_retries=max_retries)
+            self.messages = MagicMock()
+
+    monkeypatch.setattr("app.llm.anthropic_client.anthropic.Anthropic", FakeAnthropic)
+
+    AnthropicClient(api_key="sk-test", timeout_seconds=12.5, max_retries=7)
+
+    assert captured == {"api_key": "sk-test", "timeout": 12.5, "max_retries": 7}

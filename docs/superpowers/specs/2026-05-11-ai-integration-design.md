@@ -31,6 +31,7 @@ This is the MVP slice of the AI integration phase. The other four `/api/ai/*` en
 | 6 | Sync request | Output too small to justify streaming complexity. |
 | 7 | No silent fallback on LLM failure | A surfaced error is better than fabricated content. |
 | 8 | Rate limit: 5 req/min per IP on this route | Cheap insurance against accidental loops; cache absorbs legitimate repeat traffic. |
+| 9 | Retries + per-request timeout owned by the Anthropic SDK | One retry strategy, configured at construction. Avoids double-retry from a hand-rolled loop on top of the SDK's. |
 
 ## Architecture
 
@@ -66,7 +67,7 @@ React StockDetail
 | `backend/app/infrastructure/cache/redis_cache.py` | No change. Existing `CacheService.invalidate(pattern)` is already SCAN-based. |
 | `backend/app/tasks/score_tasks.py` | Add post-recompute hook in `recalculate_all_scores`: `cache_service.invalidate("ai:insight:*")` after successful pass. |
 | `backend/requirements.txt` | Add `anthropic>=0.40.0`, `slowapi>=0.1.9` (if not present). |
-| `backend/.env.example` | Add `ANTHROPIC_API_KEY=`, `LLM_ENABLED=true`, `LLM_MODEL=claude-sonnet-4-6`. |
+| `backend/.env.example` | Add `ANTHROPIC_API_KEY=`, `LLM_ENABLED=true`, `LLM_MODEL=claude-sonnet-4-6`, `LLM_TIMEOUT_SECONDS=30`, `LLM_MAX_RETRIES=3`. (`LLM_MAX_TOKENS`, `LLM_TEMPERATURE`, `LLM_INSIGHT_TTL_SECONDS`, `LLM_INSIGHT_RATE_LIMIT_PER_MIN` stay on defaults; not in `.env.example` to keep it scannable.) |
 | `frontend/src/components/AIAnalysisPanel.tsx` | New. Collapsed/loading/loaded/error/disabled states. |
 | `frontend/src/services/api.ts` | Add `aiApi.getDeepAnalysis(ticker)`. |
 | `frontend/src/types/stock.ts` | Add `AIInsight`, `DeepAnalysisResponse` types. |
@@ -84,21 +85,44 @@ React StockDetail
 
 ```python
 class AnthropicClient:
-    def __init__(self, api_key: str, model: str = "claude-sonnet-4-6"):
-        ...
+    def __init__(
+        self,
+        api_key: str,
+        *,
+        model: str = "claude-sonnet-4-6",
+        max_tokens: int = 600,
+        temperature: float = 0.3,
+        timeout_seconds: float = 30.0,
+        max_retries: int = 3,
+        client: Optional[Anthropic] = None,   # test seam; bypasses api_key/timeout/max_retries
+    ):
+        self._client = client or anthropic.Anthropic(
+            api_key=api_key,
+            timeout=timeout_seconds,
+            max_retries=max_retries,
+        )
+        self._model = model
+        self._max_tokens = max_tokens
+        self._temperature = temperature
 
     def generate_insight(self, stock_payload: dict) -> AIInsight:
         # 1. Build messages with cache_control breakpoints:
         #    - system prompt block: ephemeral cache
         #    - schema instruction block: ephemeral cache
         #    - per-ticker user message: not cached
-        # 2. messages.create(max_tokens=600, temperature=0.3)
-        # 3. Retry 3x with exponential backoff (1s, 2s, 4s) on network / 5xx
-        # 4. Parse JSON strictly; validate against AIInsight pydantic model
-        # 5. Enforce per-item word cap (<=20 words) inside the client
-        # 6. Raise InsightGenerationError on all-retries-failed network errors
-        # 7. Raise InsightSchemaError on JSON parse failure or schema violation
+        # 2. messages.create(model=self._model,
+        #                    max_tokens=self._max_tokens,
+        #                    temperature=self._temperature, ...)
+        # 3. Retries + timeout handled by the SDK client (configured at construction).
+        #    Do not implement a second retry loop here.
+        # 4. Parse JSON strictly; validate against AIInsight pydantic model.
+        # 5. Enforce per-item word cap (<=20 words) inside the client.
+        # 6. Raise InsightGenerationError when SDK retries exhausted
+        #    (anthropic.APIConnectionError, APITimeoutError, APIStatusError 5xx).
+        # 7. Raise InsightSchemaError on JSON parse failure or schema violation.
 ```
+
+Construction is the **only** place we control network policy. `generate_insight` does not catch-and-retry — it lets SDK exceptions surface and maps them to our two error types.
 
 ### `prompts.py`
 
@@ -180,9 +204,15 @@ async def deep_analysis(
 ANTHROPIC_API_KEY: str = ""
 LLM_MODEL: str = "claude-sonnet-4-6"
 LLM_ENABLED: bool = True
+LLM_MAX_TOKENS: int = 600
+LLM_TEMPERATURE: float = 0.3
+LLM_TIMEOUT_SECONDS: float = 30.0
+LLM_MAX_RETRIES: int = 3
 LLM_INSIGHT_TTL_SECONDS: int = 86_400
 LLM_INSIGHT_RATE_LIMIT_PER_MIN: int = 5
 ```
+
+The DI factory `get_insight_service` passes these straight through to the `AnthropicClient` constructor — no duplication of defaults.
 
 When `LLM_ENABLED=True` but `ANTHROPIC_API_KEY` is empty, the app fails fast on startup with a clear error.
 
@@ -309,7 +339,7 @@ Status values: `ok`, `llm_unavailable`, `llm_schema_error`, `rate_limited`, `not
 
 - `test_prompts.py` — deterministic, no `None` leaks, length under 2KB, ticker/sector/metrics present.
 - `test_insight_service.py` — cache HIT skips LLM; cache MISS calls LLM and stores; unknown ticker raises `NotFoundException`; score_hash stable across price changes; differs across score changes; `LLM_ENABLED=False` returns sentinel without calling LLM.
-- `test_anthropic_client.py` — request payload carries `cache_control` on system + schema blocks; valid JSON parses; malformed JSON raises `InsightSchemaError`; >20-word items raise; 3 retries then `InsightGenerationError`.
+- `test_anthropic_client.py` — uses the `client=` injection seam with a fake `Anthropic` whose `messages.create` is a mock. Verifies: request payload carries `cache_control` on system + schema blocks but not on the user message; `messages.create` invoked with `model`/`max_tokens`/`temperature` from constructor; valid JSON parses to `AIInsight`; malformed JSON raises `InsightSchemaError`; >20-word items raise `InsightSchemaError`; `anthropic.APIConnectionError`, `APITimeoutError`, and `APIStatusError(500)` from the fake each surface as `InsightGenerationError`. Retry-and-timeout behaviour is verified separately by asserting the real `Anthropic` factory receives the configured `timeout` and `max_retries` — the SDK itself is trusted.
 
 ### Backend integration tests
 

@@ -1,7 +1,8 @@
 """AI-specific API endpoints for LLM consumption."""
-from fastapi import APIRouter, Depends, HTTPException, Query, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from typing import List
 from datetime import datetime
+from app.limiter import limiter
 
 from .schemas import (
     AIAnalysisResponse,
@@ -69,7 +70,9 @@ async def analyze_stocks(
 
 
 @router.get("/stock/{ticker}/deep-analysis", response_model=DeepAnalysisResponse)
+@limiter.limit("5/minute")
 async def deep_analysis(
+    request: Request,
     ticker: str,
     response: Response,
     service: InsightService = Depends(get_insight_service),

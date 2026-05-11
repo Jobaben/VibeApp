@@ -1,11 +1,15 @@
 """Main FastAPI application entry point."""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from app.config import settings
 from app.infrastructure.database import Base, engine
 from app.features.ai.router import router as ai_router
 from app.features.stocks.router import router as stocks_router
 from app.features.cache.router import router as cache_router
+from app.limiter import limiter
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -17,6 +21,19 @@ app = FastAPI(
     debug=settings.DEBUG,
     description="AI-powered stock analysis platform for Avanza Bank"
 )
+
+app.state.limiter = limiter
+app.add_middleware(SlowAPIMiddleware)
+
+
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request, exc):
+    return JSONResponse(
+        status_code=429,
+        content={"detail": {"detail": "Too many requests. Please wait a minute.", "code": "rate_limited"}},
+        headers={"Retry-After": "60"},
+    )
+
 
 # Configure CORS
 app.add_middleware(

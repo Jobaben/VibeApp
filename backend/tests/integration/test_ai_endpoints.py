@@ -143,6 +143,13 @@ class TestAnalyzeStocksEndpoint:
 class TestDeepAnalysisEndpoint:
     """Test GET /api/ai/stock/{ticker}/deep-analysis endpoint."""
 
+    @pytest.fixture(autouse=True)
+    def _reset_limiter(self):
+        """Reset the in-memory rate-limit bucket before every test in this class."""
+        from app.limiter import limiter
+        limiter.reset()
+        yield
+
     def test_deep_analysis_endpoint_not_found(self, client):
         """Test deep analysis returns 404 for non-existent stock."""
         response = client.get("/api/ai/stock/VOLV-B/deep-analysis")
@@ -239,6 +246,37 @@ class TestDeepAnalysisEndpoint:
         assert response.status_code == 502
         body = response.json()
         assert body["detail"]["code"] == "llm_schema_error"
+
+    def test_deep_analysis_rate_limited_after_5_per_minute(self, client, test_db):
+        from app.features.ai.dependencies import get_insight_service
+        from app.features.ai.schemas import (
+            AIInsight, Fundamentals, ScoreBreakdown, StockAnalysis,
+        )
+        from main import app
+
+        fake = StockAnalysis(
+            ticker="VOLV-B", name="Volvo", price=1.0, sector="X",
+            scores=ScoreBreakdown(total=0, value=0, quality=0, momentum=0, health=0),
+            signal="HOLD",
+            fundamentals=Fundamentals(),
+            ai_insights=AIInsight(strengths=[], weaknesses=[], catalyst_watch=[]),
+        )
+
+        class FakeService:
+            def get_stock_with_insight(self, ticker):
+                return fake
+
+        app.dependency_overrides[get_insight_service] = lambda: FakeService()
+        try:
+            statuses = [
+                client.get("/api/ai/stock/VOLV-B/deep-analysis").status_code
+                for _ in range(6)
+            ]
+        finally:
+            app.dependency_overrides.pop(get_insight_service, None)
+
+        assert statuses[:5] == [200] * 5
+        assert statuses[5] == 429
 
 
 class TestCompareStocksEndpoint:

@@ -76,3 +76,37 @@ def test_disabled_mode_returns_sentinel_without_llm_call():
     llm.generate_insight.assert_not_called()
     cache.get.assert_not_called()
     cache.set.assert_not_called()
+
+
+def _real_insight() -> AIInsight:
+    return AIInsight(
+        strengths=["High ROIC."],
+        weaknesses=["Cyclical demand."],
+        catalyst_watch=["Q4 results."],
+    )
+
+
+def test_cache_miss_calls_llm_and_writes_cache():
+    stock = _stock_analysis()
+    stock_provider = MagicMock(return_value=stock)
+    llm = MagicMock()
+    llm.generate_insight.return_value = _real_insight()
+    cache = MagicMock()
+    cache.get.return_value = None
+
+    service = InsightService(
+        anthropic_client=llm,
+        cache_service=cache,
+        stock_provider=stock_provider,
+        config=_config(),
+    )
+
+    result = service.get_stock_with_insight("VOLV-B")
+
+    assert result.ai_insights.strengths == ["High ROIC."]
+    llm.generate_insight.assert_called_once()
+    cache.set.assert_called_once()
+    key_arg = cache.set.call_args.args[0]
+    assert key_arg.startswith("ai:insight:VOLV-B:")
+    ttl_kwarg = cache.set.call_args.kwargs.get("ttl_seconds")
+    assert ttl_kwarg == 86_400

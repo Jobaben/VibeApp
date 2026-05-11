@@ -49,8 +49,26 @@ class InsightService:
             stock.ai_insights = AIInsight(strengths=[], weaknesses=[], catalyst_watch=[])
             return stock
 
-        # Cache + LLM flow is added in subsequent tasks; for now, sentinel only.
-        stock.ai_insights = AIInsight(strengths=[], weaknesses=[], catalyst_watch=[])
+        score_hash = self._score_hash(stock.scores, stock.fundamentals)
+        cache_key = f"ai:insight:{ticker}:{score_hash}"
+
+        payload = {
+            "ticker": stock.ticker,
+            "name": stock.name,
+            "sector": stock.sector,
+            "signal": stock.signal,
+            "scores": stock.scores.model_dump(),
+            "fundamentals": stock.fundamentals.model_dump(),
+        }
+        insight = self._llm.generate_insight(payload)
+
+        self._cache.set(
+            cache_key,
+            insight.model_dump(),
+            ttl_seconds=self._config.LLM_INSIGHT_TTL_SECONDS,
+        )
+
+        stock.ai_insights = insight
         return stock
 
     @staticmethod

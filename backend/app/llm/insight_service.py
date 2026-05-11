@@ -52,6 +52,11 @@ class InsightService:
         score_hash = self._score_hash(stock.scores, stock.fundamentals)
         cache_key = f"ai:insight:{ticker}:{score_hash}"
 
+        cached = self._cache.get(cache_key)
+        if cached is not None:
+            stock.ai_insights = AIInsight(**cached)
+            return stock
+
         payload = {
             "ticker": stock.ticker,
             "name": stock.name,

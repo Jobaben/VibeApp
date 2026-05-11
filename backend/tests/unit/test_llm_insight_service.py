@@ -110,3 +110,28 @@ def test_cache_miss_calls_llm_and_writes_cache():
     assert key_arg.startswith("ai:insight:VOLV-B:")
     ttl_kwarg = cache.set.call_args.kwargs.get("ttl_seconds")
     assert ttl_kwarg == 86_400
+
+
+def test_cache_hit_skips_llm():
+    stock = _stock_analysis()
+    cached_value = {
+        "strengths": ["Cached strength."],
+        "weaknesses": ["Cached weakness."],
+        "catalyst_watch": ["Cached catalyst."],
+    }
+    cache = MagicMock()
+    cache.get.return_value = cached_value
+    llm = MagicMock()
+
+    service = InsightService(
+        anthropic_client=llm,
+        cache_service=cache,
+        stock_provider=MagicMock(return_value=stock),
+        config=_config(),
+    )
+
+    result = service.get_stock_with_insight("VOLV-B")
+
+    assert result.ai_insights.strengths == ["Cached strength."]
+    llm.generate_insight.assert_not_called()
+    cache.set.assert_not_called()

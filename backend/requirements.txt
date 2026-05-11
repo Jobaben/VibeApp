@@ -51,3 +51,9 @@ pytest-cov==6.0.0
 black==24.10.0
 flake8==7.1.1
 mypy==1.13.0
+
+# LLM provider
+anthropic>=0.40.0
+
+# Rate limiting
+slowapi>=0.1.9

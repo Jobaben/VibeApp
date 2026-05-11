@@ -53,6 +53,17 @@ class Settings(BaseSettings):
     # If true, uses mock data even if USE_REAL_STOCK_API is true (override for testing)
     FORCE_MOCK_DATA: bool = False
 
+    # LLM (AI insights)
+    ANTHROPIC_API_KEY: str = ""
+    LLM_ENABLED: bool = True
+    LLM_MODEL: str = "claude-sonnet-4-6"
+    LLM_MAX_TOKENS: int = 600
+    LLM_TEMPERATURE: float = 0.3
+    LLM_TIMEOUT_SECONDS: float = 30.0
+    LLM_MAX_RETRIES: int = 3
+    LLM_INSIGHT_TTL_SECONDS: int = 86_400
+    LLM_INSIGHT_RATE_LIMIT_PER_MIN: int = 5
+
     class Config:
         env_file = ".env"
         case_sensitive = True

@@ -5,6 +5,7 @@ import pytest
 
 from app.features.ai.schemas import AIInsight, ScoreBreakdown, Fundamentals, StockAnalysis
 from app.llm.insight_service import InsightService
+from app.shared.exceptions import NotFoundException
 
 
 def _stock_analysis(**overrides) -> StockAnalysis:
@@ -134,4 +135,26 @@ def test_cache_hit_skips_llm():
 
     assert result.ai_insights.strengths == ["Cached strength."]
     llm.generate_insight.assert_not_called()
+    cache.set.assert_not_called()
+
+
+def test_unknown_ticker_raises_not_found():
+    def raising_provider(ticker: str):
+        raise NotFoundException("Stock", ticker)
+
+    llm = MagicMock()
+    cache = MagicMock()
+
+    service = InsightService(
+        anthropic_client=llm,
+        cache_service=cache,
+        stock_provider=raising_provider,
+        config=_config(),
+    )
+
+    with pytest.raises(NotFoundException):
+        service.get_stock_with_insight("GHOST")
+
+    llm.generate_insight.assert_not_called()
+    cache.get.assert_not_called()
     cache.set.assert_not_called()

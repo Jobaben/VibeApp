@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from datetime import datetime, timezone
 from typing import Callable, Optional
 
 from app.features.ai.schemas import (
@@ -49,12 +50,14 @@ class InsightService:
             stock.ai_insights = AIInsight(strengths=[], weaknesses=[], catalyst_watch=[])
             return stock
 
-        score_hash = self._score_hash(stock.scores, stock.fundamentals)
+        score_hash = self._score_hash(stock)
         cache_key = f"ai:insight:{ticker}:{score_hash}"
 
         cached = self._cache.get(cache_key)
         if cached is not None:
-            stock.ai_insights = AIInsight(**cached)
+            insight_data = {k: v for k, v in cached.items()
+                            if k in ("strengths", "weaknesses", "catalyst_watch")}
+            stock.ai_insights = AIInsight(**insight_data)
             return stock
 
         payload = {
@@ -67,9 +70,15 @@ class InsightService:
         }
         insight = self._llm.generate_insight(payload)
 
+        cached_payload = {
+            **insight.model_dump(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "model": self._config.LLM_MODEL,
+            "score_hash": score_hash,
+        }
         self._cache.set(
             cache_key,
-            insight.model_dump(),
+            cached_payload,
             ttl_seconds=self._config.LLM_INSIGHT_TTL_SECONDS,
         )
 
@@ -77,18 +86,20 @@ class InsightService:
         return stock
 
     @staticmethod
-    def _score_hash(scores: ScoreBreakdown, fundamentals: Fundamentals) -> str:
+    def _score_hash(stock: StockAnalysis) -> str:
         canonical = {
             "scores": {
-                "total": scores.total,
-                "value": scores.value,
-                "quality": scores.quality,
-                "momentum": scores.momentum,
-                "health": scores.health,
+                "total": stock.scores.total,
+                "value": stock.scores.value,
+                "quality": stock.scores.quality,
+                "momentum": stock.scores.momentum,
+                "health": stock.scores.health,
             },
             "fundamentals": {
-                k: getattr(fundamentals, k) for k in _HASHED_FUNDAMENTAL_FIELDS
+                k: getattr(stock.fundamentals, k) for k in _HASHED_FUNDAMENTAL_FIELDS
             },
+            "sector": stock.sector,
+            "signal": stock.signal,
         }
         encoded = json.dumps(canonical, sort_keys=True, separators=(",", ":")).encode("utf-8")
         return hashlib.sha256(encoded).hexdigest()[:16]

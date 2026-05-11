@@ -27,6 +27,7 @@ def _config(**overrides) -> MagicMock:
     cfg = MagicMock()
     cfg.LLM_ENABLED = True
     cfg.LLM_INSIGHT_TTL_SECONDS = 86_400
+    cfg.LLM_MODEL = "claude-sonnet-4-6"
     for k, v in overrides.items():
         setattr(cfg, k, v)
     return cfg
@@ -34,8 +35,8 @@ def _config(**overrides) -> MagicMock:
 
 def test_score_hash_is_stable_across_calls():
     s = _stock_analysis()
-    h1 = InsightService._score_hash(s.scores, s.fundamentals)
-    h2 = InsightService._score_hash(s.scores, s.fundamentals)
+    h1 = InsightService._score_hash(s)
+    h2 = InsightService._score_hash(s)
     assert h1 == h2
     assert len(h1) == 16
 
@@ -44,8 +45,7 @@ def test_score_hash_ignores_price_changes():
     """Different prices, same scores+selected fundamentals → identical hash."""
     a = _stock_analysis(price=245.5)
     b = _stock_analysis(price=999.99)
-    assert InsightService._score_hash(a.scores, a.fundamentals) == \
-           InsightService._score_hash(b.scores, b.fundamentals)
+    assert InsightService._score_hash(a) == InsightService._score_hash(b)
 
 
 def test_score_hash_changes_when_scores_change():
@@ -53,8 +53,19 @@ def test_score_hash_changes_when_scores_change():
     b = _stock_analysis(
         scores=ScoreBreakdown(total=50, value=10, quality=10, momentum=15, health=15)
     )
-    assert InsightService._score_hash(a.scores, a.fundamentals) != \
-           InsightService._score_hash(b.scores, b.fundamentals)
+    assert InsightService._score_hash(a) != InsightService._score_hash(b)
+
+
+def test_score_hash_changes_when_sector_changes():
+    a = _stock_analysis(sector="Industrials")
+    b = _stock_analysis(sector="Technology")
+    assert InsightService._score_hash(a) != InsightService._score_hash(b)
+
+
+def test_score_hash_changes_when_signal_changes():
+    a = _stock_analysis(signal="BUY")
+    b = _stock_analysis(signal="HOLD")
+    assert InsightService._score_hash(a) != InsightService._score_hash(b)
 
 
 def test_disabled_mode_returns_sentinel_without_llm_call():
@@ -107,10 +118,14 @@ def test_cache_miss_calls_llm_and_writes_cache():
     assert result.ai_insights.strengths == ["High ROIC."]
     llm.generate_insight.assert_called_once()
     cache.set.assert_called_once()
-    key_arg = cache.set.call_args.args[0]
+    args, kwargs = cache.set.call_args
+    key_arg, payload_arg = args[0], args[1]
     assert key_arg.startswith("ai:insight:VOLV-B:")
-    ttl_kwarg = cache.set.call_args.kwargs.get("ttl_seconds")
-    assert ttl_kwarg == 86_400
+    assert kwargs.get("ttl_seconds") == 86_400
+    assert payload_arg["strengths"] == ["High ROIC."]
+    assert payload_arg["model"] == "claude-sonnet-4-6"
+    assert "generated_at" in payload_arg
+    assert "score_hash" in payload_arg
 
 
 def test_cache_hit_skips_llm():
@@ -119,6 +134,9 @@ def test_cache_hit_skips_llm():
         "strengths": ["Cached strength."],
         "weaknesses": ["Cached weakness."],
         "catalyst_watch": ["Cached catalyst."],
+        "generated_at": "2026-05-11T10:00:00+00:00",
+        "model": "claude-sonnet-4-6",
+        "score_hash": "abc123def456abcd",
     }
     cache = MagicMock()
     cache.get.return_value = cached_value

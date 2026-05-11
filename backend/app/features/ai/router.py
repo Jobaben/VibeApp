@@ -1,5 +1,5 @@
 """AI-specific API endpoints for LLM consumption."""
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from typing import List
 from datetime import datetime
 
@@ -15,6 +15,10 @@ from .schemas import (
     MarketContext,
     AISummary,
 )
+from app.features.ai.dependencies import get_insight_service, get_settings
+from app.llm.insight_service import InsightService
+from app.config import Settings
+from app.shared.exceptions import NotFoundException
 
 router = APIRouter(prefix="/api/ai", tags=["AI"])
 
@@ -64,29 +68,25 @@ async def analyze_stocks(
 
 
 @router.get("/stock/{ticker}/deep-analysis", response_model=DeepAnalysisResponse)
-async def deep_analysis(ticker: str) -> DeepAnalysisResponse:
-    """
-    Get complete analysis of a single stock.
+async def deep_analysis(
+    ticker: str,
+    response: Response,
+    service: InsightService = Depends(get_insight_service),
+    settings: Settings = Depends(get_settings),
+) -> DeepAnalysisResponse:
+    """Get complete analysis of a single stock, including LLM-generated insights."""
+    try:
+        stock = service.get_stock_with_insight(ticker)
+    except NotFoundException:
+        raise HTTPException(status_code=404, detail=f"Stock {ticker} not found")
 
-    Returns everything about one stock in one response:
-    - All fundamentals
-    - Technical indicators
-    - Score breakdown with reasoning
-    - Sector comparison
-    - Historical trends (3y of data)
-    - Risk factors
-    - AI-generated insights
+    if not settings.LLM_ENABLED:
+        response.headers["X-AI-Status"] = "disabled"
 
-    Perfect for queries like:
-    - "Tell me everything about Volvo"
-    - "Should I buy ERIC-B?"
-    - "Deep dive on SEB-A"
-    """
-    # TODO: Implement deep analysis logic
-
-    raise HTTPException(
-        status_code=404,
-        detail=f"Stock {ticker} not found. System is still being built."
+    return DeepAnalysisResponse(
+        stock=stock,
+        historical_trends={},
+        peer_comparison=None,
     )
 
 

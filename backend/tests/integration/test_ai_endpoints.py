@@ -161,6 +161,46 @@ class TestDeepAnalysisEndpoint:
             # All should return 404 during Phase 0
             assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    def test_deep_analysis_returns_populated_insight_for_known_ticker(self, client, test_db, monkeypatch):
+        """With a seeded ticker and a fake LLM, the endpoint returns AIInsight content."""
+        from app.features.ai.dependencies import get_insight_service
+        from app.features.ai.schemas import (
+            AIInsight, Fundamentals, ScoreBreakdown, StockAnalysis,
+        )
+        from app.llm.insight_service import InsightService
+        from main import app
+
+        fake_insight = AIInsight(
+            strengths=["High ROIC."],
+            weaknesses=["Cyclical."],
+            catalyst_watch=["Q4 orders."],
+        )
+        fake_stock = StockAnalysis(
+            ticker="VOLV-B", name="Volvo Group", price=245.5, sector="Industrials",
+            scores=ScoreBreakdown(total=78, value=18, quality=22, momentum=20, health=18),
+            signal="BUY",
+            fundamentals=Fundamentals(pe_ratio=9.8, roic=21.3, roe=18.5, debt_equity=0.42, fcf_yield=7.1),
+            ai_insights=AIInsight(strengths=[], weaknesses=[], catalyst_watch=[]),
+        )
+
+        class FakeService:
+            def get_stock_with_insight(self, ticker):
+                fake_stock.ai_insights = fake_insight
+                return fake_stock
+
+        app.dependency_overrides[get_insight_service] = lambda: FakeService()
+        try:
+            response = client.get("/api/ai/stock/VOLV-B/deep-analysis")
+        finally:
+            app.dependency_overrides.pop(get_insight_service, None)
+
+        assert response.status_code == 200
+        body = response.json()
+        assert body["stock"]["ticker"] == "VOLV-B"
+        assert body["stock"]["ai_insights"]["strengths"] == ["High ROIC."]
+        assert body["historical_trends"] == {}
+        assert body["peer_comparison"] is None
+
 
 class TestCompareStocksEndpoint:
     """Test POST /api/ai/compare-stocks endpoint."""

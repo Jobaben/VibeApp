@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
-import PageShell from '../components/PageShell';
 import { stockApi } from '../services/api';
 import type { MoversResponse, SignalChangesResponse } from '../types/stock';
 import { ScoreMoverCard } from '../components/ScoreMoverCard';
@@ -50,7 +49,7 @@ export function WeeklyChanges() {
   };
 
   return (
-    <PageShell>
+    <>
       <header className="header-band sticky top-0 z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -222,7 +221,7 @@ export function WeeklyChanges() {
           </div>
         )}
       </div>
-    </PageShell>
+    </>
   );
 }
 

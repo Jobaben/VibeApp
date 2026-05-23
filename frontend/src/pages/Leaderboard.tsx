@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PageShell from '../components/PageShell';
 import { stockApi } from '../services/api';
 import type { LeaderboardStock, SectorLeaderboard } from '../types/stock';
 import { Signal } from '../types/stock';
@@ -77,7 +76,7 @@ export default function Leaderboard() {
   ];
 
   return (
-    <PageShell>
+    <>
       <header className="header-band">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <button
@@ -211,7 +210,7 @@ export default function Leaderboard() {
             </div>
           )}
         </main>
-    </PageShell>
+    </>
   );
 }
 

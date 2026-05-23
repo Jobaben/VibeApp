@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useWatchlist } from '../contexts/WatchlistContext';
 import WatchlistManager from '../components/WatchlistManager';
 import ScoreChangeIndicator from '../components/ScoreChangeIndicator';
-import PageShell from '../components/PageShell';
 import { stockApi } from '../services/api';
 import type { Stock } from '../types/stock';
 
@@ -90,7 +89,7 @@ export default function Watchlists() {
   };
 
   return (
-    <PageShell>
+    <>
       <header className="header-band">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <button
@@ -320,6 +319,6 @@ export default function Watchlists() {
           </div>
         </div>
       </main>
-    </PageShell>
+    </>
   );
 }

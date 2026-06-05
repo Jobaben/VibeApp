@@ -723,6 +723,16 @@ interface SpacedRepetitionState {
 
 Make learning relevant with live market data:
 
+**Data Source Selection (prerequisite)**
+
+Before any of the below ships, we need a concrete provider for quotes, fundamentals, and (where applicable) holdings. The free-tier landscape and Sweden-specific availability has been researched separately — see [Free Brokerage & Stock-Data APIs for a Personal Portfolio Dashboard (Sweden, 2026)](../free-brokerage-stock-apis-sweden-2026-05-11.md).
+
+Short version for this phase:
+- **Quotes + fundamentals (15-min delayed acceptable):** Finnhub free tier (60 req/min) as primary, Tiingo free tier (30+ years EOD) for long history.
+- **Holdings (if/when we wire to a real Swedish broker):** Nordnet External API for Nordnet customers; Avanza unofficial wrapper at ToS risk; IBKR Web API otherwise.
+- **Avoid as primary:** yfinance (unofficial, frequently 429-throttled), Alpha Vantage free tier (25 calls/day after repeated degradation).
+- **Non-commercial-use clauses** on Finnhub/Tiingo free tiers gate any public deployment — fine for learning-mode personal use, blocker for multi-tenant SaaS.
+
 **Live Examples**
 - Use today's market movers as lesson examples
 - "Golden cross happened today on STOCK - see it in action"

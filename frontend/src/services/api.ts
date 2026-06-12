@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type {
   Stock,
+  StockDetail,
   StockListResponse,
   StockSearchParams,
   StockSearchQuery,
@@ -73,6 +74,12 @@ export const stockApi = {
   // Get stock by ticker
   getStockByTicker: async (ticker: string): Promise<Stock> => {
     const response = await apiClient.get<Stock>(`/stocks/${ticker}`);
+    return response.data;
+  },
+
+  // Get full stock detail (basics + fundamentals + scores) by ticker
+  getStockDetail: async (ticker: string): Promise<StockDetail> => {
+    const response = await apiClient.get<StockDetail>(`/stocks/${ticker}`);
     return response.data;
   },
 

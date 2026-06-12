@@ -139,6 +139,20 @@ VibeApp/
 
 ## 🚀 Getting Started
 
+### 🪟 Just want to run it? (Windows, no setup)
+
+Non-technical users can run VibeApp as a regular Windows app — **no Python,
+Node.js, or terminal required**:
+
+1. Download **`VibeApp-Windows.zip`** from the **Releases** page (or the latest
+   **Actions → Build Windows App** run).
+2. Extract it and double-click **`VibeApp.exe`**.
+3. The app opens in your browser automatically.
+
+See **[docs/WINDOWS_APP.md](docs/WINDOWS_APP.md)** for details and build
+instructions. The rest of this section covers running from source for
+development.
+
 ### Prerequisites
 
 - **Python 3.11+**

@@ -22,6 +22,7 @@ wheels/
 MANIFEST
 *.manifest
 *.spec
+!packaging/vibeapp.spec
 pip-log.txt
 pip-delete-this-directory.txt
 htmlcov/

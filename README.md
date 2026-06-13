@@ -61,6 +61,17 @@ Every stock score includes:
 - **By Signal:** Filter stocks by buy/sell signal
 - **By Sector:** Top performers in each sector
 
+### Side-by-Side Comparison
+- Compare up to **4 stocks** at once across scores and fundamentals
+- Automatically highlights the **best value in every row** (P/E, ROIC, margins, debt, scores, signal, and more)
+- Direction-aware: lower is better for valuation/leverage metrics, higher is better for quality/growth metrics
+- Selection is saved locally so your comparison set survives a refresh
+
+### Portfolio Tracker & Health Check
+- Track the positions you own (ticker, shares, average buy price) — saved locally in your browser
+- Runs each holding through the scoring engine to surface its current **score and buy/sell signal**
+- **Portfolio health summary:** cost basis, cost-weighted average score, signal mix, sector allocation, and a "positions to review" flag for any holdings on a SELL signal
+
 ---
 
 ## 🏗️ Architecture

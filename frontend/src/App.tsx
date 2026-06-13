@@ -7,7 +7,10 @@ import Leaderboard from './pages/Leaderboard';
 import Watchlists from './pages/Watchlists';
 import WeeklyChanges from './pages/WeeklyChanges';
 import LearningLab from './pages/LearningLab';
+import Compare from './pages/Compare';
+import Portfolio from './pages/Portfolio';
 import { WatchlistProvider } from './contexts/WatchlistContext';
+import { PortfolioProvider } from './contexts/PortfolioContext';
 import { LearningModeProvider } from './contexts/LearningModeContext';
 import { LearningModeToggle, LessonSidebar, LessonContent } from './components/learning';
 
@@ -15,21 +18,25 @@ function App() {
   const location = useLocation();
 
   // Check if we're on a detail page (don't show header/footer)
-  const isDetailPage = location.pathname.startsWith('/stock/') || location.pathname === '/leaderboard' || location.pathname === '/watchlists' || location.pathname === '/weekly-changes';
+  const isDetailPage = location.pathname.startsWith('/stock/') || location.pathname === '/leaderboard' || location.pathname === '/watchlists' || location.pathname === '/weekly-changes' || location.pathname === '/compare' || location.pathname === '/portfolio';
 
   if (isDetailPage) {
     return (
       <LearningModeProvider>
         <WatchlistProvider>
-          <Routes>
-            <Route path="/stock/:ticker" element={<StockDetail />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/watchlists" element={<Watchlists />} />
-            <Route path="/weekly-changes" element={<WeeklyChanges />} />
-          </Routes>
-          {/* Learning Mode Components */}
-          <LessonSidebar />
-          <LessonContent />
+          <PortfolioProvider>
+            <Routes>
+              <Route path="/stock/:ticker" element={<StockDetail />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/watchlists" element={<Watchlists />} />
+              <Route path="/weekly-changes" element={<WeeklyChanges />} />
+              <Route path="/compare" element={<Compare />} />
+              <Route path="/portfolio" element={<Portfolio />} />
+            </Routes>
+            {/* Learning Mode Components */}
+            <LessonSidebar />
+            <LessonContent />
+          </PortfolioProvider>
         </WatchlistProvider>
       </LearningModeProvider>
     );
@@ -130,6 +137,25 @@ function App() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                 </svg>
                 What Changed
+                <span className="px-2 py-0.5 text-xs bg-blue-400/20 rounded-full border border-blue-400/30">NEW</span>
+              </Link>
+              <Link
+                to="/compare"
+                className="px-6 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 text-gray-400 hover:text-white hover:bg-gray-800/50"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                </svg>
+                Compare
+              </Link>
+              <Link
+                to="/portfolio"
+                className="px-6 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 text-gray-400 hover:text-white hover:bg-gray-800/50"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3v18h18M9 17V9m4 8V5m4 12v-6" />
+                </svg>
+                Portfolio
                 <span className="px-2 py-0.5 text-xs bg-blue-400/20 rounded-full border border-blue-400/30">NEW</span>
               </Link>
             </nav>

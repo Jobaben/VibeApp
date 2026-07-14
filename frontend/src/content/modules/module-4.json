@@ -1,0 +1,158 @@
+{
+  "id": "module-4",
+  "title": "Technical Indicators",
+  "description": "Learn to use RSI, moving averages and volume to read momentum and time your trades more thoughtfully.",
+  "icon": "Activity",
+  "level": "intermediate",
+  "estimatedTime": 25,
+  "prerequisites": ["module-3"],
+  "lessons": [
+    {
+      "id": "lesson-4-1",
+      "moduleId": "module-4",
+      "title": "Moving Averages: Smoothing Out the Noise",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Daily prices zigzag so much that the underlying direction can be hard to see. A **moving average** fixes that by drawing a smooth line through the noise.\n\nThe most common version is the **simple moving average (SMA)**: the average closing price over a set number of days, recalculated each day as the window slides forward. Here is a tiny worked example with a 3-day SMA. Suppose a stock closes at $10, $12, and $14 over three days. The 3-day SMA is (10 + 12 + 14) ÷ 3 = **$12**. The next day it closes at $16, so the window drops the oldest price and becomes (12 + 14 + 16) ÷ 3 = **$14**. Repeat this every day and you get a smooth line that follows the price with a slight delay.\n\nIn practice, two SMAs matter most, and both appear on every stock's detail page in the app:\n- **SMA50** — the average of the last 50 trading days. It reacts fairly quickly and tracks the medium-term trend.\n- **SMA200** — the average of the last 200 trading days (roughly a year of trading). It moves slowly and shows the long-term trend.\n\nThe simplest way to use them: compare the current price to the line. When the **price is above its SMA**, the stock is trading higher than its recent average — a sign of an uptrend. When the **price is below its SMA**, it is trading lower than average — a sign of weakness. A stock sitting above both its SMA50 and SMA200 is generally considered to be in a healthy uptrend.\n\nRemember: moving averages describe where the price *has been*, not where it is going. They are a lens for seeing the trend clearly, not a crystal ball.",
+        "highlights": [
+          { "term": "Moving average", "definition": "A smooth line showing the average price over a set period, recalculated each day as the window slides forward." },
+          { "term": "SMA (simple moving average)", "definition": "The plain average of closing prices over a chosen number of days, such as 50 or 200." },
+          { "term": "SMA50", "definition": "The average of the last 50 trading days' closes — a medium-term trend line." },
+          { "term": "SMA200", "definition": "The average of the last 200 trading days' closes — a slow-moving, long-term trend line." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-4-2",
+      "moduleId": "module-4",
+      "title": "Golden Cross and Death Cross",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Once you can read the SMA50 and SMA200 separately, the next step is watching how they interact. Because the SMA50 reacts faster than the SMA200, the two lines occasionally cross — and those crossings have famous names.\n\nA **golden cross** happens when the SMA50 rises up through the SMA200. In plain terms: the medium-term trend has turned up strongly enough to overtake the long-term trend. Historically, golden crosses have often appeared in the early-to-middle stages of long rallies, which is why many investors treat them as a bullish sign.\n\nA **death cross** is the opposite: the SMA50 falls down through the SMA200, meaning medium-term weakness has dragged below the long-term average. It has often appeared during serious, extended declines, so it is widely read as a bearish warning.\n\nSounds like a magic signal? Here is the catch — actually two:\n- **Lag.** Moving averages are built from past prices, so crosses show up well *after* a trend has changed. By the time a golden cross prints, the stock may have already risen 20% or more off its low. You are confirming a trend, not catching its start.\n- **False signals.** In choppy, sideways markets the two lines can weave back and forth, firing crosses that lead nowhere. A stock can print a golden cross and then promptly fall.\n\nFor example, imagine a stock that bottoms at $40, climbs to $52, and only then shows a golden cross. The signal was real, but a big part of the move already happened.\n\nTreat crosses as useful context about trend direction — one clue among many — never as an automatic buy or sell command. Past patterns do not guarantee future results.",
+        "highlights": [
+          { "term": "Golden cross", "definition": "When the SMA50 rises above the SMA200 — historically read as a bullish sign of a strengthening trend." },
+          { "term": "Death cross", "definition": "When the SMA50 falls below the SMA200 — historically read as a bearish warning of a weakening trend." },
+          { "term": "Lag", "definition": "The delay built into moving averages: crosses appear only after much of a trend change has already happened." },
+          { "term": "False signal", "definition": "A cross that fires in a choppy market and then reverses, leading nowhere." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-4-3",
+      "moduleId": "module-4",
+      "title": "RSI: Overbought and Oversold",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "The **RSI (Relative Strength Index)** measures how fast and how far a price has been moving recently — its momentum. It compresses that into a single number on a **0 to 100 scale**, which you can see on every stock's detail page in the app.\n\nThe classic reading levels:\n- **Above 70 — overbought.** The price has risen unusually fast. Buying pressure may be getting stretched, and a pause or pullback becomes more likely.\n- **Below 30 — oversold.** The price has fallen unusually fast. Selling may be overdone, and a bounce becomes more likely.\n- **Around 50** is neutral — no strong momentum either way.\n\nFor example, if a stock rallies from $80 to $100 in two weeks and its RSI hits 78, the market is signaling that the climb has been unusually steep — not that the company is bad, just that the pace may not be sustainable.\n\nOne more pattern worth knowing: **divergence**. If a stock's price makes a new high but RSI makes a *lower* high than before, momentum is quietly fading even as the price climbs — an early caution flag. The mirror image (price makes a new low, RSI makes a higher low) can hint that selling is exhausting itself.\n\nNow the crucial fine print. RSI works best when a stock is **range-bound** — bouncing between support and resistance — where overbought and oversold readings often mark the turning points. In a **strong trend**, RSI can stay extreme for a long time: a great stock in a powerful uptrend can sit above 70 for weeks while it keeps climbing, and a collapsing stock can stay below 30 all the way down. So never treat \"overbought\" as an automatic sell or \"oversold\" as an automatic buy — read RSI in the context of the trend you learned to spot in Module 3.",
+        "highlights": [
+          { "term": "RSI (Relative Strength Index)", "definition": "A momentum indicator on a 0-100 scale measuring how fast and how far a price has moved recently." },
+          { "term": "Overbought", "definition": "RSI above 70 — the price has risen unusually fast, and a pause or pullback becomes more likely." },
+          { "term": "Oversold", "definition": "RSI below 30 — the price has fallen unusually fast, and a bounce becomes more likely." },
+          { "term": "Divergence", "definition": "When price and RSI move in opposite directions, such as a new price high with a weaker RSI high — an early sign momentum is fading." },
+          { "term": "Range-bound", "definition": "A price moving sideways between support and resistance — the environment where RSI signals work best." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-4-4",
+      "moduleId": "module-4",
+      "title": "Using Indicators Together (and Their Limits)",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "You now know three tools: moving averages, RSI, and volume. The real skill is combining them — and knowing what they cannot do.\n\nNo single indicator is reliable on its own. What professionals look for is **confluence**: several independent signals pointing the same way. One clue is a whisper; three clues agreeing is worth listening to. For example, suppose a stock is trading above both its SMA50 and SMA200 (uptrend), pulls back until RSI dips near 35 (momentum reset, not broken), and then starts rising again on increasing volume (buyers confirming). Each signal alone is weak; together they paint a much more convincing picture than any one of them.\n\nNow the limits, and they matter:\n- **Indicators describe the past, not the future.** Every one of them is computed from prices that already happened. They summarize history well, but nothing on a chart knows what tomorrow brings.\n- **They say nothing about the business.** RSI cannot tell you whether a company is profitable or drowning in debt. That is why technicals work best combined with **fundamentals** — the financial health and valuation measures you will study elsewhere in this curriculum. The app's composite 0-100 score does exactly this blending for you: Momentum is only one of its four factors, alongside Value, Quality, and Health.\n- **Avoid indicator overload.** Stacking ten indicators on one chart does not add insight — many of them are calculated from the same price data, so they mostly repeat each other while creating noise and false confidence. Two or three well-understood tools beat ten half-understood ones.\n\nA sensible routine: use the trend and SMAs to decide the direction, RSI to judge the timing, and volume to check conviction — then confirm the company itself is worth owning. And remember: indicators improve your odds and discipline, but nothing guarantees a profit. This is education, not financial advice.",
+        "highlights": [
+          { "term": "Confluence", "definition": "When several independent indicators point in the same direction, making the overall signal more trustworthy." },
+          { "term": "Fundamentals", "definition": "Measures of the underlying business — profitability, debt, growth, valuation — as opposed to price-based technical signals." },
+          { "term": "Indicator overload", "definition": "Cluttering a chart with many overlapping indicators, which adds noise and false confidence rather than insight." },
+          { "term": "Composite score", "definition": "The app's 0-100 rating that blends Value, Quality, Momentum, and Health into one number." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-4-5",
+      "moduleId": "module-4",
+      "title": "Indicators Quiz",
+      "type": "quiz",
+      "order": 5,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Five questions to test your grasp of moving averages, RSI, and how to combine them.",
+        "quiz": [
+          {
+            "id": "q-4-1",
+            "question": "A stock closes at $10, $12, and $14 over three days. What is its 3-day simple moving average (SMA)?",
+            "options": [
+              { "id": "a", "text": "$14, the most recent close", "isCorrect": false },
+              { "id": "b", "text": "$12, the average of the three closes", "isCorrect": true },
+              { "id": "c", "text": "$36, the sum of the three closes", "isCorrect": false },
+              { "id": "d", "text": "$4, the range from lowest to highest", "isCorrect": false }
+            ],
+            "explanation": "A simple moving average is the plain average of closing prices over the chosen window: (10 + 12 + 14) ÷ 3 = $12. Each new day, the window slides forward and drops the oldest price.",
+            "correctExplanation": "Correct. Add the closes (10 + 12 + 14 = 36) and divide by the number of days (3) to get $12. Tomorrow the window slides forward and the calculation repeats.",
+            "incorrectExplanation": "An SMA is just the average of the closes in the window: (10 + 12 + 14) ÷ 3 = $12. It's neither the latest price nor the sum — it's the mean, recalculated each day as the window slides."
+          },
+          {
+            "id": "q-4-2",
+            "question": "What is a golden cross?",
+            "options": [
+              { "id": "a", "text": "The SMA50 rising above the SMA200 — a historically bullish sign", "isCorrect": true },
+              { "id": "b", "text": "The SMA50 falling below the SMA200 — a historically bearish sign", "isCorrect": false },
+              { "id": "c", "text": "The price crossing above its all-time high", "isCorrect": false },
+              { "id": "d", "text": "RSI crossing above 70", "isCorrect": false }
+            ],
+            "explanation": "A golden cross is the faster SMA50 crossing up through the slower SMA200, meaning medium-term strength has overtaken the long-term average. The bearish mirror image — SMA50 falling below SMA200 — is a death cross.",
+            "correctExplanation": "Right. SMA50 crossing above SMA200 is the golden cross, historically associated with strengthening uptrends — though it arrives with a lag and can produce false signals in choppy markets.",
+            "incorrectExplanation": "A golden cross is specifically the SMA50 rising up through the SMA200. The opposite crossing is the death cross. Neither involves all-time highs or RSI levels."
+          },
+          {
+            "id": "q-4-3",
+            "question": "A stock's RSI reads 82. What does this most accurately mean?",
+            "options": [
+              { "id": "a", "text": "The stock is guaranteed to fall soon, so you should sell", "isCorrect": false },
+              { "id": "b", "text": "The company's business is overvalued relative to earnings", "isCorrect": false },
+              { "id": "c", "text": "The price has risen unusually fast recently — it is overbought, but can stay that way in a strong uptrend", "isCorrect": true },
+              { "id": "d", "text": "Trading volume is 82% above its normal level", "isCorrect": false }
+            ],
+            "explanation": "RSI above 70 means overbought: recent momentum has been unusually strong to the upside. It raises the odds of a pause or pullback, but in a powerful uptrend RSI can stay extreme for weeks. It says nothing about the company's valuation or volume.",
+            "correctExplanation": "Exactly. RSI 82 signals stretched upward momentum — worth noting, but not an automatic sell. Strong trends can keep RSI above 70 for a long time, which is why you read it alongside the trend.",
+            "incorrectExplanation": "RSI measures price momentum on a 0-100 scale, nothing more. A reading of 82 means the price rose unusually fast (overbought) — it doesn't guarantee a fall, doesn't measure valuation, and has nothing to do with volume."
+          },
+          {
+            "id": "q-4-4",
+            "question": "Why do golden and death crosses often appear only after much of a move has already happened?",
+            "options": [
+              { "id": "a", "text": "Exchanges delay publishing the data by several weeks", "isCorrect": false },
+              { "id": "b", "text": "Moving averages are built from past prices, so they lag behind trend changes", "isCorrect": true },
+              { "id": "c", "text": "Crosses are only calculated once per quarter", "isCorrect": false },
+              { "id": "d", "text": "They don't — crosses always mark the exact start of a trend", "isCorrect": false }
+            ],
+            "explanation": "SMAs average many days of past prices, so they respond slowly. By the time the SMA50 crosses the SMA200, the underlying trend change is already well underway — the cross confirms a trend rather than predicting its start.",
+            "correctExplanation": "Correct. Averaging 50 or 200 days of history makes these lines slow by design. The cross is a lagging confirmation — useful context, but not an early-entry signal.",
+            "incorrectExplanation": "The reason is lag: SMAs are averages of past prices, so they turn slowly. A cross only appears after the trend has already shifted — it confirms what happened rather than predicting what's next."
+          },
+          {
+            "id": "q-4-5",
+            "question": "Which approach best reflects how technical indicators should be used?",
+            "options": [
+              { "id": "a", "text": "Find one reliable indicator and follow its signals automatically", "isCorrect": false },
+              { "id": "b", "text": "Add as many indicators as possible so nothing is missed", "isCorrect": false },
+              { "id": "c", "text": "Look for confluence among a few indicators and combine them with the company's fundamentals", "isCorrect": true },
+              { "id": "d", "text": "Use indicators to predict exact future prices before buying", "isCorrect": false }
+            ],
+            "explanation": "No single indicator is reliable alone, and piling on many overlapping ones just adds noise. The sound approach is confluence — a few independent signals agreeing — combined with fundamental analysis of the business, which is exactly how the app's composite score blends Momentum with Value, Quality, and Health.",
+            "correctExplanation": "Well done. A few agreeing signals plus healthy fundamentals beats any single indicator — and indicators describe the past, so they can never promise future prices.",
+            "incorrectExplanation": "The best practice is confluence: two or three well-understood indicators agreeing, checked against the company's fundamentals. One indicator alone is unreliable, ten create noise, and none of them can predict future prices."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import Leaderboard from './pages/Leaderboard';
 import Watchlists from './pages/Watchlists';
 import WeeklyChanges from './pages/WeeklyChanges';
 import LearningLab from './pages/LearningLab';
+import Glossary from './pages/Glossary';
 import Compare from './pages/Compare';
 import Portfolio from './pages/Portfolio';
 import { WatchlistProvider } from './contexts/WatchlistContext';
@@ -45,6 +46,7 @@ function App() {
   const isHomePage = location.pathname === '/';
   const isScreenerPage = location.pathname === '/screener';
   const isLearningLabPage = location.pathname === '/learning-lab';
+  const isGlossaryPage = location.pathname === '/glossary';
 
   return (
     <LearningModeProvider>
@@ -110,6 +112,19 @@ function App() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-3.314 0-6 2.014-6 4.5S8.686 17 12 17s6-2.014 6-4.5S15.314 8 12 8zm0 0V4m0 13v3m8-8h-3M7 12H4" />
                 </svg>
                 Learning Lab
+              </Link>
+              <Link
+                to="/glossary"
+                className={`px-6 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${
+                  isGlossaryPage
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25'
+                    : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                Glossary
               </Link>
               <Link
                 to="/leaderboard"
@@ -182,10 +197,12 @@ function App() {
                         <div className="flex-1">
                           <h3 className="text-lg font-semibold text-white mb-2">Welcome to Avanza Stock Finder</h3>
                           <p className="text-gray-300 text-sm leading-relaxed">
-                            Explore stocks with advanced search and filtering, or try the
-                            <span className="text-purple-400 font-medium"> Strategy Screener</span> to find opportunities with proven investment criteria.
-                            Check out the
-                            <span className="text-cyan-400 font-medium"> Leaderboard</span> for top-performing stocks, and use
+                            New to investing? Flip on
+                            <span className="text-amber-400 font-medium"> Learning Mode</span> (top right) for a complete beginner-to-investor course, practice risk-free in the
+                            <span className="text-emerald-400 font-medium"> Learning Lab</span>, and look up any term in the
+                            <span className="text-cyan-400 font-medium"> Glossary</span>.
+                            Then explore stocks with search and filtering, try the
+                            <span className="text-purple-400 font-medium"> Strategy Screener</span> to find opportunities with proven investment criteria, and use
                             <span className="text-green-400 font-medium"> Watchlists</span> to track your favorite stocks with
                             <span className="text-blue-400 font-medium"> score updates</span> and
                             <span className="text-purple-400 font-medium"> signal changes</span>.
@@ -203,6 +220,7 @@ function App() {
             />
             <Route path="/screener" element={<Screener />} />
             <Route path="/learning-lab" element={<LearningLab />} />
+            <Route path="/glossary" element={<Glossary />} />
           </Routes>
         </main>
 

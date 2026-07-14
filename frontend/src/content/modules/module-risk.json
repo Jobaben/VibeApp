@@ -1,0 +1,161 @@
+{
+  "id": "module-risk",
+  "title": "Risk Management and Position Sizing",
+  "description": "Learn to protect your capital first — understand the risks you face, size your positions sensibly, and plan your exits before chasing returns.",
+  "icon": "Shield",
+  "level": "intermediate",
+  "estimatedTime": 30,
+  "prerequisites": ["module-2"],
+  "lessons": [
+    {
+      "id": "lesson-risk-1",
+      "moduleId": "module-risk",
+      "title": "Know Your Risks",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Before you can manage risk, you need to know what it actually looks like. \"Risk\" isn't one thing — it comes in several flavors, and they behave differently.\n\n**Market risk** is the risk that the whole stock market falls together — because of a recession, a crisis, or simply a change in mood. When the market drops 20%, even excellent companies usually drop with it. This risk affects everyone who owns stocks.\n\n**Company-specific risk** is the risk that something goes wrong with one particular company: a failed product, a fraud scandal, a lost customer. If you own 10 shares of one company at $50 each ($500 total) and it collapses, you lose the whole $500 — but the rest of the market doesn't care.\n\nA few more to know:\n- **Sector risk**: an entire industry struggles at once — for example, oil companies when oil prices crash, or banks in a financial crisis.\n- **Currency risk**: if you buy a stock priced in another currency, you can lose money even when the stock rises, because the exchange rate moved against you.\n- **Liquidity risk**: some small stocks trade so rarely that when you want to sell, there may be no buyer at a fair price.\n\nHere's the key insight: company-specific and sector risk can be **diversified away** — owning many companies across many industries means one disaster barely dents you. Market risk cannot be diversified away by owning more stocks; it's the price of being invested at all. You manage it with time (staying invested for years), asset allocation, and only investing money you won't need soon.\n\nIn the app, the Health factor in a stock's 0–100 score helps you spot fragile companies — high debt and weak cash flow make company-specific risk worse.",
+        "highlights": [
+          { "term": "Market risk", "definition": "The risk that the entire stock market falls at once, dragging down almost all stocks regardless of company quality." },
+          { "term": "Company-specific risk", "definition": "The risk that one particular company runs into trouble — a scandal, failed product, or bankruptcy — independent of the wider market." },
+          { "term": "Sector risk", "definition": "The risk that a whole industry suffers together, such as energy stocks when oil prices collapse." },
+          { "term": "Currency risk", "definition": "The risk of losing money on foreign stocks because the exchange rate moves against you, even if the stock itself rises." },
+          { "term": "Liquidity risk", "definition": "The risk that you can't sell a stock quickly at a fair price because too few people are trading it." },
+          { "term": "Diversification", "definition": "Spreading your money across many companies and industries so that no single failure can seriously hurt you." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-risk-2",
+      "moduleId": "module-risk",
+      "title": "Volatility and Drawdowns: The Price of Admission",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Stock prices don't move in a straight line — they bounce around constantly. This bouncing is called **volatility**, and a fall from a recent peak is called a **drawdown**. Neither means something is broken. They are the price of admission for the long-term returns stocks have historically delivered.\n\nHow normal are falls? Very:\n- A **correction** — a drop of about 10% — happens in most years.\n- A drop of 20% or more (a **bear market**) happens every few years.\n- A crash of 30–50% happens roughly once or twice per decade. Investors who lived through 2008 or 2020 saw exactly that.\n\nNo one reliably predicts when these arrive. What you can control is how prepared you are.\n\nNow the uncomfortable math of drawdowns: losses hurt more than gains help, because percentages are asymmetric. If your $1,000 portfolio falls 50% to $500, you need a **100% gain** — a double — just to get back to $1,000. A 20% loss needs a 25% gain to recover; a 33% loss needs 50%. This is why avoiding catastrophic, concentrated losses matters more than squeezing out extra gains.\n\nThe most expensive mistake beginners make is **panic-selling**: selling after a big fall, which converts a temporary paper loss into a permanent real one — and then missing the recovery, because rebounds often start suddenly. Historically, broad markets have recovered from every crash, but individual stocks sometimes never do. That's one more argument for diversification.\n\nPractical takeaways: only invest money you won't need for years, expect a 30%+ drawdown at some point, and decide **before** it happens what you'll do (usually: nothing, or buy more). Past performance doesn't guarantee the future — but panic has a very reliable track record of losing money.",
+        "highlights": [
+          { "term": "Volatility", "definition": "How much and how quickly a price moves up and down. High volatility means big swings in both directions." },
+          { "term": "Drawdown", "definition": "The fall from a recent peak to a low point, usually measured in percent — e.g., a stock that drops from $100 to $70 is in a 30% drawdown." },
+          { "term": "Correction", "definition": "A market decline of roughly 10% from a recent high. Corrections happen in most years and are normal." },
+          { "term": "Bear market", "definition": "A prolonged decline of 20% or more in the broad market." },
+          { "term": "Panic-selling", "definition": "Selling in fear after a big drop, which locks in the loss permanently and often means missing the recovery." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-risk-3",
+      "moduleId": "module-risk",
+      "title": "Position Sizing: Never Bet the Farm",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "**Position sizing** answers the most underrated question in investing: not \"what should I buy?\" but \"**how much** should I buy?\" Get this right and no single mistake can ruin you. Get it wrong and even a great strategy can blow up.\n\nRule one: cap each stock at a small share of your portfolio. A common guideline for beginners is **5–10% maximum per stock**. With a $2,000 portfolio, that means no more than $100–$200 in any single company. If that stock goes to zero — it happens — you lose at most 10% of your money, which you can recover from. If it were 50% of your portfolio, you'd need the math from the previous lesson: a 100% gain elsewhere just to break even.\n\nRule two, used by many professionals: **risk only 1–2% of your portfolio per idea**. \"Risk\" here means the amount you'd lose if your exit point is hit, not the full amount invested. Worked example: your portfolio is $10,000 and you accept risking 1%, i.e. $100. You want to buy a stock at $50 and you decide you'd sell if it falls to $40 — a $10 risk per share. $100 ÷ $10 = **10 shares**, a $500 position. Notice the position ($500) is bigger than the risk ($100), because you don't plan to ride it to zero.\n\nWhy does this matter more than being right? Because even skilled investors are wrong perhaps 40–50% of the time. Sizing is what makes being wrong survivable and being right meaningful. Someone who is right 60% of the time but bets everything on each idea will eventually go broke; someone with modest accuracy and disciplined sizing compounds steadily.\n\nPractice this safely: the Learning Lab's paper trading lets you apply the 1–2% rule with fake money, and the Portfolio tracker shows each position's weight so oversized bets are easy to spot.",
+        "highlights": [
+          { "term": "Position sizing", "definition": "Deciding how much money to put into each investment, so that no single mistake can do serious damage." },
+          { "term": "Position", "definition": "The total amount you have invested in one stock — e.g., 10 shares at $50 is a $500 position." },
+          { "term": "1–2% rule", "definition": "Risk no more than 1–2% of your total portfolio on any single idea — meaning the loss if your exit point is hit, not the full amount invested." },
+          { "term": "Portfolio weight", "definition": "One holding's value as a percentage of your whole portfolio. A $500 position in a $10,000 portfolio has a 5% weight." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-risk-4",
+      "moduleId": "module-risk",
+      "title": "Exits: Stop-Losses and Thesis Breaks",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Most beginners plan the buy carefully and improvise the sell — usually under stress, which is when we decide worst. Professionals do the opposite: they define the **exit** before they enter. Before buying, write down two things: the price at which you'd admit the trade isn't working, and the reasons you're buying (your **thesis**).\n\nOne tool is the **stop-loss order**: an instruction to your broker to sell automatically if the price falls to a level you choose. Buy at $50, set a stop at $42, and your maximum planned loss is 16% — no willpower required.\n\nStop-losses have real drawbacks, though:\n- **Gaps**: prices can jump overnight. If bad news lands after hours and the stock opens at $35, your $42 stop sells at around $35, not $42.\n- **Whipsaws**: a stock dips briefly, triggers your stop, then recovers. You're sold out at the bottom of a wiggle. Stops set too tight — say 3–5% on a volatile stock — get whipsawed constantly.\n\nAn alternative is the **mental stop**: you pick the exit level but place no order, and set a price alert instead — add the stock to a Watchlist in the app to keep it in view. When the alert fires, you re-evaluate calmly. This avoids whipsaws but demands honesty: a mental stop you ignore is just a loss with extra steps.\n\nThe second exit trigger has nothing to do with price: the **thesis break**. If you bought because of strong earnings growth and healthy finances, and growth stalls or debt balloons, the reason you bought is gone — sell, even at a loss, and even if the chart looks fine. The app's \"What Changed\" weekly movers and a stock's Quality and Health factors help you notice when the story changes.\n\nExits aren't pessimism. They're the plan that lets you take risks calmly.",
+        "highlights": [
+          { "term": "Stop-loss order", "definition": "A standing instruction to sell automatically if a stock falls to a price you set, capping your planned loss." },
+          { "term": "Gap", "definition": "A sudden jump in price between trading sessions, which can cause a stop-loss to execute well below its trigger level." },
+          { "term": "Whipsaw", "definition": "A brief dip that triggers your stop-loss and then reverses, selling you out just before the recovery." },
+          { "term": "Mental stop", "definition": "A predefined exit level you monitor yourself (often with a price alert) instead of placing an order — flexible, but only works with discipline." },
+          { "term": "Thesis break", "definition": "When the original reason you bought a stock is no longer true — a signal to sell regardless of the current price." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-risk-5",
+      "moduleId": "module-risk",
+      "title": "Risk Quiz",
+      "type": "quiz",
+      "order": 5,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Check your understanding of risk, drawdowns, position sizing and exits.",
+        "quiz": [
+          {
+            "id": "q-risk-1",
+            "question": "Which type of risk CANNOT be eliminated by owning many different stocks?",
+            "options": [
+              { "id": "a", "text": "Company-specific risk", "isCorrect": false },
+              { "id": "b", "text": "Market risk", "isCorrect": true },
+              { "id": "c", "text": "Sector risk", "isCorrect": false },
+              { "id": "d", "text": "The risk of one company going bankrupt", "isCorrect": false }
+            ],
+            "explanation": "Diversification spreads out company-specific and sector risk, but when the whole market falls, nearly all stocks fall together — market risk remains no matter how many stocks you own.",
+            "correctExplanation": "Right. Owning more stocks dilutes company and sector problems, but market risk affects everything at once. You manage it with time, asset allocation, and only investing money you won't need soon.",
+            "incorrectExplanation": "Not quite. Company-specific and sector risks shrink as you diversify across many companies and industries. Market risk — the whole market falling together — is the one that stays and must be managed with time horizon and allocation."
+          },
+          {
+            "id": "q-risk-2",
+            "question": "Your $1,000 portfolio falls 50% to $500. What gain do you now need to get back to $1,000?",
+            "options": [
+              { "id": "a", "text": "50%", "isCorrect": false },
+              { "id": "b", "text": "75%", "isCorrect": false },
+              { "id": "c", "text": "100%", "isCorrect": true },
+              { "id": "d", "text": "150%", "isCorrect": false }
+            ],
+            "explanation": "Percentages are asymmetric: from $500, getting back to $1,000 means gaining $500, which is 100% of $500. This is why avoiding large losses matters more than chasing large gains.",
+            "correctExplanation": "Exactly. A 50% loss requires a 100% gain — a full double — just to break even. Big drawdowns are far harder to recover from than they look.",
+            "incorrectExplanation": "The recovery is measured from the new, lower value: $500 must grow by $500 to reach $1,000 again, and $500 is 100% of $500. Losses need proportionally bigger gains to undo."
+          },
+          {
+            "id": "q-risk-3",
+            "question": "You have a $10,000 portfolio and follow the 1% risk rule. You want to buy a stock at $50 with an exit point at $40. How many shares can you buy?",
+            "options": [
+              { "id": "a", "text": "2 shares", "isCorrect": false },
+              { "id": "b", "text": "10 shares", "isCorrect": true },
+              { "id": "c", "text": "20 shares", "isCorrect": false },
+              { "id": "d", "text": "100 shares", "isCorrect": false }
+            ],
+            "explanation": "1% of $10,000 is $100 of acceptable risk. The risk per share is $50 − $40 = $10. $100 ÷ $10 = 10 shares, a $500 position.",
+            "correctExplanation": "Correct. You risk $10 per share (buy at $50, exit at $40), and your risk budget is $100, so 10 shares. Note the position is $500, but the planned risk is only $100.",
+            "incorrectExplanation": "Work from the risk budget: 1% of $10,000 = $100. Each share risks $50 − $40 = $10 if the exit is hit. $100 ÷ $10 = 10 shares. The position size ($500) is larger than the amount at risk ($100)."
+          },
+          {
+            "id": "q-risk-4",
+            "question": "The market has just fallen 30% and your diversified portfolio is deep in the red. Based on this module, what is usually the WORST response?",
+            "options": [
+              { "id": "a", "text": "Doing nothing and sticking to your plan", "isCorrect": false },
+              { "id": "b", "text": "Continuing to invest a fixed amount regularly", "isCorrect": false },
+              { "id": "c", "text": "Selling everything to stop the pain", "isCorrect": true },
+              { "id": "d", "text": "Reviewing whether your original reasons for each holding still hold", "isCorrect": false }
+            ],
+            "explanation": "Panic-selling after a crash converts a temporary paper loss into a permanent one and often means missing the recovery. Crashes of 30–50% are normal once or twice per decade; the plan for them should be made in advance.",
+            "correctExplanation": "Right. Selling in panic locks in the loss at the worst moment. Staying the course, continuing regular investments, or calmly re-checking your thesis are all reasonable; fear-driven liquidation is not.",
+            "incorrectExplanation": "The most damaging choice is selling everything in panic — it makes the loss permanent and risks missing the rebound. Doing nothing, investing steadily, and re-checking your thesis are all sensible responses to a normal (if painful) drawdown."
+          },
+          {
+            "id": "q-risk-5",
+            "question": "You bought a stock because of its strong earnings growth. Growth has now stalled for a year, but the price hasn't fallen yet. What does this module suggest?",
+            "options": [
+              { "id": "a", "text": "Hold — you only sell when the price hits your stop-loss", "isCorrect": false },
+              { "id": "b", "text": "Consider selling — your thesis is broken even though the price looks fine", "isCorrect": true },
+              { "id": "c", "text": "Buy more, since the price hasn't reacted yet", "isCorrect": false },
+              { "id": "d", "text": "Remove your exit plan, since it clearly isn't needed", "isCorrect": false }
+            ],
+            "explanation": "A thesis break — the original reason for buying no longer being true — is a sell signal independent of price. Price-based stops catch falling prices; thesis checks catch broken stories before the price does.",
+            "correctExplanation": "Correct. When the reason you bought is gone, the trade no longer makes sense, whatever the chart says. Tools like the app's \"What Changed\" movers and Quality/Health factors help you spot this early.",
+            "incorrectExplanation": "Exits have two triggers: a price level AND a broken thesis. If the growth story you bought is gone, holding just because the price hasn't moved yet means waiting for the market to notice what you already know."
+          }
+        ]
+      }
+    }
+  ]
+}

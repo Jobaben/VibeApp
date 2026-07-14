@@ -1,0 +1,179 @@
+{
+  "id": "module-3",
+  "title": "Reading Price Charts",
+  "description": "Master reading and interpreting stock price charts so you can spot trends, key levels, and meaningful moves at a glance.",
+  "icon": "TrendingUp",
+  "level": "intermediate",
+  "estimatedTime": 30,
+  "prerequisites": ["module-2"],
+  "lessons": [
+    {
+      "id": "lesson-3-1",
+      "moduleId": "module-3",
+      "title": "Anatomy of a Price Chart",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "A price chart is simply a picture of a stock's price over time. The **horizontal axis** (left to right) shows time — days, months, or years. The **vertical axis** (bottom to top) shows the price. Once you can read this picture, a wall of numbers turns into a story you can follow.\n\nThe simplest version is a **line chart**: one line connecting the closing price of each day. It is clean and great for seeing the big picture, but it hides what happened *during* each day.\n\nThat is where **candlestick charts** come in. Each candlestick summarizes one period (for example, one day) using four prices, known as **OHLC**:\n- **Open** — the price when the period started\n- **High** — the highest price reached\n- **Low** — the lowest price reached\n- **Close** — the price when the period ended\n\nA candlestick has two parts. The thick rectangle is the **body**, which stretches from the open price to the close price. The thin lines poking out above and below are the **wicks** (also called shadows), which mark the high and the low.\n\nColor tells you direction at a glance. A **green candle** means the price closed higher than it opened — buyers won that day. A **red candle** means the price closed lower than it opened — sellers won. For example, if a stock opens at $50, dips to $48, rises to $53, and closes at $52, you get a green candle with a body from $50 to $52 and wicks reaching down to $48 and up to $53.\n\nIn the app, every stock's detail page shows a price chart. Open one and see if you can identify these parts yourself.",
+        "highlights": [
+          { "term": "Line chart", "definition": "A chart that connects closing prices with a single line — simple and good for spotting the overall direction." },
+          { "term": "Candlestick", "definition": "A chart symbol showing the open, high, low, and close prices for one time period." },
+          { "term": "OHLC", "definition": "Short for Open, High, Low, Close — the four prices that summarize one trading period." },
+          { "term": "Body", "definition": "The thick part of a candlestick, stretching from the opening price to the closing price." },
+          { "term": "Wick", "definition": "The thin line above or below a candle's body, marking the highest and lowest prices reached." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-3-2",
+      "moduleId": "module-3",
+      "title": "Timeframes: Zooming In and Out",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "The same stock can look completely different depending on how far you zoom out. That zoom level is called the **timeframe**, and choosing the right one is one of the most underrated chart-reading skills.\n\nImagine a stock trading at $100:\n- On a **1-day view**, you might see it wobble between $99 and $101 — it looks dramatic, but almost nothing happened.\n- On a **1-month view**, you might see it slid from $105 to $100 — looks like bad news.\n- On a **1-year view**, you might see it climbed from $70 to $100 — a strong year despite the recent dip.\n- On a **5-year view**, you might see it rose from $30 to $100 — a long, steady winner.\n\nAll four views are true at the same time. The short views show **noise**: random daily wiggles caused by news headlines, big orders, or plain mood swings in the market. The long views show the **trend**: the underlying direction the price has been moving over months and years.\n\nHere is the practical rule: **judge a stock on the timeframe that matches how long you plan to hold it.** If you are investing for years — which is the sensible default for beginners — the 1-year and 5-year views matter far more than today's red or green candle. A scary-looking daily drop often disappears entirely when you zoom out.\n\nBeginners who stare at short timeframes tend to panic-sell dips and chase spikes. Zooming out keeps you calm and focused on what actually matters: the long-term direction. In the app, you can switch timeframes on any stock's price chart with one tap — make zooming out a habit before you form any opinion.",
+        "highlights": [
+          { "term": "Timeframe", "definition": "The time window a chart displays, such as one day, one month, one year, or five years." },
+          { "term": "Noise", "definition": "Short-term, mostly random price wiggles that don't reflect any real change in a company's value." },
+          { "term": "Trend", "definition": "The overall direction a price has been moving over a longer period." },
+          { "term": "Zooming out", "definition": "Switching to a longer timeframe to see the big picture instead of daily fluctuations." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-3-3",
+      "moduleId": "module-3",
+      "title": "Trends, Support and Resistance",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Prices rarely move in straight lines, but over time they usually follow one of three patterns:\n- **Uptrend** — the price is generally rising\n- **Downtrend** — the price is generally falling\n- **Sideways** — the price bounces around in a range with no clear direction\n\nHow do you spot an uptrend among all the zigzags? Look for **higher highs and higher lows**. Each bounce peaks above the previous peak, and each dip bottoms above the previous dip. For example: the price rises to $50, dips to $45, rises to $55, dips to $48, then rises to $60. Both the highs (50 → 55 → 60) and the lows (45 → 48) are climbing — that is a healthy uptrend. A downtrend is the mirror image: lower highs and lower lows.\n\nTwo more ideas help you read where a price might pause. **Support** is a price level where a falling stock has repeatedly stopped dropping and bounced back up — think of it as a floor. **Resistance** is a level where a rising stock has repeatedly stalled and turned back down — a ceiling. Suppose a stock bounced off $40 three times over the past year and stalled near $50 twice: $40 is acting as support and $50 as resistance. These levels form because many investors remember them and place buy or sell orders around them.\n\nWhen the price finally pushes through one of these levels — say it closes clearly above $50 — that is called a **breakout**, and it often signals the start of a new move. But be careful: breakouts can fail and fall back, so treat them as clues, not guarantees. Nothing on a chart predicts the future with certainty.",
+        "highlights": [
+          { "term": "Uptrend", "definition": "A pattern of rising prices, marked by higher highs and higher lows." },
+          { "term": "Downtrend", "definition": "A pattern of falling prices, marked by lower highs and lower lows." },
+          { "term": "Support", "definition": "A price level where a stock has repeatedly stopped falling and bounced — like a floor." },
+          { "term": "Resistance", "definition": "A price level where a stock has repeatedly stopped rising and turned back — like a ceiling." },
+          { "term": "Breakout", "definition": "When the price pushes clearly through a support or resistance level, often starting a new move." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-3-4",
+      "moduleId": "module-3",
+      "title": "Volume: The Fuel Behind Price Moves",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Price tells you *what* happened. **Volume** tells you *how many people cared*. Volume is simply the number of shares traded during a period — usually shown as bars along the bottom of a chart. If 2 million shares of a stock change hands on Tuesday, Tuesday's volume is 2 million.\n\nWhy does this matter? Because a price move backed by heavy trading is far more meaningful than the same move on light trading. Imagine two scenarios:\n- A stock jumps 5% while trading 10 times its normal volume. Thousands of investors actively pushed it up — strong conviction.\n- The same stock jumps 5% on a quiet day with barely any trading. A handful of small orders nudged the price — weak evidence.\n\nThe first move is much more likely to stick. This is why traders say **volume confirms price**.\n\nUse this as a quick credibility check:\n- **Rising price + rising volume** — the move is confirmed; buyers are genuinely stepping in.\n- **Rising price + falling volume** — the rally is losing fuel and may fizzle out.\n- **Falling price + heavy volume** — serious selling pressure; take the drop seriously.\n- **Falling price + light volume** — a drift lower, not a stampede for the exits.\n\nVolume also matters around breakouts from the previous lesson: a breakout above resistance on high volume is far more trustworthy than one on a sleepy, low-volume day.\n\nIn the app, every stock's detail page shows volume bars beneath the price chart. Next time you see a big price move, glance down at the volume — it tells you whether the move had real fuel behind it or was just running on fumes.",
+        "highlights": [
+          { "term": "Volume", "definition": "The number of shares traded during a given period, shown as bars along the bottom of a chart." },
+          { "term": "Volume confirms price", "definition": "The idea that a price move on high volume is more meaningful and more likely to continue than one on low volume." },
+          { "term": "Conviction", "definition": "How strongly investors believe in a move — high volume signals many participants acting with confidence." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-3-5",
+      "moduleId": "module-3",
+      "title": "Explore a Real Chart",
+      "type": "exercise",
+      "order": 5,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Time to put your chart-reading skills to work on a real stock. This is observation only — no buying or selling, real or paper.",
+        "exercise": {
+          "type": "stock_selection",
+          "instructions": "Pick any stock in the app — one from the Leaderboard, your Watchlist, or just a company you know — and open its detail page. Switch the price chart to the 1-year view. Now study the shape of the line: is the stock in an uptrend, a downtrend, or moving sideways? Decide before you look at anything else, then check the volume bars and the SMA lines to see if they agree with your read.",
+          "successCriteria": "You opened a stock's detail page, viewed its price chart on the 1-year timeframe, and made a clear call: uptrend, downtrend, or sideways.",
+          "hints": [
+            "Trace the peaks and dips with your eye: higher highs and higher lows mean an uptrend, lower highs and lower lows mean a downtrend. If neither pattern holds, it's sideways.",
+            "Check the SMA50 and SMA200 lines on the chart: price sitting above both usually supports an uptrend call, while price below both supports a downtrend call.",
+            "Don't judge from the last few candles — zoom out mentally and ask which direction the chart travelled over the whole year."
+          ]
+        }
+      }
+    },
+    {
+      "id": "lesson-3-6",
+      "moduleId": "module-3",
+      "title": "Charts Quiz",
+      "type": "quiz",
+      "order": 6,
+      "estimatedMinutes": 4,
+      "content": {
+        "text": "Check your chart-reading skills with five quick questions.",
+        "quiz": [
+          {
+            "id": "q-3-1",
+            "question": "A candlestick's body stretches from $50 to $52 and the candle is green. What does this tell you?",
+            "options": [
+              { "id": "a", "text": "The stock's highest price of the day was $52", "isCorrect": false },
+              { "id": "b", "text": "The stock opened at $50 and closed at $52", "isCorrect": true },
+              { "id": "c", "text": "The stock opened at $52 and closed at $50", "isCorrect": false },
+              { "id": "d", "text": "The stock traded exactly between $50 and $52 all day", "isCorrect": false }
+            ],
+            "explanation": "A candle's body runs from the open to the close. Green means the close was higher than the open, so the stock opened at $50 and closed at $52. The day's high and low are shown by the wicks, which can extend beyond the body.",
+            "correctExplanation": "Exactly. Green means close above open, and the body marks those two prices — $50 open, $52 close. The wicks, not the body, show the day's full high and low.",
+            "incorrectExplanation": "Not quite. The body shows open and close, and green means the close was higher — so it opened at $50 and closed at $52. The high and low of the day are marked by the wicks, which can reach beyond the body."
+          },
+          {
+            "id": "q-3-2",
+            "question": "You plan to hold stocks for several years. Which chart timeframe should carry the most weight in your judgment?",
+            "options": [
+              { "id": "a", "text": "The 1-day view, because it shows the freshest information", "isCorrect": false },
+              { "id": "b", "text": "The 1-month view, because it balances detail and history", "isCorrect": false },
+              { "id": "c", "text": "The 1-year or 5-year view, because it matches your holding period", "isCorrect": true },
+              { "id": "d", "text": "All timeframes are equally important for every investor", "isCorrect": false }
+            ],
+            "explanation": "You should judge a stock on the timeframe that matches how long you plan to hold it. For multi-year investors, the 1-year and 5-year views reveal the real trend, while short views mostly show noise.",
+            "correctExplanation": "Right. Long holding period, long timeframe. Daily wiggles are mostly noise for a multi-year investor — the 1-year and 5-year views show the trend that actually matters.",
+            "incorrectExplanation": "Remember the rule: match the timeframe to your holding period. If you're investing for years, the 1-year and 5-year views matter most — short timeframes mostly show random noise that can trick you into panic decisions."
+          },
+          {
+            "id": "q-3-3",
+            "question": "A stock rises to $55, dips to $48, rises to $60, then dips to $52. What pattern is this?",
+            "options": [
+              { "id": "a", "text": "An uptrend — higher highs and higher lows", "isCorrect": true },
+              { "id": "b", "text": "A downtrend — lower highs and lower lows", "isCorrect": false },
+              { "id": "c", "text": "A sideways market with no direction", "isCorrect": false },
+              { "id": "d", "text": "A breakout above resistance", "isCorrect": false }
+            ],
+            "explanation": "The highs climbed from $55 to $60 and the lows climbed from $48 to $52. Higher highs plus higher lows is the classic signature of an uptrend.",
+            "correctExplanation": "Well spotted. Highs rising (55 → 60) and lows rising (48 → 52) — that's a textbook uptrend, even though the price zigzags along the way.",
+            "incorrectExplanation": "Compare the peaks and the dips: highs went 55 → 60 and lows went 48 → 52. Both are climbing, and higher highs with higher lows defines an uptrend."
+          },
+          {
+            "id": "q-3-4",
+            "question": "A stock has bounced off $40 three times in the past year without falling below it. What is $40 acting as?",
+            "options": [
+              { "id": "a", "text": "Resistance — a ceiling the price can't rise above", "isCorrect": false },
+              { "id": "b", "text": "Support — a floor where buyers keep stepping in", "isCorrect": true },
+              { "id": "c", "text": "A breakout level that guarantees a rally", "isCorrect": false },
+              { "id": "d", "text": "The stock's fair value", "isCorrect": false }
+            ],
+            "explanation": "A level where a falling price has repeatedly stopped and bounced is support — a floor. Resistance is the opposite: a ceiling where rising prices stall. Neither level guarantees anything or tells you a stock's fair value.",
+            "correctExplanation": "Correct. Repeated bounces off $40 mean buyers keep stepping in there — that's support, a floor under the price. If the price ever breaks below it, that would be a bearish breakout.",
+            "incorrectExplanation": "A price level where drops repeatedly stop and reverse is support (a floor). Resistance is the ceiling version, where rallies stall. And no chart level guarantees future moves or defines fair value."
+          },
+          {
+            "id": "q-3-5",
+            "question": "Stock A jumps 5% on 10 times its normal trading volume. Stock B jumps 5% on unusually light volume. Which move is more meaningful, and why?",
+            "options": [
+              { "id": "a", "text": "Stock B's, because low volume means less selling pressure", "isCorrect": false },
+              { "id": "b", "text": "They are equally meaningful — the price change is identical", "isCorrect": false },
+              { "id": "c", "text": "Stock A's, because heavy volume shows many investors backed the move", "isCorrect": true },
+              { "id": "d", "text": "Neither — volume has nothing to do with price moves", "isCorrect": false }
+            ],
+            "explanation": "Volume confirms price. A move backed by heavy trading reflects broad conviction and is more likely to stick, while the same move on light volume rests on just a few trades and can easily reverse.",
+            "correctExplanation": "Exactly. Ten times normal volume means thousands of investors actively pushed the price up — real conviction. Stock B's identical move rests on a handful of trades and could fade just as quickly.",
+            "incorrectExplanation": "The key idea is that volume confirms price. Stock A's jump on 10x volume shows broad, genuine buying interest, making it more likely to hold. The same jump on light volume, like Stock B's, is weak evidence that can reverse easily."
+          }
+        ]
+      }
+    }
+  ]
+}

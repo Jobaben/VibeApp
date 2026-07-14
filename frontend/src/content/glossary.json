@@ -1,0 +1,736 @@
+{
+  "terms": [
+    {
+      "term": "After-Hours Trading",
+      "definition": "Buying and selling stocks outside the exchange's normal opening hours. Fewer people trade at these times, so prices can jump around more and it can be harder to buy or sell at a fair price.",
+      "category": "Trading & Orders",
+      "example": "A company reports strong earnings at 5 PM after the market closes, and its stock rises 6% in after-hours trading before regular trading resumes the next morning."
+    },
+    {
+      "term": "Anchoring Bias",
+      "definition": "The mental habit of fixating on one number, often the price you first saw or paid, and judging everything against it. It can make you hold a bad stock just because it is below the price you bought at.",
+      "category": "Strategy & Psychology",
+      "example": "You bought at $100, the stock falls to $60, and you refuse to sell 'until it gets back to $100' even though the business has gotten worse."
+    },
+    {
+      "term": "Ask Price",
+      "definition": "The lowest price sellers are currently willing to accept for a stock. When you buy immediately, you usually pay the ask price.",
+      "category": "Trading & Orders",
+      "example": "If the ask is $50.10, that is the price you pay right now to buy one share instantly."
+    },
+    {
+      "term": "Asset Allocation",
+      "definition": "How you split your money between different types of investments, such as stocks, bonds (loans to companies or governments), and cash. It is one of the biggest drivers of your long-term results and how bumpy the ride feels.",
+      "category": "Portfolio & Risk",
+      "example": "A common starting mix is 80% stocks and 20% bonds; someone close to retirement might choose 50/50 to reduce swings."
+    },
+    {
+      "term": "Balance Sheet",
+      "definition": "A financial statement showing what a company owns (assets), what it owes (liabilities), and the difference (equity) at one point in time. Think of it as a snapshot of the company's financial health.",
+      "category": "Fundamental Analysis",
+      "example": "A company with $10 billion in assets and $4 billion in liabilities has $6 billion in equity on its balance sheet."
+    },
+    {
+      "term": "Bear Market",
+      "definition": "A period when stock prices fall a lot, usually defined as a drop of 20% or more from a recent high. Bear markets feel scary but are a normal part of investing and have always ended eventually.",
+      "category": "Basics",
+      "example": "In 2022, major US indexes fell more than 20% from their peaks, putting stocks in a bear market."
+    },
+    {
+      "term": "Beta",
+      "definition": "A number that describes how much a stock tends to move compared with the overall market. A beta of 1 means it moves roughly with the market; above 1 means bigger swings, below 1 means smaller swings.",
+      "category": "Portfolio & Risk",
+      "example": "A stock with a beta of 1.5 would typically rise about 15% when the market rises 10%, and fall about 15% when the market drops 10%."
+    },
+    {
+      "term": "Bid Price",
+      "definition": "The highest price buyers are currently willing to pay for a stock. When you sell immediately, you usually receive the bid price.",
+      "category": "Trading & Orders",
+      "example": "If the bid is $49.95, that is what you receive per share if you sell instantly."
+    },
+    {
+      "term": "Bid-Ask Spread",
+      "definition": "The gap between the highest price buyers will pay (bid) and the lowest price sellers will accept (ask). A small spread means the stock is easy to trade at a fair price; a wide spread is a hidden cost.",
+      "category": "Trading & Orders",
+      "example": "With a bid of $49.95 and an ask of $50.05, the spread is $0.10 - about 0.2% you effectively lose if you buy and immediately sell."
+    },
+    {
+      "term": "Blue Chip",
+      "definition": "A large, well-established, financially solid company with a long track record, like the star players of the stock market. Blue chips are usually less risky than small companies, though they can still fall in price.",
+      "category": "Basics",
+      "example": "Companies like Apple, Microsoft, or Johnson & Johnson are often called blue chips."
+    },
+    {
+      "term": "Bond",
+      "definition": "A loan you give to a government or company. In return they pay you interest and promise to repay the loan amount on a set date. Bonds usually move less dramatically than stocks, which is why they are often used to steady a portfolio.",
+      "category": "Basics",
+      "example": "You buy a $1,000 government bond paying 4% per year: you receive $40 annually and get your $1,000 back when the bond matures."
+    },
+    {
+      "term": "Book Value",
+      "definition": "The value of a company according to its accounting records: everything it owns minus everything it owes. It is a rough floor estimate of what the business would be worth if it were wound down.",
+      "category": "Fundamental Analysis",
+      "example": "A bank with $50 billion in assets and $44 billion in liabilities has a book value of $6 billion."
+    },
+    {
+      "term": "Breakout",
+      "definition": "When a stock's price pushes above a level it previously struggled to pass (resistance) or below a level it previously held (support). Traders watch breakouts because they can signal the start of a bigger move.",
+      "category": "Technical Analysis",
+      "example": "A stock bounces between $45 and $50 for months, then jumps to $53 on heavy trading - a breakout above the $50 resistance level."
+    },
+    {
+      "term": "Broker",
+      "definition": "A company or app that places your buy and sell orders on the stock exchange for you. You need a brokerage account to invest; most online brokers today charge low or zero commissions.",
+      "category": "Basics",
+      "example": "Avanza, Interactive Brokers, and Fidelity are brokers - you deposit money with them and use their app to buy shares."
+    },
+    {
+      "term": "Bubble",
+      "definition": "A period when prices rise far above what the underlying businesses are realistically worth, driven by excitement rather than fundamentals. Bubbles eventually pop, and prices can fall very hard.",
+      "category": "Portfolio & Risk",
+      "example": "In the dot-com bubble of 1999-2000, many internet stocks with no profits multiplied in price, then lost 80-90% when the bubble burst."
+    },
+    {
+      "term": "Bull Market",
+      "definition": "A long period when stock prices are generally rising, often defined as a gain of 20% or more from a recent low. The name comes from how a bull attacks: thrusting its horns upward.",
+      "category": "Basics",
+      "example": "From 2009 to 2020, US stocks were in one of the longest bull markets in history, rising over 300%."
+    },
+    {
+      "term": "Buy and Hold",
+      "definition": "A strategy of buying good investments and keeping them for many years instead of trading in and out. It works because it lets returns compound, keeps costs low, and avoids mistimed trades.",
+      "category": "Strategy & Psychology",
+      "example": "Someone who bought a broad index fund in 2000 and simply held it through two crashes still roughly quadrupled their money by 2020."
+    },
+    {
+      "term": "Candlestick Chart",
+      "definition": "A price chart where each bar (candle) shows four prices for a period: where the price opened, the highest and lowest it reached, and where it closed. A green or white candle means the price closed higher than it opened; red or black means it closed lower.",
+      "category": "Technical Analysis",
+      "example": "A daily candle showing open $50, high $53, low $49, close $52 draws as a green body from $50 to $52 with thin wicks reaching $53 and $49."
+    },
+    {
+      "term": "Capital Gain",
+      "definition": "The profit you make when you sell an investment for more than you paid. In most countries this profit is taxed, often only when you actually sell.",
+      "category": "Basics",
+      "example": "You buy shares for $1,000 and sell them later for $1,400 - your capital gain is $400."
+    },
+    {
+      "term": "Cash Flow Statement",
+      "definition": "A financial statement showing the actual cash moving in and out of a company during a period. It matters because accounting profits can be massaged, but cash is much harder to fake.",
+      "category": "Fundamental Analysis",
+      "example": "A company might report a $100 million profit but show only $20 million of cash coming in - the cash flow statement reveals that gap."
+    },
+    {
+      "term": "Commission",
+      "definition": "A fee your broker charges for executing a trade. Many brokers now charge zero or very low commissions, but fees still exist for some markets and small trades, and they eat into returns.",
+      "category": "Trading & Orders",
+      "example": "If your broker charges a minimum commission of $1 and you invest $50, you lose 2% instantly - investing larger amounts less often keeps fees small."
+    },
+    {
+      "term": "Compound Interest",
+      "definition": "Earning returns on your previous returns, so your money grows faster and faster over time, like a snowball rolling downhill. It is the single most powerful force in long-term investing, and it needs time to work.",
+      "category": "Funds & Dividends",
+      "example": "$10,000 growing at 7% per year becomes about $19,700 in 10 years, $38,700 in 20 years, and $76,100 in 30 years - the last decade alone adds more than the first two."
+    },
+    {
+      "term": "Confirmation Bias",
+      "definition": "The tendency to seek out and believe information that supports what you already think, while ignoring evidence against it. It makes investors fall in love with a stock and miss warning signs.",
+      "category": "Strategy & Psychology",
+      "example": "After buying a stock, you read only bullish posts about it and dismiss the analyst report warning about falling sales."
+    },
+    {
+      "term": "Contrarian Investing",
+      "definition": "Deliberately going against the crowd: buying what others hate and selling what others love. The logic is that popular assets get overpriced and unpopular ones get too cheap - but the crowd is sometimes right, so it requires careful research.",
+      "category": "Strategy & Psychology",
+      "example": "A contrarian buys airline stocks during a panic when everyone is selling, betting the industry will recover within a few years."
+    },
+    {
+      "term": "Correction",
+      "definition": "A drop of roughly 10% to 20% in stock prices from a recent high. Corrections happen every year or two on average, and they are a normal, healthy part of markets - not a reason to panic.",
+      "category": "Portfolio & Risk",
+      "example": "An index falls from 5,000 to 4,400 points - a 12% decline, officially a correction - then recovers over the following months."
+    },
+    {
+      "term": "Crash",
+      "definition": "A sudden, severe drop in stock prices, often 20% or more in days or weeks, usually driven by panic. Crashes are rare and painful, but markets have historically recovered from every one - selling in a panic locks in the loss.",
+      "category": "Portfolio & Risk",
+      "example": "In March 2020, global stocks fell about 30% in a month during the COVID panic, then recovered to new highs within a year."
+    },
+    {
+      "term": "Current Ratio",
+      "definition": "A quick health check that compares what a company can turn into cash within a year (current assets) with what it must pay within a year (current liabilities). A ratio above 1 means it can cover its short-term bills.",
+      "category": "Fundamental Analysis",
+      "example": "Current assets of $2 billion and current liabilities of $1 billion give a current ratio of 2.0 - a comfortable cushion."
+    },
+    {
+      "term": "Day Trading",
+      "definition": "Buying and selling stocks within the same day, trying to profit from small price moves. It is fast, stressful, and statistically most day traders lose money - it is closer to a competitive profession than to investing.",
+      "category": "Trading & Orders",
+      "example": "A day trader buys 1,000 shares at $20.00 at 10 AM and sells at $20.15 at 11 AM for a $150 gain, repeating similar trades all day."
+    },
+    {
+      "term": "Death Cross",
+      "definition": "A chart signal that appears when a stock's short-term average price (typically the 50-day moving average) falls below its long-term average (typically the 200-day). Some traders read it as a warning that a downtrend is taking hold.",
+      "category": "Technical Analysis",
+      "example": "A stock's 50-day average slides from $105 down through its 200-day average at $100 - a death cross that some traders treat as a sell signal."
+    },
+    {
+      "term": "Debt-to-Equity Ratio",
+      "definition": "How much a company owes compared with what its owners have put in and retained. Higher debt can boost profits in good times but makes a company fragile when business slows or interest rates rise.",
+      "category": "Fundamental Analysis",
+      "example": "A company with $3 billion of debt and $6 billion of equity has a debt-to-equity ratio of 0.5, which is generally considered moderate."
+    },
+    {
+      "term": "Divergence",
+      "definition": "When a stock's price and a technical indicator move in opposite directions, hinting the current trend may be weakening. For example, price makes a new high but RSI (a momentum gauge) makes a lower high.",
+      "category": "Technical Analysis",
+      "example": "A stock climbs from $80 to $85 to $88, but its RSI readings fall from 75 to 68 to 62 - a bearish divergence suggesting the rally is running out of steam."
+    },
+    {
+      "term": "Diversification",
+      "definition": "Spreading your money across many different investments so no single failure can seriously hurt you. It is the closest thing to a free lunch in investing: less risk without necessarily lower returns.",
+      "category": "Portfolio & Risk",
+      "example": "Instead of putting $10,000 into one stock, you spread it across 20 stocks in different industries - if one company collapses, you lose 5% instead of everything."
+    },
+    {
+      "term": "Dividend",
+      "definition": "A portion of a company's profits paid out to shareholders in cash, usually every quarter or year. Not all companies pay dividends - fast-growing ones often reinvest profits instead.",
+      "category": "Funds & Dividends",
+      "example": "You own 100 shares and the company pays a $0.50 dividend per share each quarter - you receive $50 every three months, $200 per year."
+    },
+    {
+      "term": "Dividend Aristocrat",
+      "definition": "A company that has increased its dividend every single year for at least 25 years in a row. The long streak signals a stable, disciplined business, though it is no guarantee for the future.",
+      "category": "Funds & Dividends",
+      "example": "Coca-Cola and Procter & Gamble have raised their dividends for over 60 consecutive years."
+    },
+    {
+      "term": "Dividend Yield",
+      "definition": "The yearly dividend as a percentage of the stock's current price - roughly the cash income you earn just for holding the stock. Be careful: a very high yield can be a warning sign that the market expects the dividend to be cut.",
+      "category": "Funds & Dividends",
+      "example": "A stock priced at $100 that pays $3 per year in dividends has a dividend yield of 3%."
+    },
+    {
+      "term": "Dollar-Cost Averaging",
+      "definition": "Investing a fixed amount at regular intervals, such as every month, regardless of whether the market is up or down. You automatically buy more shares when prices are low and fewer when prices are high, and you never have to guess the right moment.",
+      "category": "Strategy & Psychology",
+      "example": "You invest $200 monthly: at $50 per share you get 4 shares, and when the price drops to $40 you get 5 shares - the dip works in your favor."
+    },
+    {
+      "term": "Drawdown",
+      "definition": "How far your portfolio has fallen from its highest point, measured in percent. It shows the worst-case pain you would have felt, which helps you judge whether you can emotionally handle a strategy.",
+      "category": "Portfolio & Risk",
+      "example": "Your portfolio grows to $12,000, then falls to $9,000 before recovering - that is a 25% drawdown."
+    },
+    {
+      "term": "DRIP (Dividend Reinvestment Plan)",
+      "definition": "An arrangement where your cash dividends are automatically used to buy more shares instead of sitting idle. Over decades, reinvested dividends can account for a huge share of total returns thanks to compounding.",
+      "category": "Funds & Dividends",
+      "example": "Your $50 quarterly dividend automatically buys one extra share at $50 - and that new share earns its own dividends going forward."
+    },
+    {
+      "term": "Earnings",
+      "definition": "A company's profit: what is left of its sales after paying all costs, interest, and taxes. Earnings are the ultimate engine of a stock's long-term value - over time, share prices tend to follow profits.",
+      "category": "Fundamental Analysis",
+      "example": "A company with $10 billion in revenue and $8.5 billion in total costs has earnings of $1.5 billion."
+    },
+    {
+      "term": "Earnings Report",
+      "definition": "The official update a public company releases every quarter showing its sales, profits, and outlook. Stock prices often move sharply on report day when results beat or miss what investors expected.",
+      "category": "Fundamental Analysis",
+      "example": "A company expected to earn $1.00 per share reports $1.20 and its stock jumps 8% the next morning."
+    },
+    {
+      "term": "Earnings Season",
+      "definition": "The few weeks after each quarter ends when most public companies release their earnings reports. Markets tend to be more volatile during earnings season because so much new information arrives at once.",
+      "category": "Fundamental Analysis",
+      "example": "In mid-January, hundreds of companies report their October-December results within a few weeks - that is earnings season."
+    },
+    {
+      "term": "EMA (Exponential Moving Average)",
+      "definition": "A moving average (the average price over a set number of days) that gives extra weight to the most recent prices. It reacts faster to new price moves than a simple moving average.",
+      "category": "Technical Analysis",
+      "example": "After a sudden jump from $50 to $55, a 20-day EMA might rise to $51.50 while the simple 20-day average is still at $50.50."
+    },
+    {
+      "term": "EPS (Earnings Per Share)",
+      "definition": "A company's total profit divided by its number of shares - the slice of profit each single share represents. Growing EPS over the years is one of the best signs of a healthy business.",
+      "category": "Fundamental Analysis",
+      "example": "A company earning $2 billion with 500 million shares has an EPS of $4.00."
+    },
+    {
+      "term": "ETF (Exchange-Traded Fund)",
+      "definition": "A fund that holds a basket of many investments (often hundreds of stocks) and trades on the exchange like a single stock. ETFs give you instant diversification at very low cost, which is why they are the most common starting point for beginners.",
+      "category": "Funds & Dividends",
+      "example": "Buying one share of a global stock ETF for $100 makes you a part-owner of over 1,500 companies around the world."
+    },
+    {
+      "term": "EV/EBITDA",
+      "definition": "A valuation measure comparing a company's total value including debt (enterprise value, EV) with its core operating profit before interest, taxes, depreciation, and amortization (EBITDA). It is useful for comparing companies with different debt levels; lower usually means cheaper.",
+      "category": "Fundamental Analysis",
+      "example": "A company with an enterprise value of $12 billion and EBITDA of $1.5 billion trades at an EV/EBITDA of 8, cheaper than a rival at 14."
+    },
+    {
+      "term": "Ex-Dividend Date",
+      "definition": "The cutoff date for a dividend: you must own the stock before this date to receive the next payout. On the ex-dividend date itself, the stock price typically drops by roughly the dividend amount.",
+      "category": "Funds & Dividends",
+      "example": "The ex-dividend date is March 10. Buy on March 9 and you get the $1 dividend; buy on March 10 and you miss it - but the stock also opens about $1 lower."
+    },
+    {
+      "term": "Exchange",
+      "definition": "The marketplace where stocks are bought and sold, matching buyers with sellers. Today exchanges are electronic networks rather than crowded trading floors.",
+      "category": "Basics",
+      "example": "The New York Stock Exchange (NYSE), Nasdaq, and Nasdaq Stockholm are exchanges where companies' shares trade."
+    },
+    {
+      "term": "Expense Ratio (TER)",
+      "definition": "The yearly fee a fund charges, shown as a percentage of your money, and deducted automatically - also called the Total Expense Ratio (TER). Small differences compound into huge amounts over decades, so low fees matter enormously.",
+      "category": "Funds & Dividends",
+      "example": "On a $10,000 investment, a 0.2% expense ratio costs $20 per year while 1.5% costs $150 - over 30 years that difference can eat up tens of thousands in lost growth."
+    },
+    {
+      "term": "FCF Yield",
+      "definition": "Free cash flow (the real spare cash a business generates) divided by the company's market value. It shows how much cash return the business produces per dollar of price; a higher FCF yield suggests better value.",
+      "category": "Fundamental Analysis",
+      "example": "A company worth $20 billion generating $1.6 billion of free cash flow has an FCF yield of 8% - like a bank account paying 8% in cash generation."
+    },
+    {
+      "term": "FOMO",
+      "definition": "Fear Of Missing Out: the urge to buy something just because its price is soaring and everyone is talking about it. FOMO buying usually means buying near the top, after the easy gains are gone.",
+      "category": "Strategy & Psychology",
+      "example": "A stock has already tripled in three months; you buy at $150 because 'it keeps going up' - a classic FOMO trade that often ends badly."
+    },
+    {
+      "term": "Free Cash Flow",
+      "definition": "The cash a company has left after paying its operating costs and investing in equipment and maintenance. It is the money truly available for dividends, buybacks, paying down debt, or growth - many investors trust it more than reported profit.",
+      "category": "Fundamental Analysis",
+      "example": "A company generates $5 billion in operating cash and spends $2 billion on factories and equipment, leaving $3 billion in free cash flow."
+    },
+    {
+      "term": "Fundamental Analysis",
+      "definition": "Evaluating a stock by studying the underlying business: its sales, profits, debts, competitive position, and management. The goal is to estimate what the company is really worth and compare that with its current price.",
+      "category": "Fundamental Analysis",
+      "example": "An investor reads a company's annual report, calculates that the business is worth about $80 per share, and buys because it trades at $60."
+    },
+    {
+      "term": "Golden Cross",
+      "definition": "A chart signal that appears when a stock's short-term average price (typically the 50-day moving average) rises above its long-term average (typically the 200-day). Some traders read it as a sign that an uptrend is gaining strength.",
+      "category": "Technical Analysis",
+      "example": "A stock's 50-day average climbs from $95 up through its 200-day average at $100 - a golden cross that some traders treat as a buy signal."
+    },
+    {
+      "term": "Gross Margin",
+      "definition": "The share of each sales dollar left after paying the direct cost of making the product, before other expenses. A high gross margin often signals pricing power - customers will pay well above what the product costs to produce.",
+      "category": "Fundamental Analysis",
+      "example": "A phone sells for $1,000 and costs $400 to build - the gross margin is 60%."
+    },
+    {
+      "term": "Growth Investing",
+      "definition": "Buying companies whose sales and profits are expanding quickly, expecting the stock to follow. Growth stocks often look expensive on ratios like P/E, and the bet is that rapid growth will justify the price.",
+      "category": "Strategy & Psychology",
+      "example": "An investor pays a P/E of 45 for a software company growing revenue 35% per year, betting profits will multiply over the next five years."
+    },
+    {
+      "term": "Guidance",
+      "definition": "A company's own forecast of its upcoming sales or profits, shared with investors in its earnings reports. Stocks often move more on changed guidance than on the past quarter's actual results, because markets care about the future.",
+      "category": "Fundamental Analysis",
+      "example": "A company beats expectations this quarter but lowers next year's guidance from $5 to $4 per share - and the stock falls 10% anyway."
+    },
+    {
+      "term": "Hedge",
+      "definition": "An investment made specifically to reduce the damage if another investment goes wrong - like insurance for your portfolio. Hedges usually cost something, either in fees or in reduced upside.",
+      "category": "Portfolio & Risk",
+      "example": "Worried about a downturn, an investor holding mostly stocks moves 20% into government bonds, which often hold their value when stocks fall."
+    },
+    {
+      "term": "Herding",
+      "definition": "Copying what the crowd is doing - buying because everyone is buying, selling because everyone is selling. Herding inflates bubbles and deepens crashes, and it usually means acting after the smart move has passed.",
+      "category": "Strategy & Psychology",
+      "example": "In early 2021, millions piled into the same few meme stocks because social media was buzzing - many who joined late lost most of their money."
+    },
+    {
+      "term": "Income Statement",
+      "definition": "A financial statement showing a company's sales, costs, and profit over a period such as a quarter or year. Reading it top to bottom shows how revenue turns into (or fails to turn into) profit.",
+      "category": "Fundamental Analysis",
+      "example": "An income statement might show $10 billion revenue, $6 billion cost of goods, $2.5 billion other expenses, and $1.5 billion net profit."
+    },
+    {
+      "term": "Index",
+      "definition": "A number that tracks the combined performance of a group of stocks, acting as a thermometer for a market. When people say 'the market rose 1% today,' they usually mean an index did.",
+      "category": "Basics",
+      "example": "The S&P 500 tracks 500 large US companies; the OMXS30 tracks the 30 most-traded stocks in Stockholm."
+    },
+    {
+      "term": "Index Fund",
+      "definition": "A fund that simply buys all the stocks in an index instead of paying managers to pick winners. Because it is cheap and automatically diversified, an index fund is the most widely recommended core investment for beginners.",
+      "category": "Funds & Dividends",
+      "example": "A global index fund with a 0.2% yearly fee gives you a slice of thousands of companies - historically returning around 7-10% per year on average, though with big swings along the way."
+    },
+    {
+      "term": "Interest Coverage Ratio",
+      "definition": "How many times over a company's operating profit could pay the interest on its debt. A high number means debt is comfortably manageable; a number near 1 means the company is barely keeping up with interest payments.",
+      "category": "Fundamental Analysis",
+      "example": "Operating profit of $800 million against $100 million in yearly interest gives interest coverage of 8 - a solid safety margin."
+    },
+    {
+      "term": "Intrinsic Value",
+      "definition": "What a business is really worth based on the cash it can generate over its lifetime, as opposed to whatever its stock price happens to be today. Value investors try to buy when the price is well below their estimate of intrinsic value.",
+      "category": "Fundamental Analysis",
+      "example": "After studying a company's cash flows, you estimate its intrinsic value at $90 per share - so at a market price of $60, it looks like a bargain."
+    },
+    {
+      "term": "IPO (Initial Public Offering)",
+      "definition": "The first time a private company sells its shares to the public and gets listed on a stock exchange. IPOs get lots of hype, but newly listed stocks are often volatile and have a mixed track record for early buyers.",
+      "category": "Basics",
+      "example": "A startup goes public at $25 per share, spikes to $40 on day one on excitement, then drifts back below $25 within a year - a common IPO pattern."
+    },
+    {
+      "term": "Leverage",
+      "definition": "Using borrowed money to invest more than you actually have, which multiplies both your gains and your losses. Leverage is how investors get wiped out - beginners should avoid it entirely.",
+      "category": "Trading & Orders",
+      "example": "With $10,000 of your own money plus $10,000 borrowed, a 20% market drop costs you $4,000 - a 40% loss on your own capital."
+    },
+    {
+      "term": "Limit Order",
+      "definition": "An order to buy or sell only at a specific price or better. You control the price you get, but there is no guarantee the order will execute if the market never reaches your price.",
+      "category": "Trading & Orders",
+      "example": "A stock trades at $52 and you place a limit order to buy at $50 - it only executes if the price drops to $50 or below."
+    },
+    {
+      "term": "Liquidity",
+      "definition": "How quickly and easily an asset can be bought or sold without moving its price. Large, popular stocks are highly liquid; tiny companies can be hard to sell without accepting a worse price.",
+      "category": "Basics",
+      "example": "You can sell $10,000 of Apple in a second at the market price, but selling $10,000 of a tiny stock that trades $50,000 per day could push the price down against you."
+    },
+    {
+      "term": "Loss Aversion",
+      "definition": "The psychological fact that losing money feels roughly twice as painful as gaining the same amount feels good. It drives investors to sell winners too early and cling to losers too long, hoping to avoid 'making the loss real.'",
+      "category": "Strategy & Psychology",
+      "example": "You quickly sell a stock that is up 15% to 'lock in the win,' but hold a stock that is down 40% for years because selling would admit the mistake."
+    },
+    {
+      "term": "Margin",
+      "definition": "Money borrowed from your broker to buy investments, using your existing holdings as collateral (security for the loan). If prices fall too far, the broker can force you to sell at the worst possible moment - a 'margin call.'",
+      "category": "Trading & Orders",
+      "example": "You buy $20,000 of stock using $10,000 of your own cash and $10,000 on margin; if the position falls 30%, the broker may demand more cash or sell your shares automatically."
+    },
+    {
+      "term": "Margin of Safety",
+      "definition": "Buying a stock well below what you think it is truly worth, so that even if your analysis is somewhat wrong, you are protected. It is the core principle of value investing.",
+      "category": "Strategy & Psychology",
+      "example": "You estimate a company is worth $100 per share but only buy at $70 - the $30 discount is your margin of safety against errors and bad luck."
+    },
+    {
+      "term": "Market Cap (Market Capitalization)",
+      "definition": "The total value of all of a company's shares combined: share price times number of shares. It tells you the company's size - which matters far more than the price of a single share.",
+      "category": "Basics",
+      "example": "A company with 1 billion shares at $50 each has a market cap of $50 billion. A $500 stock is not 'more expensive' than a $5 stock - size depends on market cap."
+    },
+    {
+      "term": "Market Order",
+      "definition": "An order to buy or sell immediately at the best available price. It executes almost instantly, but in a fast-moving or thinly traded stock, the price you get can differ from the price you saw.",
+      "category": "Trading & Orders",
+      "example": "You place a market order to buy when the screen shows $50.00, and it fills at $50.08 because the price moved as your order arrived."
+    },
+    {
+      "term": "Moat",
+      "definition": "A durable advantage that protects a company from competitors, like the water-filled ditch around a castle. Moats come from strong brands, network effects, high switching costs, patents, or being the cheapest producer.",
+      "category": "Fundamental Analysis",
+      "example": "Visa's payment network is a moat: every new cardholder makes it more valuable to merchants and vice versa, making it extremely hard for a newcomer to compete."
+    },
+    {
+      "term": "Momentum",
+      "definition": "The tendency of stocks that have recently performed well to keep performing well for a while (and losers to keep losing). Momentum strategies buy strength - the opposite of bargain hunting - and require discipline to exit when the trend turns.",
+      "category": "Strategy & Psychology",
+      "example": "A momentum investor buys the stocks that rose most over the past 6-12 months, and replaces any that drop out of the top ranks."
+    },
+    {
+      "term": "Moving Average",
+      "definition": "The average price of a stock over a set number of past days, drawn as a smooth line on the chart. It filters out daily noise so you can see the underlying direction of the price.",
+      "category": "Technical Analysis",
+      "example": "A 50-day moving average adds up the last 50 closing prices and divides by 50 - if the stock trades above that line, the medium-term trend is up."
+    },
+    {
+      "term": "Mutual Fund",
+      "definition": "A pool of money from many investors, managed by professionals who buy a portfolio of stocks or bonds on everyone's behalf. Unlike ETFs, mutual funds trade once per day and actively managed ones often charge higher fees.",
+      "category": "Funds & Dividends",
+      "example": "You invest $1,000 in a mutual fund with 80 holdings; the fund charges 1.2% per year ($12) for the manager's stock picking - which studies show usually fails to beat a cheap index fund over time."
+    },
+    {
+      "term": "Net Margin",
+      "definition": "The percentage of revenue that ends up as final profit after every cost, including interest and taxes. It answers: for each dollar of sales, how many cents does the company actually keep?",
+      "category": "Fundamental Analysis",
+      "example": "A company with $10 billion in revenue and $1.5 billion in net profit has a net margin of 15% - it keeps 15 cents of every sales dollar."
+    },
+    {
+      "term": "OHLC",
+      "definition": "Short for Open, High, Low, Close - the four key prices for any time period on a chart: where the price started, its peak, its bottom, and where it finished. Candlestick and bar charts are built from OHLC data.",
+      "category": "Technical Analysis",
+      "example": "Monday's OHLC of $50 / $53 / $49 / $52 means the stock opened at $50, touched $53 and $49 during the day, and closed at $52."
+    },
+    {
+      "term": "Operating Margin",
+      "definition": "The percentage of revenue left after all the costs of running the business (production, salaries, marketing, rent), but before interest and taxes. It shows how efficiently the core business converts sales into profit.",
+      "category": "Fundamental Analysis",
+      "example": "Revenue of $10 billion and operating profit of $2.5 billion means an operating margin of 25%."
+    },
+    {
+      "term": "Order Book",
+      "definition": "The live list of all pending buy and sell orders for a stock, showing how many shares people want to trade at each price. It reveals where the buying and selling interest sits right now.",
+      "category": "Trading & Orders",
+      "example": "The order book shows buyers wanting 5,000 shares at $49.90 and sellers offering 2,000 shares at $50.10 - the trade happens when someone crosses the gap."
+    },
+    {
+      "term": "Overbought",
+      "definition": "A condition where a stock has risen so fast that indicators suggest the buying may be overdone and due for a pause or pullback. Commonly flagged when RSI rises above 70. Overbought does not mean 'about to crash' - strong stocks can stay overbought for weeks.",
+      "category": "Technical Analysis",
+      "example": "After jumping 25% in two weeks, a stock's RSI hits 82 - deeply overbought - and it then drifts sideways for a month."
+    },
+    {
+      "term": "Oversold",
+      "definition": "A condition where a stock has fallen so fast that indicators suggest the selling may be exhausted and a bounce could be near. Commonly flagged when RSI drops below 30. Oversold is a hint, not a guarantee - weak stocks can keep falling.",
+      "category": "Technical Analysis",
+      "example": "A stock drops 20% in a week and its RSI falls to 22 - oversold territory - and it bounces 6% over the next few days."
+    },
+    {
+      "term": "P/B Ratio (Price-to-Book)",
+      "definition": "The stock price compared with the company's book value (assets minus liabilities) per share. It is most useful for banks and asset-heavy businesses; a P/B below 1 means the market prices the company below its accounting net worth.",
+      "category": "Fundamental Analysis",
+      "example": "A bank with a book value of $40 per share trading at $32 has a P/B of 0.8 - the market values it at less than its net assets."
+    },
+    {
+      "term": "P/E Ratio (Price-to-Earnings)",
+      "definition": "The stock price divided by the company's earnings per share - how many dollars you pay for each dollar of yearly profit. A low P/E can mean a bargain or a troubled business; a high P/E usually means investors expect strong growth.",
+      "category": "Fundamental Analysis",
+      "example": "A $60 stock with $4 of earnings per share has a P/E of 15 - you pay $15 for every $1 of annual profit."
+    },
+    {
+      "term": "P/S Ratio (Price-to-Sales)",
+      "definition": "The company's total market value divided by its yearly revenue. It is handy for valuing companies that are not yet profitable, where P/E cannot be calculated.",
+      "category": "Fundamental Analysis",
+      "example": "A young company valued at $5 billion with $1 billion in sales has a P/S of 5 - investors pay $5 for each $1 of revenue."
+    },
+    {
+      "term": "Paper Trading",
+      "definition": "Practicing buying and selling with fake money to learn how markets and orders work before risking real cash. It is the best risk-free way to build skills - just remember real money brings real emotions that practice cannot fully simulate.",
+      "category": "Strategy & Psychology",
+      "example": "You manage a $100,000 pretend portfolio for three months in a paper-trading simulator, making every trade and mistake for free before investing real savings."
+    },
+    {
+      "term": "Payout Ratio",
+      "definition": "The share of a company's profit paid out as dividends. A low ratio leaves room to grow the dividend; a ratio near or above 100% means the company pays out more than it earns, which is rarely sustainable.",
+      "category": "Funds & Dividends",
+      "example": "A company earning $4 per share and paying a $2 dividend has a payout ratio of 50% - comfortable. Another paying $3.80 on $4.00 of earnings (95%) has little safety margin."
+    },
+    {
+      "term": "PEG Ratio",
+      "definition": "The P/E ratio divided by the company's expected earnings growth rate, balancing price against growth. A PEG around 1 is often considered fair; well below 1 may signal an undervalued growth stock.",
+      "category": "Fundamental Analysis",
+      "example": "A stock with a P/E of 30 growing earnings 30% per year has a PEG of 1.0 - arguably better value than a P/E-15 stock growing only 5% (PEG 3.0)."
+    },
+    {
+      "term": "Portfolio",
+      "definition": "Your entire collection of investments - all your stocks, funds, bonds, and investment cash together. Investors judge decisions by their effect on the whole portfolio, not on any single holding.",
+      "category": "Portfolio & Risk",
+      "example": "A beginner's portfolio might be $8,000 in a global index fund, $1,500 in individual stocks, and $500 in cash."
+    },
+    {
+      "term": "Position",
+      "definition": "Your holding in a particular investment - the shares you currently own (or owe, if short) in one stock or fund. 'Opening a position' means buying in; 'closing a position' means selling out.",
+      "category": "Trading & Orders",
+      "example": "After buying 50 shares at $40, you have a $2,000 position in the company."
+    },
+    {
+      "term": "Position Sizing",
+      "definition": "Deciding how much money to put into each individual investment. Good position sizing ensures that even a total loss in one holding cannot seriously damage your overall portfolio.",
+      "category": "Portfolio & Risk",
+      "example": "With a $20,000 portfolio and a rule of maximum 5% per stock, you invest at most $1,000 in any single company."
+    },
+    {
+      "term": "Pump and Dump",
+      "definition": "A scam where fraudsters hype a cheap, thinly traded stock to pump the price up, then dump their own shares on the buyers they lured in, causing the price to collapse. Unsolicited hot tips about tiny stocks are the classic red flag.",
+      "category": "Strategy & Psychology",
+      "example": "A social media campaign drives a $0.50 penny stock to $3.00 in days; the promoters sell everything at the top and the price crashes back to $0.40, wiping out latecomers."
+    },
+    {
+      "term": "Rebalancing",
+      "definition": "Periodically adjusting your portfolio back to your intended mix after market moves have shifted it. It enforces the discipline of trimming what has grown expensive and adding to what has become cheap.",
+      "category": "Portfolio & Risk",
+      "example": "Your target is 80% stocks / 20% bonds, but after a rally you are at 88/12 - you sell some stocks and buy bonds to return to 80/20."
+    },
+    {
+      "term": "Recession",
+      "definition": "A period when a country's whole economy shrinks - typically two or more quarters of falling output, with rising unemployment and lower spending. Stock markets often fall before and during recessions, and typically start recovering before the economy does.",
+      "category": "Basics",
+      "example": "In 2008-2009, the global economy contracted, unemployment jumped, and stock markets fell roughly 50% before beginning a long recovery in March 2009."
+    },
+    {
+      "term": "Resistance",
+      "definition": "A price level where a rising stock has repeatedly stalled and turned back down, as if hitting a ceiling. It forms where many holders are waiting to sell; a convincing break above it can open the way to further gains.",
+      "category": "Technical Analysis",
+      "example": "A stock rallies to about $75 three times over six months and pulls back each time - $75 is acting as resistance."
+    },
+    {
+      "term": "Revenue",
+      "definition": "The total money a company brings in from selling its products and services, before any costs are subtracted. It is also called sales or the 'top line,' since it sits at the top of the income statement.",
+      "category": "Fundamental Analysis",
+      "example": "A store sells 1 million items at $10 each - its revenue is $10 million, regardless of what its costs were."
+    },
+    {
+      "term": "Risk Tolerance",
+      "definition": "How much loss and volatility you can genuinely handle - both financially and emotionally - without panic-selling or losing sleep. Your true tolerance is revealed in crashes, not in calm markets, and your portfolio should match it.",
+      "category": "Portfolio & Risk",
+      "example": "If seeing your $10,000 portfolio drop to $7,000 would make you sell everything, a 100% stock allocation exceeds your risk tolerance - a stock/bond mix would suit you better."
+    },
+    {
+      "term": "Risk/Reward Ratio",
+      "definition": "A comparison of how much you could lose on a trade versus how much you realistically stand to gain. Traders often look for setups where the potential gain is at least two or three times the potential loss.",
+      "category": "Portfolio & Risk",
+      "example": "You buy at $50, plan to sell if it falls to $45 (risking $5) and aim for $65 (gaining $15) - a risk/reward ratio of 1:3."
+    },
+    {
+      "term": "ROE (Return on Equity)",
+      "definition": "A company's yearly profit as a percentage of shareholders' equity (the owners' stake). It measures how effectively the company turns owners' money into profit; consistently high ROE is a hallmark of a quality business.",
+      "category": "Fundamental Analysis",
+      "example": "A company with $2 billion in equity earning $400 million per year has an ROE of 20% - each dollar of owner capital generates 20 cents of annual profit."
+    },
+    {
+      "term": "ROIC (Return on Invested Capital)",
+      "definition": "The profit a company generates as a percentage of all the capital invested in the business - both owners' equity and borrowed money. It is a stricter quality test than ROE because it cannot be flattered by piling on debt.",
+      "category": "Fundamental Analysis",
+      "example": "A business using $10 billion of total capital to produce $1.5 billion of operating profit after tax has an ROIC of 15% - comfortably above what that capital costs."
+    },
+    {
+      "term": "RSI (Relative Strength Index)",
+      "definition": "A momentum indicator from 0 to 100 measuring how fast and how far a stock's price has moved recently. Readings above 70 suggest the stock may be overbought (risen too fast); below 30 suggests oversold (fallen too fast).",
+      "category": "Technical Analysis",
+      "example": "After a 15% slide in two weeks, a stock's RSI drops to 25 - a hint that the selling may be overdone and a bounce could follow."
+    },
+    {
+      "term": "Sector",
+      "definition": "A broad category of companies in the same kind of business, such as technology, healthcare, energy, or financials. Sectors often move together, so spreading investments across several sectors improves diversification.",
+      "category": "Basics",
+      "example": "When oil prices jump, most stocks in the energy sector tend to rise together - even the well-run and poorly-run companies alike."
+    },
+    {
+      "term": "Share",
+      "definition": "One single unit of ownership in a company. Owning shares makes you a part-owner, entitled to a slice of the profits and usually a vote at shareholder meetings.",
+      "category": "Basics",
+      "example": "If a company has issued 1,000,000 shares and you own 100, you own 0.01% of the entire business."
+    },
+    {
+      "term": "Short Selling",
+      "definition": "Betting that a stock will fall: you borrow shares, sell them, and hope to buy them back cheaper later, keeping the difference. It is risky because a stock can rise without limit, so potential losses are theoretically unlimited.",
+      "category": "Trading & Orders",
+      "example": "You short 100 shares at $50 ($5,000). If the price falls to $40 you profit $1,000 - but if it rises to $80 you lose $3,000, and there is no ceiling."
+    },
+    {
+      "term": "Slippage",
+      "definition": "The difference between the price you expected when placing an order and the price you actually got. It grows in fast markets and in stocks with little trading, and it quietly erodes returns for frequent traders.",
+      "category": "Trading & Orders",
+      "example": "You send a market order at $20.00, but by the time it executes you pay $20.12 - twelve cents of slippage per share."
+    },
+    {
+      "term": "SMA (Simple Moving Average)",
+      "definition": "The plain average of a stock's closing prices over a set number of days, giving every day equal weight. The 50-day and 200-day SMAs are the most watched trend lines in investing.",
+      "category": "Technical Analysis",
+      "example": "If a stock's last 5 closes were $48, $49, $50, $51, and $52, its 5-day SMA is $50."
+    },
+    {
+      "term": "Stock",
+      "definition": "A type of investment that represents ownership in a company. When you buy stock, you become a part-owner and benefit if the company grows in value or pays out profits - but you also share the losses if it does poorly.",
+      "category": "Basics",
+      "example": "Buying Apple stock makes you a part-owner of Apple - if the company thrives over the years, your slice typically becomes more valuable."
+    },
+    {
+      "term": "Stop-Limit Order",
+      "definition": "An order that activates at a trigger price (the stop) but then only executes at your limit price or better. It gives more price control than a plain stop-loss, but in a fast crash the order may never fill and you stay stuck in the position.",
+      "category": "Trading & Orders",
+      "example": "You set a stop at $45 with a limit of $44: if the stock hits $45 your sell order activates, but it will not sell below $44 - so if the price gaps straight to $40, you still hold the shares."
+    },
+    {
+      "term": "Stop-Loss Order",
+      "definition": "An order that automatically sells your stock if its price falls to a level you choose, capping your loss on that position. In a very fast drop, the actual sale price can be lower than your stop level.",
+      "category": "Trading & Orders",
+      "example": "You buy at $50 and set a stop-loss at $45 - if the stock falls to $45, it is sold automatically, limiting your loss to about 10%."
+    },
+    {
+      "term": "Sunk Cost Fallacy",
+      "definition": "Refusing to abandon a bad investment because of the money you have already lost, even though that money is gone regardless. The only question that matters is whether the investment is worth holding from today onward.",
+      "category": "Strategy & Psychology",
+      "example": "A stock you bought at $80 sits at $30 with a broken business behind it. 'I've lost too much to sell now' is the sunk cost fallacy - the $50 is lost whether you sell or not."
+    },
+    {
+      "term": "Support",
+      "definition": "A price level where a falling stock has repeatedly stopped dropping and bounced back up, as if landing on a floor. It forms where many buyers step in; if support clearly breaks, the decline often accelerates.",
+      "category": "Technical Analysis",
+      "example": "A stock falls to about $40 four times in a year and rebounds each time - $40 is acting as support."
+    },
+    {
+      "term": "Tax-Advantaged Account",
+      "definition": "A special investment account where the government reduces or simplifies taxes to encourage saving. Using one can meaningfully boost long-term returns; the rules and names differ by country, so check what applies where you live.",
+      "category": "Basics",
+      "example": "Sweden has the ISK, the US has IRAs and 401(k)s, and the UK has ISAs - each shelters investments from some taxes in its own way."
+    },
+    {
+      "term": "Technical Analysis",
+      "definition": "Studying price charts, patterns, and trading volume to predict where a price might go next, based on the idea that market psychology repeats. It contrasts with fundamental analysis, which studies the business itself; many investors combine both.",
+      "category": "Technical Analysis",
+      "example": "A technical analyst notices a stock holding support at $40 with rising volume and an RSI turning up from 30, and takes that as a sign a rebound may be starting."
+    },
+    {
+      "term": "Ticker",
+      "definition": "The short letter code that identifies a stock on an exchange, used for looking up quotes and placing orders. The same company can have different tickers on different exchanges.",
+      "category": "Basics",
+      "example": "AAPL is Apple on the Nasdaq, VOLV-B is Volvo's B share in Stockholm."
+    },
+    {
+      "term": "Time Horizon",
+      "definition": "How long you plan to keep money invested before you need it. A long horizon (10+ years) lets you ride out crashes and take more stock risk; money needed within a few years should not be in stocks at all.",
+      "category": "Portfolio & Risk",
+      "example": "Saving for retirement in 30 years? Stock-heavy is reasonable. Saving for a house deposit in 2 years? Keep it in savings - a 30% crash the month before you buy would be devastating."
+    },
+    {
+      "term": "Trend",
+      "definition": "The general direction a stock's price is moving over time: up (higher highs and higher lows), down (lower highs and lower lows), or sideways. 'The trend is your friend' captures the idea that trends often persist longer than expected.",
+      "category": "Technical Analysis",
+      "example": "A stock climbing from $40 to $44 to $42 to $47 to $45 to $50 is in an uptrend - each peak and each dip is higher than the last."
+    },
+    {
+      "term": "Value Investing",
+      "definition": "Buying stocks for less than the business is truly worth, based on careful analysis of its profits, assets, and prospects. Popularized by Benjamin Graham and Warren Buffett, it treats a stock as a piece of a business, not a lottery ticket.",
+      "category": "Strategy & Psychology",
+      "example": "A value investor calculates a company is worth $100 per share and buys at $65 during a market panic, then waits patiently for the price to reflect reality."
+    },
+    {
+      "term": "Value Trap",
+      "definition": "A stock that looks cheap on ratios like P/E but is cheap for a good reason - the business is deteriorating. The price keeps falling or stagnates because the 'E' in P/E shrinks. The lesson: always ask why something is cheap.",
+      "category": "Strategy & Psychology",
+      "example": "A retailer trades at a P/E of 6 and looks like a bargain, but online competition cuts its earnings in half - suddenly the 'cheap' stock is at a P/E of 12 and still falling."
+    },
+    {
+      "term": "Volatility",
+      "definition": "How much and how quickly a price swings up and down. High volatility means bigger, faster moves in both directions - more opportunity, but also more risk and more stomach-churn.",
+      "category": "Basics",
+      "example": "A calm utility stock might move 0.5% on a typical day, while a small biotech stock might routinely swing 5-10% in a single day."
+    },
+    {
+      "term": "Volume",
+      "definition": "The number of shares traded during a given period, such as a day. Volume shows how much conviction is behind a price move: a rise on heavy volume is more meaningful than one on light volume.",
+      "category": "Technical Analysis",
+      "example": "A stock that averages 1 million shares a day suddenly trades 8 million as it breaks above resistance - the heavy volume suggests the breakout is genuine."
+    },
+    {
+      "term": "Watchlist",
+      "definition": "A personal list of stocks you are monitoring but have not necessarily bought. Watchlists let you study companies, track prices, and wait patiently for the right moment instead of buying on impulse.",
+      "category": "Basics",
+      "example": "You add five interesting companies to your watchlist, follow their earnings for a few months, and buy one when its price dips 15% below your target."
+    },
+    {
+      "term": "Yield",
+      "definition": "The income an investment pays out each year, expressed as a percentage of its price. For stocks it usually means the dividend yield; for bonds, the interest yield.",
+      "category": "Basics",
+      "example": "A $100 stock paying $2.50 in yearly dividends yields 2.5%; a bond paying $45 per year on a $1,000 price yields 4.5%."
+    }
+  ]
+}

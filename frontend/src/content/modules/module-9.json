@@ -1,0 +1,209 @@
+{
+  "id": "module-9",
+  "title": "Making Investment Decisions",
+  "description": "Build a repeatable framework for making sound buy, hold and sell decisions instead of acting on impulse.",
+  "icon": "CheckCircle",
+  "level": "advanced",
+  "estimatedTime": 30,
+  "prerequisites": ["module-6", "module-risk"],
+  "lessons": [
+    {
+      "id": "lesson-9-1",
+      "moduleId": "module-9",
+      "title": "A Repeatable Decision Framework",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "The difference between investors and gamblers isn't intelligence — it's process. Gamblers act on feelings; investors follow a checklist. Pilots use checklists precisely because experience alone isn't enough under pressure, and buying a stock with real money is pressure.\n\nHere is a simple written checklist to run before every purchase:\n\n- **Understand the business.** Can you explain in two sentences how this company makes money? If not, stop here.\n- **Check the score breakdown.** In the app, look at all four factors — Value, Quality, Momentum, Health — not just the composite 0-100 number. A score of 75 built on great Quality but terrible Health tells a different story than a balanced 75.\n- **Valuation sanity.** Is the P/E or EV/EBITDA reasonable compared to similar companies in the same sector? Use the Compare feature.\n- **Financial health.** Check debt/equity, current ratio and interest coverage. Would this company survive a bad recession?\n- **Chart context.** Is the price in free fall, or in a steady trend? You don't need perfect timing, but you should know what you're stepping into.\n- **Position size.** Decide how much this stock should be of your portfolio before you buy — not after it doubles or halves.\n- **Write down why.** One short note: why you're buying and what you expect. This becomes priceless later.\n\nThe point of a checklist isn't that each step is hard — it's that under excitement or fear you will skip steps unless they're written down. Good decisions come from process, not impulse. Practice the full checklist in the Learning Lab with paper trading before using real money.",
+        "highlights": [
+          {
+            "term": "Decision Checklist",
+            "definition": "A written list of checks you run before every investment, so decisions come from process rather than emotion"
+          },
+          {
+            "term": "Score Breakdown",
+            "definition": "The four factors (Value, Quality, Momentum, Health) behind the app's composite 0-100 score"
+          },
+          {
+            "term": "Position Size",
+            "definition": "How much of your total portfolio a single investment represents, decided before you buy"
+          },
+          {
+            "term": "Paper Trading",
+            "definition": "Practicing buying and selling with fake money to build skill without financial risk"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-9-2",
+      "moduleId": "module-9",
+      "title": "Building a Buy Case: The Investment Thesis",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "An investment thesis is a short, written argument for why you're buying a stock. If you can't write one, you don't have a reason — you have a feeling.\n\nA good thesis is one paragraph and answers three questions:\n\n- **What do you expect to happen, and why?** Example: \"I'm buying this logistics company because it's growing revenue 15% a year, margins are expanding as its new warehouses come online, and it trades at a P/E of 14 versus 20 for its closest competitors.\"\n- **What would prove you wrong?** This is the most important part. Example: \"If revenue growth falls below 8% for two straight quarters, or debt/equity rises above 1.5, my thesis is broken.\" Deciding your exit conditions in advance protects you from making excuses later.\n- **What is your time horizon?** A thesis about improving fundamentals needs years to play out. If you'd panic over a bad month, the thesis and your behavior don't match.\n\nUse the app's tools as inputs, not verdicts. The AI analysis and the score breakdown are excellent for surfacing facts you might miss — shrinking margins, rising debt, a momentum shift. But a STRONG_BUY signal is not a reason to buy by itself; it's a prompt to investigate. Your thesis should stand on the underlying facts: \"revenue is growing and the valuation is modest,\" not \"the app said 82.\"\n\nWrite your thesis in a note or journal and date it. When you review the position later, you'll judge yourself against what you actually believed at the time — not what you conveniently remember believing. Past performance never guarantees future results, so a thesis is about probabilities, not certainties.",
+        "highlights": [
+          {
+            "term": "Investment Thesis",
+            "definition": "A short written argument stating what you expect from an investment and why"
+          },
+          {
+            "term": "Falsification Criteria",
+            "definition": "Pre-defined conditions that would prove your thesis wrong and trigger a re-evaluation"
+          },
+          {
+            "term": "Time Horizon",
+            "definition": "How long you plan to hold an investment for your thesis to play out"
+          },
+          {
+            "term": "Inputs vs Verdicts",
+            "definition": "Treating scores and AI analysis as information to weigh, not commands to follow"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-9-3",
+      "moduleId": "module-9",
+      "title": "When to Sell (and When Not To)",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Selling well is harder than buying well, because emotions run hottest when money is already on the line. The fix is the same as before: decide your reasons in advance.\n\n**Good reasons to sell:**\n\n- **Your thesis broke.** You bought because of 15% growth; growth is now 3% and falling. The reason you owned the stock no longer exists — regardless of whether the price is up or down.\n- **Fundamentals are deteriorating.** Rising debt, shrinking margins, falling cash flow. The app's \"What Changed\" view and signal downgrades (say, from BUY to HOLD) are useful review triggers — not automatic sell orders, but a prompt to re-read your thesis.\n- **A clearly better opportunity.** Every krona or dollar in stock A is unavailable for stock B. Switch only when the gap is large — small edges rarely survive costs and taxes.\n- **Rebalancing.** One winner has grown to 40% of your portfolio and you want to reduce concentration risk.\n\n**Bad reasons to sell:**\n\n- **The price fell today.** Red days are normal. If nothing changed in the business, a lower price makes the stock cheaper, not worse.\n- **A scary headline.** Most news is noise. Ask: does this change my thesis, or just my mood?\n\nRemember that selling has real costs. In many countries you pay tax on realized gains (rules differ — check your local ones), plus trading fees and the spread. Frequent traders often underperform patient holders for exactly this reason: overtrading is a tax on impatience.\n\nA practical habit: when you feel the urge to sell, re-read the thesis you wrote when you bought. If it still holds, close the app and go for a walk.",
+        "highlights": [
+          {
+            "term": "Thesis Break",
+            "definition": "When the original reason you bought a stock no longer holds true — the strongest reason to sell"
+          },
+          {
+            "term": "Rebalancing",
+            "definition": "Selling part of an oversized position to bring your portfolio back to its intended balance"
+          },
+          {
+            "term": "Signal Downgrade",
+            "definition": "When the app's signal drops (e.g., BUY to HOLD); a trigger to review your thesis, not an automatic sell order"
+          },
+          {
+            "term": "Overtrading",
+            "definition": "Buying and selling too often, letting taxes, fees and impulsive timing eat your returns"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-9-4",
+      "moduleId": "module-9",
+      "title": "The Costliest Beginner Mistakes",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Most beginner losses come from a handful of predictable mistakes. Knowing them in advance is the cheapest lesson you'll ever get.\n\n- **Chasing hype.** Buying whatever is soaring on social media usually means buying at the top, from people who bought earlier and are selling to you. If \"everyone is talking about it,\" the good news is probably already in the price.\n- **Averaging down blindly.** Buying more of a falling stock only makes sense if your thesis is intact and the business is fine. Doubling down just because \"it was $50 and now it's $25\" assumes the market is wrong and you're right — sometimes the market knows something you don't.\n- **No exit plan.** If you don't know in advance what would make you sell, you'll decide in a panic, at the worst moment.\n- **Checking prices hourly.** Prices wiggle constantly; your fundamentals don't. Hourly checking creates anxiety, and anxiety creates bad trades. Weekly is plenty for long-term investors — the app's \"What Changed\" summary exists precisely so you don't have to stare at charts.\n- **Overconcentration.** Putting half your money in one stock means one CEO scandal can undo years of saving. Keep single positions modest and let a broad index fund or ETF be your core.\n- **Borrowing to invest.** Leverage magnifies losses just as much as gains, and it can force you to sell at the bottom to repay the loan. Only invest money you won't need for years — never money you owe.\n- **Panic selling at bottoms.** Markets fall 30-50% every decade or so. Investors who sell during crashes lock in losses; historically, those who held diversified portfolios through crashes recovered. Past results don't guarantee the future, but panic has a near-perfect record of being expensive.\n\nEvery one of these mistakes is a process failure — and every one is preventable with the checklist and thesis habits from earlier lessons.",
+        "highlights": [
+          {
+            "term": "Chasing Hype",
+            "definition": "Buying a stock because it's soaring and everyone is talking about it — usually near the top"
+          },
+          {
+            "term": "Averaging Down",
+            "definition": "Buying more of a stock as it falls; sensible only if your thesis is genuinely intact"
+          },
+          {
+            "term": "Overconcentration",
+            "definition": "Having too much of your portfolio in a single stock, so one failure causes major damage"
+          },
+          {
+            "term": "Leverage",
+            "definition": "Investing with borrowed money, which magnifies losses as much as gains"
+          },
+          {
+            "term": "Panic Selling",
+            "definition": "Selling during a market crash out of fear, locking in losses at the worst moment"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-9-5",
+      "moduleId": "module-9",
+      "title": "Decisions Quiz",
+      "type": "quiz",
+      "order": 5,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Check your grasp of the decision framework, investment theses, selling discipline and common mistakes.",
+        "quiz": [
+          {
+            "id": "q-9-1",
+            "question": "What is the main purpose of using a written checklist before buying a stock?",
+            "options": [
+              { "id": "a", "text": "It guarantees the stock will go up", "isCorrect": false },
+              { "id": "b", "text": "It prevents excitement or fear from making you skip important checks", "isCorrect": true },
+              { "id": "c", "text": "It replaces the need to understand the business", "isCorrect": false },
+              { "id": "d", "text": "It helps you buy faster than other investors", "isCorrect": false }
+            ],
+            "explanation": "Checklists exist because under emotional pressure people skip steps. Writing the process down keeps decisions grounded in process, not impulse.",
+            "correctExplanation": "Exactly. Nothing guarantees a stock rises — the checklist's job is to make sure emotion doesn't shortcut your process.",
+            "incorrectExplanation": "A checklist can't guarantee results or replace understanding. Its purpose is to stop excitement or fear from making you skip essential checks."
+          },
+          {
+            "id": "q-9-2",
+            "question": "Which of these is the most important part of a written investment thesis?",
+            "options": [
+              { "id": "a", "text": "A price target for next month", "isCorrect": false },
+              { "id": "b", "text": "The number of shares you plan to buy", "isCorrect": false },
+              { "id": "c", "text": "Stating in advance what would prove you wrong", "isCorrect": true },
+              { "id": "d", "text": "A list of analysts who agree with you", "isCorrect": false }
+            ],
+            "explanation": "Pre-defining the conditions that would break your thesis protects you from making excuses and holding on when the facts change.",
+            "correctExplanation": "Right! Deciding your falsification criteria in advance is what turns a hope into a testable thesis.",
+            "incorrectExplanation": "The key element is stating in advance what would prove you wrong — it protects you from rationalizing when fundamentals deteriorate."
+          },
+          {
+            "id": "q-9-3",
+            "question": "The app downgrades one of your holdings from BUY to HOLD. What is the best response?",
+            "options": [
+              { "id": "a", "text": "Sell immediately before the price drops", "isCorrect": false },
+              { "id": "b", "text": "Ignore it completely — signals never matter", "isCorrect": false },
+              { "id": "c", "text": "Buy more, since the stock is probably cheaper now", "isCorrect": false },
+              { "id": "d", "text": "Re-read your thesis and review the score breakdown to see what changed", "isCorrect": true }
+            ],
+            "explanation": "A signal downgrade is a review trigger, not an order. Check what changed in the four factors and whether your original thesis still holds.",
+            "correctExplanation": "Exactly. Signals are inputs, not verdicts — a downgrade means investigate, then decide based on whether your thesis still holds.",
+            "incorrectExplanation": "A downgrade is neither an automatic sell nor something to ignore. Use it as a trigger to re-read your thesis and check what changed in the score breakdown."
+          },
+          {
+            "id": "q-9-4",
+            "question": "Which of these is a GOOD reason to sell a stock?",
+            "options": [
+              { "id": "a", "text": "The price dropped 4% today", "isCorrect": false },
+              { "id": "b", "text": "The growth your thesis depended on has stalled for two quarters", "isCorrect": true },
+              { "id": "c", "text": "A scary headline about the market appeared this morning", "isCorrect": false },
+              { "id": "d", "text": "You haven't traded anything in a month", "isCorrect": false }
+            ],
+            "explanation": "Sell when your thesis breaks or fundamentals deteriorate — not because of daily price moves, headlines, or an itch to trade.",
+            "correctExplanation": "Correct! If the reason you bought no longer exists, selling makes sense regardless of the current price.",
+            "incorrectExplanation": "Red days, headlines and boredom are bad reasons to sell. A broken thesis — like stalled growth your case depended on — is a good one."
+          },
+          {
+            "id": "q-9-5",
+            "question": "Why is borrowing money to invest especially dangerous for beginners?",
+            "options": [
+              { "id": "a", "text": "Losses are magnified and you may be forced to sell at the bottom to repay the loan", "isCorrect": true },
+              { "id": "b", "text": "Borrowed money grows more slowly than your own money", "isCorrect": false },
+              { "id": "c", "text": "Banks don't allow borrowed money in stocks", "isCorrect": false },
+              { "id": "d", "text": "It only matters if the market goes up", "isCorrect": false }
+            ],
+            "explanation": "Leverage magnifies losses as much as gains, and loan repayment can force you to sell during a crash — locking in losses at the worst time.",
+            "correctExplanation": "Right! Leverage cuts both ways, and forced selling during a downturn is how borrowed money turns a temporary dip into a permanent loss.",
+            "incorrectExplanation": "The danger is that leverage magnifies losses and can force you to sell at the bottom to repay the loan. Only invest money you won't need for years."
+          }
+        ]
+      }
+    }
+  ]
+}

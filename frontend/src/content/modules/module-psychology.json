@@ -1,0 +1,209 @@
+{
+  "id": "module-psychology",
+  "title": "Investor Psychology",
+  "description": "Master the emotions and mental biases that cost investors real money, so your decisions stay calm and rational.",
+  "icon": "Brain",
+  "level": "intermediate",
+  "estimatedTime": 25,
+  "prerequisites": ["module-2"],
+  "lessons": [
+    {
+      "id": "lesson-psy-1",
+      "moduleId": "module-psychology",
+      "title": "Fear and Greed: The Market's Mood Swings",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "The stock market is millions of people making decisions with real money, and people have feelings. That is why markets move in emotional cycles: a stretch of rising prices creates optimism, optimism becomes **euphoria** (\"stocks only go up!\"), and then something breaks and euphoria flips into **panic** (\"sell everything before it goes to zero!\").\n\nHere is the trap. When prices have already risen a lot, investing feels safe and exciting, so most people buy near the top. When prices have already crashed, investing feels terrifying, so most people sell near the bottom. Buying high and selling low is the classic retail investor mistake, and it is driven entirely by emotion, not analysis.\n\nA quick example: imagine a stock climbs from $50 to $100 over two years. Your neighbor buys at $95 because \"it keeps going up.\" A recession hits and the stock falls to $55. Frightened, he sells and locks in a $40 per share loss. Two years later it is back at $100. The company barely changed; his emotions did all the damage.\n\nWarren Buffett summarized the antidote in one line: **be fearful when others are greedy, and greedy when others are fearful**. That does not mean blindly buying every crash. It means the crowd's mood is a poor guide, and sometimes a contrary indicator. When everyone around you is euphoric, be extra careful about price. When everyone is panicking, quality companies often go on sale.\n\nYou cannot remove your emotions, but you can learn to notice them. The rest of this module gives you the tools.",
+        "highlights": [
+          {
+            "term": "Market cycle",
+            "definition": "The repeating emotional pattern of optimism, euphoria, panic, and despair that drives prices above and below fair value"
+          },
+          {
+            "term": "Euphoria",
+            "definition": "The stage where investors believe prices can only rise — historically the most dangerous time to buy"
+          },
+          {
+            "term": "Panic",
+            "definition": "The stage where fear takes over and investors sell at any price — often near the bottom"
+          },
+          {
+            "term": "Buying high, selling low",
+            "definition": "The classic emotional mistake: buying after big gains feel safe and selling after big losses feel scary"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-psy-2",
+      "moduleId": "module-psychology",
+      "title": "The Biases That Cost You Money",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Your brain uses mental shortcuts that work well in daily life but backfire badly when investing. Psychologists call them **cognitive biases**. Here are the seven most expensive ones:\n\n- **Loss aversion**: losing $100 hurts roughly twice as much as gaining $100 feels good. Example: you refuse to sell a stock that is down 40% and clearly broken, because selling makes the loss feel \"real.\"\n- **FOMO** (fear of missing out): a rising price makes you want to jump in before it is \"too late.\" Example: you buy a stock that doubled last month with no research at all.\n- **Confirmation bias**: you seek information that agrees with you and ignore what does not. Example: after buying a stock you only read bullish posts about it and skip the earnings warning.\n- **Anchoring**: you fixate on an arbitrary number, usually your purchase price. Example: \"I will sell when it gets back to the $80 I paid\" — even though nothing says it ever will.\n- **Recency bias**: you assume whatever just happened will keep happening. Example: three green months convinces you the market is \"safe now.\"\n- **Overconfidence**: a few early wins convince you that you have a gift. Example: after two lucky picks you put half your savings into one \"sure thing.\"\n- **Herding**: doing what everyone else does feels safe. Example: you buy a hyped stock because your whole group chat did.\n\nYou cannot delete these biases — they are wired in. But naming them helps. Before any buy or sell, ask: \"Is this my analysis talking, or one of these seven?\" The app's scores and checklists exist partly to give you an unemotional second opinion.",
+        "highlights": [
+          {
+            "term": "Cognitive bias",
+            "definition": "A built-in mental shortcut that distorts judgment — useful in daily life, expensive in investing"
+          },
+          {
+            "term": "Loss aversion",
+            "definition": "The tendency to feel losses about twice as strongly as equivalent gains, which makes people hold broken losers"
+          },
+          {
+            "term": "FOMO",
+            "definition": "Fear of missing out — the urge to buy something only because its price is rising fast"
+          },
+          {
+            "term": "Anchoring",
+            "definition": "Fixating on an arbitrary reference number, like your purchase price, when making decisions"
+          },
+          {
+            "term": "Herding",
+            "definition": "Copying the crowd because it feels safe — the fuel behind bubbles and panics"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-psy-3",
+      "moduleId": "module-psychology",
+      "title": "Surviving Your First Crash",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "If you invest for decades — and you should — you will live through several market crashes. This is not a risk to hope away; it is a guarantee. Historically the market drops 10% or more about every couple of years, and 30% or more roughly once a decade. Nobody reliably predicts when.\n\nHere is what -30% feels like on real money. Say you have invested steadily and built a $20,000 portfolio. A crash arrives, and over a few months your screen shows $14,000. That missing $6,000 is a used car, a year of rent, hundreds of working hours. The news is apocalyptic, your feed is full of people \"going to cash,\" and every instinct screams SELL.\n\nNow the history. Markets have recovered from every crash so far: 1987, the dot-com bust of 2000, the 2008 financial crisis, the 2020 pandemic plunge. Recovery took months in some cases and years in others, but broad market investors who simply held — and especially those who kept buying at the lower prices — came out ahead. Past performance never guarantees the future, but the pattern is remarkably consistent: crashes are temporary, selling at the bottom is permanent.\n\nThat is the key insight: **selling in a panic is the one unforced error**. A crash only converts into a real loss the moment you sell. The investors who get hurt worst are those who sell near the bottom and then miss the recovery.\n\nSo prepare instead of predict:\n\n- Only invest money you will not need for at least 5 years\n- Keep an emergency fund in cash so a crash never forces you to sell\n- Decide NOW, in calm weather, what you will do at -30%: usually the answer is \"nothing, or buy a little more\"\n\nWrite that decision down. The next lesson shows you how.",
+        "highlights": [
+          {
+            "term": "Market crash",
+            "definition": "A rapid fall in stock prices, often 20-30% or more — a normal, recurring feature of markets, not a rare accident"
+          },
+          {
+            "term": "Drawdown",
+            "definition": "The drop from a portfolio's peak value to its low point, e.g. $20,000 to $14,000 is a 30% drawdown"
+          },
+          {
+            "term": "Paper loss",
+            "definition": "A decline in value you have not sold — it only becomes a real, permanent loss when you sell"
+          },
+          {
+            "term": "Emergency fund",
+            "definition": "Cash savings (often 3-6 months of expenses) kept outside the market so you are never forced to sell during a crash"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-psy-4",
+      "moduleId": "module-psychology",
+      "title": "Rules Beat Emotions: Your Written Investment Plan",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "You will not out-willpower your emotions in the middle of a crash or a mania. What works is deciding in advance, in writing, while you are calm. Professionals call this an **investment plan** (or investment policy statement), and yours can fit on one page.\n\nA simple one-page plan has six parts:\n\n- **Goals**: what the money is for and when you need it. Example: \"Retirement in 30 years; house deposit in 8 years.\"\n- **Monthly amount**: what you invest automatically each month. Example: \"$300 on the 25th, every month, regardless of headlines.\"\n- **Allocation**: how the money is split. Example: \"80% global index ETF as the core, up to 20% in individual stocks I have researched.\"\n- **Max position size**: the most any single stock may be. Example: \"No single stock over 5% of my portfolio.\"\n- **Buy checklist**: conditions every purchase must pass. Example: \"App score above 65, I understand the business, P/E reasonable versus its sector, debt manageable, and I have written one paragraph on why I am buying.\"\n- **Sell rules**: the only reasons you sell. Example: \"The original thesis broke, the fundamentals deteriorated, or I need to rebalance — never simply because the price fell.\"\n\nThe final rule is about timing: **review on a schedule, not on headlines**. Pick a rhythm — say, one hour on the first Saturday of each quarter — to check your portfolio against the plan and make any changes. Between reviews, scary news is not a trigger to act; it is a trigger to reread your plan.\n\nWhen a decision tempts you, the question is no longer \"how do I feel?\" but \"what does my plan say?\" That single shift removes most emotional mistakes. Write your plan this week, before the next module.",
+        "highlights": [
+          {
+            "term": "Investment plan",
+            "definition": "A short written document, created while calm, that fixes your goals, monthly amount, allocation, and buy/sell rules in advance"
+          },
+          {
+            "term": "Allocation",
+            "definition": "How your money is divided between investment types, e.g. 80% index ETF core and 20% individual stocks"
+          },
+          {
+            "term": "Max position size",
+            "definition": "A self-imposed cap on how large any single stock can be, such as 5% of your portfolio, to limit damage from one bad pick"
+          },
+          {
+            "term": "Sell rules",
+            "definition": "Pre-written conditions that justify selling — thesis broken, fundamentals deteriorated, rebalancing — so fear alone never decides"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-psy-5",
+      "moduleId": "module-psychology",
+      "title": "Psychology Quiz",
+      "type": "quiz",
+      "order": 5,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Test what you have learned about the emotional side of investing.",
+        "quiz": [
+          {
+            "id": "q-psy-1",
+            "question": "What is the classic emotional mistake most retail investors make?",
+            "options": [
+              { "id": "a", "text": "Buying after prices have risen a lot and selling after they have crashed", "isCorrect": true },
+              { "id": "b", "text": "Holding investments for too many years", "isCorrect": false },
+              { "id": "c", "text": "Diversifying across too many stocks", "isCorrect": false },
+              { "id": "d", "text": "Investing the same amount every month", "isCorrect": false }
+            ],
+            "explanation": "Rising prices feel safe and falling prices feel scary, so emotions push people to buy high and sell low — the opposite of profitable investing.",
+            "correctExplanation": "Right. Euphoria pulls people in near tops and panic pushes them out near bottoms — buying high and selling low is the classic emotional error.",
+            "incorrectExplanation": "The classic mistake is buying high and selling low: euphoria makes people buy after big gains, and panic makes them sell after big losses. Holding for years and investing monthly are actually good habits."
+          },
+          {
+            "id": "q-psy-2",
+            "question": "You refuse to sell a clearly broken stock that is down 40% because selling would make the loss feel 'real'. Which bias is this?",
+            "options": [
+              { "id": "a", "text": "FOMO", "isCorrect": false },
+              { "id": "b", "text": "Loss aversion", "isCorrect": true },
+              { "id": "c", "text": "Herding", "isCorrect": false },
+              { "id": "d", "text": "Recency bias", "isCorrect": false }
+            ],
+            "explanation": "Loss aversion means losses hurt roughly twice as much as gains feel good, so investors avoid 'realizing' a loss even when the investment is broken.",
+            "correctExplanation": "Correct. Loss aversion makes locking in a loss feel unbearable, so people cling to broken investments instead of moving the money somewhere better.",
+            "incorrectExplanation": "This is loss aversion: because losses hurt about twice as much as gains feel good, investors hold broken losers just to avoid making the loss feel real."
+          },
+          {
+            "id": "q-psy-3",
+            "question": "During a crash, your $20,000 portfolio falls to $14,000. According to this module, what is the one unforced error?",
+            "options": [
+              { "id": "a", "text": "Continuing your automatic monthly investments", "isCorrect": false },
+              { "id": "b", "text": "Doing nothing and waiting", "isCorrect": false },
+              { "id": "c", "text": "Panic-selling near the bottom and turning the paper loss into a permanent one", "isCorrect": true },
+              { "id": "d", "text": "Rereading your written investment plan", "isCorrect": false }
+            ],
+            "explanation": "A drawdown only becomes a permanent loss when you sell. Historically markets have recovered from every crash, but panic-sellers miss the recovery.",
+            "correctExplanation": "Exactly. Selling in a panic converts a temporary paper loss into a permanent real one — and history shows markets have recovered from every crash so far.",
+            "incorrectExplanation": "The unforced error is panic-selling near the bottom. Holding, continuing monthly investments, and rereading your plan are all sensible crash responses; selling in fear locks the loss in permanently."
+          },
+          {
+            "id": "q-psy-4",
+            "question": "What does 'be fearful when others are greedy, and greedy when others are fearful' mean in practice?",
+            "options": [
+              { "id": "a", "text": "Always do the exact opposite of every market move", "isCorrect": false },
+              { "id": "b", "text": "The crowd's mood is a poor guide — be extra careful about price during euphoria, and look for quality on sale during panics", "isCorrect": true },
+              { "id": "c", "text": "Buy every stock that has crashed, since it must recover", "isCorrect": false },
+              { "id": "d", "text": "Avoid the stock market whenever people are optimistic", "isCorrect": false }
+            ],
+            "explanation": "The quote warns against following crowd emotion: euphoric markets deserve extra caution on price, and panics can put quality companies on sale. It is not a command to blindly buy every crash.",
+            "correctExplanation": "Right. It is about not letting the crowd's mood set your decisions — caution when everyone is euphoric, and open eyes for bargains when everyone is panicking.",
+            "incorrectExplanation": "The idea is that crowd emotion is a poor guide: be extra careful about price when everyone is euphoric, and look for quality companies on sale when everyone panics. It does not mean blindly buying every crash or opposing every move."
+          },
+          {
+            "id": "q-psy-5",
+            "question": "What is the main purpose of a written one-page investment plan?",
+            "options": [
+              { "id": "a", "text": "To guarantee your investments will be profitable", "isCorrect": false },
+              { "id": "b", "text": "To predict when the next crash will happen", "isCorrect": false },
+              { "id": "c", "text": "To impress your bank or broker", "isCorrect": false },
+              { "id": "d", "text": "To make key decisions in advance while calm, so rules — not emotions — decide during manias and crashes", "isCorrect": true }
+            ],
+            "explanation": "A written plan fixes your goals, monthly amount, allocation, position limits, and buy/sell rules ahead of time, so under stress you follow the plan instead of your feelings. Nothing can guarantee profits.",
+            "correctExplanation": "Correct. The plan is a pre-commitment device: decisions made calmly in advance replace decisions made in fear or greed. Reviews happen on a schedule, not on headlines.",
+            "incorrectExplanation": "The plan's purpose is pre-commitment: by writing rules while calm, you let the plan decide during manias and crashes instead of your emotions. No plan can guarantee profits or predict crashes."
+          }
+        ]
+      }
+    }
+  ]
+}

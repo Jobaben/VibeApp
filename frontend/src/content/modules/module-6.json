@@ -1,0 +1,240 @@
+{
+  "id": "module-6",
+  "title": "Investment Strategies",
+  "description": "Explore the classic investment strategies — from value and growth to dividends and index investing — and learn how to pick one that fits you.",
+  "icon": "Lightbulb",
+  "level": "intermediate",
+  "estimatedTime": 30,
+  "prerequisites": ["module-5"],
+  "lessons": [
+    {
+      "id": "lesson-6-1",
+      "moduleId": "module-6",
+      "title": "Value Investing: Buying a Dollar for Fifty Cents",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Value investing is the oldest named strategy in the book — literally. Benjamin Graham laid it out in the 1930s and later taught it to a student named Warren Buffett, who became one of the most successful investors in history using it.\n\nThe core idea is simple: every business has an underlying worth — its **intrinsic value** — based on the cash it can generate over its lifetime. The stock market, swayed by fear and fashion, sometimes prices a business well below that worth. A value investor tries to buy a dollar of business for fifty cents and then waits for the market to come to its senses.\n\nBecause estimating intrinsic value is imprecise, Graham insisted on a **margin of safety**: only buy when the price is well below your estimate. If you think a business is worth $100 per share, buying at $95 leaves no room for error; buying at $60 means even a sloppy estimate can still work out.\n\nIn practice, value investors screen for statistically cheap stocks — low **P/E** (price versus earnings) and low **P/B** (price versus net assets) are classic filters. In this app, the Value score and the Strategy Screener's value presets do that first pass for you.\n\nOne big warning: beware the **value trap**. Some stocks are cheap because the business is genuinely dying — shrinking sales, obsolete products, crushing debt. They look like bargains and just keep falling. This is exactly why the app pairs Value with Quality, Momentum, and Health: a low price is only interesting when the business behind it is worth owning. Cheap plus good is the goal; cheap alone is a gamble.",
+        "highlights": [
+          {
+            "term": "Value investing",
+            "definition": "Buying stocks priced below the underlying business's estimated worth, pioneered by Benjamin Graham and made famous by Warren Buffett."
+          },
+          {
+            "term": "Intrinsic value",
+            "definition": "What a business is really worth based on the cash it can generate over time — as opposed to whatever price the market quotes today."
+          },
+          {
+            "term": "Margin of safety",
+            "definition": "Buying well below your estimate of a stock's worth, so that even if your estimate is somewhat wrong, you can still do fine."
+          },
+          {
+            "term": "Value trap",
+            "definition": "A stock that looks cheap on ratios like P/E or P/B but is cheap because the business is deteriorating — and often keeps getting cheaper."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-6-2",
+      "moduleId": "module-6",
+      "title": "Growth Investing: Paying Up for the Future",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Growth investing takes the opposite bet from value investing: instead of hunting for cheap stocks, it hunts for companies whose **revenue growth** and **earnings growth** are unusually fast — and it is willing to pay a premium price for them.\n\nThe logic: if a company's earnings double every few years, today's expensive-looking price can become tomorrow's bargain. Suppose a company earns $2 per share and its stock trades at $80 — a steep P/E of 40. If earnings grow 25% per year, in four years it earns about $5 per share, and the same $80 price would be a P/E of just 16. Growth investors are effectively buying the future, not the present.\n\nThis explains why growth stocks carry high P/Es without necessarily being overpriced: the market prices in years of expansion. To judge whether the price is reasonable for the growth, investors use the **PEG ratio** — the P/E divided by the expected annual earnings growth rate. A P/E of 40 with 40% growth gives a PEG of 1.0, a common rule-of-thumb for 'fairly priced growth'. A P/E of 40 with 10% growth gives a PEG of 4.0 — you are paying a lot for modest expansion. You can find PEG in the metric tooltips on any stock's detail page.\n\nThe risk is symmetrical to the reward: when a growth story stumbles, the punishment is severe. A high price rests entirely on high expectations, so a single disappointing earnings report — growth of 15% when the market expected 30% — can cut a stock's price dramatically, even though the company is still growing. Growth investing demands strong nerves, honest attention to whether the story is still on track, and acceptance that some bets will fail badly.",
+        "highlights": [
+          {
+            "term": "Growth investing",
+            "definition": "Buying companies with unusually fast revenue and earnings growth, accepting a high price today in exchange for a much bigger business tomorrow."
+          },
+          {
+            "term": "Revenue growth",
+            "definition": "How quickly a company's total sales are increasing year over year — the raw fuel of a growth story."
+          },
+          {
+            "term": "Earnings growth",
+            "definition": "How quickly a company's profits are increasing. Fast, durable earnings growth is what justifies paying a premium price."
+          },
+          {
+            "term": "PEG ratio",
+            "definition": "P/E divided by expected annual earnings growth. Around 1.0 is a rough rule of thumb for growth that is fairly priced; much higher means you are paying dearly for it."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-6-3",
+      "moduleId": "module-6",
+      "title": "Dividend Investing: Getting Paid to Wait",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Some companies share their profits directly with shareholders through **dividends** — regular cash payments per share. Dividend investing builds a portfolio around these payers, so you earn income while you hold, whatever the share price does day to day. You get paid to wait.\n\nThe headline number is **dividend yield**: the annual dividend divided by the share price. If a stock costs $100 and pays $3 per year, the yield is 3%. Own 200 shares and roughly $600 arrives in your account each year — cash you can spend or reinvest into more shares.\n\nBut a dividend is only as good as the company's ability to keep paying it. That is where the **payout ratio** comes in: the share of profits paid out as dividends. A company earning $4 per share and paying $2 has a comfortable 50% payout ratio, leaving room to invest in the business and to keep paying through a weak year. A payout ratio above 100% means the company pays out more than it earns — that cannot last.\n\nDividend investors also face a strategic choice: **dividend growth versus high yield**. A stock yielding 2% that raises its dividend 10% every year can, over a decade or two, pay you far more than a stagnant 5%-yielder — and dividend growth usually signals a healthy, expanding business.\n\nWhich brings us to the **yield trap**: an unusually high yield (say 9% when peers pay 3%) is often a red flag, not a gift. Yields spike when a share price collapses, and the market may be predicting the dividend will be cut. Check the payout ratio, the company's debt, and its Health score in the app before trusting a fat yield. As always, dividends are never guaranteed — companies can cut them at any time.",
+        "highlights": [
+          {
+            "term": "Dividend",
+            "definition": "A cash payment a company makes to its shareholders out of profits, typically once to four times a year."
+          },
+          {
+            "term": "Dividend yield",
+            "definition": "Annual dividend divided by share price. A $100 stock paying $3 a year yields 3%."
+          },
+          {
+            "term": "Payout ratio",
+            "definition": "The share of profits paid out as dividends. Around 50% is comfortable; above 100% means the dividend costs more than the company earns and is at risk."
+          },
+          {
+            "term": "Dividend growth",
+            "definition": "A company's habit of raising its dividend year after year — often a better long-term deal, and a healthier sign, than a high but stagnant yield."
+          },
+          {
+            "term": "Yield trap",
+            "definition": "A suspiciously high dividend yield caused by a collapsing share price, where the market expects the dividend to be cut."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-6-4",
+      "moduleId": "module-6",
+      "title": "Index Investing: The Powerful Default",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Here is a humbling fact this app wants you to know, even though it is a stock-picking app: **most professional fund managers fail to beat the market index** over the long run. Study after study shows that, over ten years or more, the large majority of highly paid, full-time experts deliver worse results than simply owning the whole market. After their fees, the gap gets even wider.\n\nThat is why index investing exists. An **index** is a list that tracks a whole market — like the S&P 500 (500 large US companies) or the OMXS30 (30 large Swedish ones). An **index fund** or **ETF** (exchange-traded fund) simply buys everything on the list, giving you a tiny slice of hundreds of businesses in one purchase. No forecasting, no stock selection — you just own the market and collect its long-term growth.\n\nTwo things make this the powerful default:\n\n- **Instant diversification** — one bad company barely dents a 500-company portfolio.\n- **Low fees** — index funds often charge 0.1-0.3% per year versus 1-2% for actively managed funds. On a $10,000 investment, that is roughly $20 versus $150 every year, and the savings compound enormously over decades.\n\nFor beginners, a broad, cheap index fund is the ideal **core** of a portfolio. So why learn stock-picking at all? Think **core and satellite**: the index fund is your sturdy core, and individual stocks you research with this app are smaller satellite positions where you apply your skills, learn, and try to add extra return. If a pick goes wrong, your core keeps compounding. Practice your satellite ideas risk-free first with the Learning Lab's paper trading — and remember, even index funds fall in bad years; invest only money you won't need for years.",
+        "highlights": [
+          {
+            "term": "Index",
+            "definition": "A list tracking a whole market's performance, such as the S&P 500 (500 large US companies). You cannot buy an index directly, but funds can copy it."
+          },
+          {
+            "term": "Index fund / ETF",
+            "definition": "A fund that simply buys everything in an index, giving you the whole market in one purchase, usually at a very low yearly fee."
+          },
+          {
+            "term": "Fees (expense ratio)",
+            "definition": "The yearly percentage a fund charges. Index funds often cost 0.1-0.3% versus 1-2% for active funds — a difference that compounds into huge sums over decades."
+          },
+          {
+            "term": "Core and satellite",
+            "definition": "A portfolio design: a broad index fund as the sturdy core, with a few researched individual stocks as smaller satellite positions on top."
+          },
+          {
+            "term": "Diversification",
+            "definition": "Spreading money across many holdings so no single company's failure can seriously hurt you. Index funds provide it automatically."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-6-5",
+      "moduleId": "module-6",
+      "title": "Choosing Your Strategy",
+      "type": "theory",
+      "order": 5,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "You have now met four strategies: value, growth, dividend, and index investing. Which is right for you? The honest answer: the one you can actually stick with. Match the strategy to three things about yourself.\n\n**Your time.** Value and growth investing demand real research — reading reports, checking metrics, following your companies. If you can give investing an hour or two a week, that is realistic. If you have fifteen minutes a month, a mostly index approach with perhaps a couple of dividend stalwarts fits your life better. There is no shame in that; it is what most experts recommend anyway.\n\n**Your temperament.** Growth investing means stomaching violent price swings when a story wobbles. Value investing means buying what everyone else hates and waiting, sometimes for years. Dividend investing suits people who find steady cash income calming. If watching a holding drop 30% would make you sell in a panic, choose the style that lets you sleep — panic-selling at the bottom is how investors turn temporary declines into permanent losses.\n\n**Your goals and horizon.** Decades until retirement favor growth and broad index compounding. Wanting income within a few years points toward dividends. Money you'll need soon should not be in stocks at all.\n\nWhen you want to put a style into practice, the app's **Strategy Screener** has presets for each approach — value, growth, and dividend screens that filter the market using the metrics you have learned, giving you a shortlist to research.\n\nOne final principle beats everything else: **consistency beats strategy-hopping**. Every strategy has losing years. Investors who abandon value for growth right after growth's best year — and then flip back — systematically buy each style at its most expensive. Pick a sensible approach, write down why, and give it years, not weeks. This is education, not financial advice — the choice is yours.",
+        "highlights": [
+          {
+            "term": "Temperament",
+            "definition": "Your emotional response to risk and losses. The best strategy on paper is worthless if its swings make you panic-sell at the bottom."
+          },
+          {
+            "term": "Time horizon",
+            "definition": "How long until you need the money. Longer horizons can ride out crashes and favor growth and index compounding; short horizons should avoid stocks."
+          },
+          {
+            "term": "Strategy Screener",
+            "definition": "The app feature with ready-made presets (value, growth, dividend) that filter all stocks by a strategy's key metrics into a research shortlist."
+          },
+          {
+            "term": "Strategy-hopping",
+            "definition": "Repeatedly switching strategies to chase whatever worked recently — which usually means buying each style when it is most expensive."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-6-6",
+      "moduleId": "module-6",
+      "title": "Strategies Quiz",
+      "type": "quiz",
+      "order": 6,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Test your grasp of the four investment strategies and how to choose between them.",
+        "quiz": [
+          {
+            "id": "q-6-1",
+            "question": "In value investing, what does 'margin of safety' mean?",
+            "options": [
+              { "id": "a", "text": "Only buying stocks that pay a dividend, so you earn something even if the price falls", "isCorrect": false },
+              { "id": "b", "text": "Buying well below your estimate of the business's worth, so even an imperfect estimate can still work out", "isCorrect": true },
+              { "id": "c", "text": "Setting an automatic order to sell if the price drops 10%", "isCorrect": false },
+              { "id": "d", "text": "Keeping at least half your money in cash at all times", "isCorrect": false }
+            ],
+            "explanation": "Graham's margin of safety means paying a price far below your estimate of intrinsic value — like buying at $60 what you believe is worth $100 — so estimation errors don't ruin you.",
+            "correctExplanation": "Right. Because estimating a business's worth is imprecise, value investors demand a big discount — that gap is the margin of safety.",
+            "incorrectExplanation": "The margin of safety is the discount between price and estimated worth: buying at $60 what you think is worth $100 leaves room to be wrong. It is not about dividends, stop orders, or cash reserves."
+          },
+          {
+            "id": "q-6-2",
+            "question": "A growth stock has a P/E of 40 and expected earnings growth of 10% per year, giving a PEG ratio of 4.0. What does this suggest?",
+            "options": [
+              { "id": "a", "text": "The stock is fairly priced, since a P/E of 40 is normal for growth stocks", "isCorrect": false },
+              { "id": "b", "text": "You are paying a very high price for fairly modest growth", "isCorrect": true },
+              { "id": "c", "text": "The stock is a bargain, because a higher PEG is better", "isCorrect": false },
+              { "id": "d", "text": "The company must pay a 4% dividend", "isCorrect": false }
+            ],
+            "explanation": "PEG compares the P/E to the growth rate; around 1.0 is the rough rule of thumb for fairly priced growth. A PEG of 4.0 means the price assumes far more growth than is actually expected.",
+            "correctExplanation": "Exactly. A high P/E can be justified by high growth, but 40 divided by 10 gives a PEG of 4.0 — expensive for the growth on offer.",
+            "incorrectExplanation": "Lower PEG is better: near 1.0 is roughly fair. A PEG of 4.0 (P/E 40 for only 10% growth) means the price bakes in far more growth than expected — a risky setup if the story disappoints."
+          },
+          {
+            "id": "q-6-3",
+            "question": "A stock's dividend yield suddenly jumps to 9% while similar companies yield about 3%. What should a careful investor suspect?",
+            "options": [
+              { "id": "a", "text": "The company has tripled its profits", "isCorrect": false },
+              { "id": "b", "text": "Nothing — a higher yield is always better", "isCorrect": false },
+              { "id": "c", "text": "It may be a yield trap: the price has likely collapsed and the market expects the dividend to be cut", "isCorrect": true },
+              { "id": "d", "text": "The stock has become less risky than its peers", "isCorrect": false }
+            ],
+            "explanation": "Yield equals dividend divided by price, so a plunging price inflates the yield. An outlier yield often signals that the market doubts the dividend will survive — check the payout ratio and financial health.",
+            "correctExplanation": "Correct. Outsized yields usually come from a falling price, not generosity — check the payout ratio and Health score before trusting it.",
+            "incorrectExplanation": "An unusually high yield is often a warning, not a gift. Since yield is dividend divided by price, a collapsing price inflates it — and the market may be pricing in a dividend cut. Verify the payout ratio and the company's health first."
+          },
+          {
+            "id": "q-6-4",
+            "question": "Why does this course recommend a broad index fund as the core of a beginner's portfolio?",
+            "options": [
+              { "id": "a", "text": "Index funds are guaranteed never to lose money", "isCorrect": false },
+              { "id": "b", "text": "Most professionals fail to beat the index long-term, and index funds offer instant diversification at very low fees", "isCorrect": true },
+              { "id": "c", "text": "Individual stocks are illegal for beginners in most countries", "isCorrect": false },
+              { "id": "d", "text": "Index funds always pay higher dividends than individual stocks", "isCorrect": false }
+            ],
+            "explanation": "Over long periods most professional managers underperform the index, especially after fees. A cheap, broad index fund captures the market's return with automatic diversification — a sturdy core, with researched stock picks as smaller satellites.",
+            "correctExplanation": "Right. If most full-time experts can't beat the market, owning the whole market cheaply is a powerful default — and your stock picks can sit on top as satellites.",
+            "incorrectExplanation": "Index funds can absolutely fall in bad years and aren't required by law. The case for them: most professionals underperform the index over time, while index funds deliver the market's return with broad diversification and tiny fees — an ideal core under your stock-picking satellites."
+          },
+          {
+            "id": "q-6-5",
+            "question": "True or false: if your strategy underperforms for a year, the smart move is usually to switch to whichever strategy did best last year.",
+            "options": [
+              { "id": "a", "text": "True", "isCorrect": false },
+              { "id": "b", "text": "False", "isCorrect": true }
+            ],
+            "explanation": "Every strategy has losing years. Chasing last year's winner means repeatedly buying each style at its most expensive point. Consistency with a sensible, well-understood strategy beats strategy-hopping.",
+            "correctExplanation": "Exactly. All strategies have bad years, and hopping to last year's winner tends to buy each style at its peak. Pick a sensible approach and give it years, not weeks.",
+            "incorrectExplanation": "Strategy-hopping usually hurts: you end up buying each style right after its best run, when it is most expensive. Every strategy has losing years — consistency with a sensible approach is what pays off."
+          }
+        ]
+      }
+    }
+  ]
+}

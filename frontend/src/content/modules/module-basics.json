@@ -1,0 +1,218 @@
+{
+  "id": "module-basics",
+  "title": "Stock Market Foundations",
+  "description": "Understand what stocks are, how the market works, and why investing beats leaving cash idle.",
+  "icon": "GraduationCap",
+  "level": "beginner",
+  "estimatedTime": 30,
+  "prerequisites": [],
+  "lessons": [
+    {
+      "id": "lesson-basics-1",
+      "moduleId": "module-basics",
+      "title": "What Is a Stock?",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "A **stock** (also called a share or equity) is a small piece of ownership in a real company. When you buy a share of a company, you literally own a slice of its buildings, brands, products, and future profits. If the company does well over time, your slice becomes more valuable.\n\nWhy would a company sell pieces of itself? To raise money. Imagine a bakery that wants to open ten new locations but doesn't have the cash. It can sell shares to the public: investors hand over money today in exchange for owning part of the bigger bakery of tomorrow. This is why companies \"go public\" on the stock market.\n\nAs a shareholder, there are two ways you can earn money:\n- **Price appreciation**: the share price rises and you can sell for more than you paid.\n- **Dividends**: some companies pay out part of their profits to shareholders in cash, usually a few times per year.\n\nHere is a concrete example. Suppose you buy 10 shares of a company at $50 each, investing $500 in total. Over three years the business grows, and the share price rises to $65. Your 10 shares are now worth $650. Along the way the company also paid a $1 dividend per share each year, adding $30 in cash. Your total gain: $180 on a $500 investment. Of course, the price could also have fallen — ownership means sharing both the ups and the downs.\n\nOwning shares usually also gives you **shareholder rights**: you can vote at the company's annual meeting on things like who sits on the board. For small investors the money matters more than the votes, but it is a reminder that a stock is not a lottery ticket — it is a claim on a real business.",
+        "highlights": [
+          {
+            "term": "Stock (Share)",
+            "definition": "A unit of ownership in a company, entitling you to a slice of its profits and value"
+          },
+          {
+            "term": "Price Appreciation",
+            "definition": "Earning money because the share price rises above what you paid"
+          },
+          {
+            "term": "Dividend",
+            "definition": "A cash payment some companies make to shareholders out of their profits"
+          },
+          {
+            "term": "Shareholder Rights",
+            "definition": "Rights that come with owning shares, such as voting at the company's annual meeting"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-basics-2",
+      "moduleId": "module-basics",
+      "title": "How the Stock Market Works",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "The stock market is not one place — it is a network of **exchanges** where buyers and sellers meet. Famous examples include the New York Stock Exchange (NYSE) and Nasdaq in the US, and Nasdaq Stockholm in Sweden. Today almost all trading happens electronically.\n\nEvery listed company has a **ticker** — a short code that identifies its stock. Apple is AAPL, Microsoft is MSFT, and Volvo trades in Stockholm as VOLV-B. When you search for a stock in this app, you can type either the company name or its ticker.\n\nSo who decides what a stock costs? Nobody sets the price — buyers and sellers do, together. At any moment there is a **bid** (the highest price anyone is currently willing to pay) and an **ask** (the lowest price anyone is willing to sell for). The small gap between them is called the bid/ask spread. When a buyer and seller agree, a trade happens and that becomes the latest price you see on the screen. If more people want to buy than sell, the price gets pushed up; if more want to sell, it drifts down. Prices move constantly because opinions, news, and company results change constantly.\n\nExchanges have **market hours**. Stockholm trades roughly 9:00 to 17:30 local time on weekdays; US markets run 9:30 to 16:00 New York time. Outside those hours you generally cannot trade, and prices sit still.\n\nFinally, a **market index** like the S&P 500 (500 large US companies) or OMXS30 (30 large Stockholm-listed companies) works like a thermometer for the whole market. When you hear \"the market rose 1% today,\" it usually means an index did. Indexes matter later too: the cheap index funds we recommend as a beginner's core simply own everything in an index.",
+        "highlights": [
+          {
+            "term": "Exchange",
+            "definition": "A marketplace (like NYSE, Nasdaq, or Nasdaq Stockholm) where stocks are bought and sold"
+          },
+          {
+            "term": "Ticker",
+            "definition": "A short code identifying a stock, such as AAPL for Apple"
+          },
+          {
+            "term": "Bid/Ask Spread",
+            "definition": "The gap between the highest price buyers offer (bid) and the lowest price sellers accept (ask)"
+          },
+          {
+            "term": "Market Index",
+            "definition": "A basket of stocks, like the S&P 500 or OMXS30, used to measure how the overall market is doing"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-basics-3",
+      "moduleId": "module-basics",
+      "title": "Why Invest? Compounding and Inflation",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Why bother investing at all? Two forces answer that question: inflation and compounding.\n\n**Inflation** is the slow rise in prices over time, and it quietly eats cash savings. If prices rise 3% a year, the $1,000 sitting in your account still says $1,000 next year — but it buys only about $970 worth of stuff. After 20 years at 3% inflation, that $1,000 buys roughly what $550 buys today. Money that just sits still is actually shrinking.\n\nInvesting fights back with **compound growth**: your returns start earning returns of their own. Suppose you invest $1,000 and it grows 7% per year (roughly what broad stock markets have averaged historically — never guaranteed). After year one you have $1,070. In year two you earn 7% on $1,070, not just on your original $1,000. The snowball builds:\n- After 10 years: about $1,970\n- After 20 years: about $3,870\n- After 30 years: about $7,610\n\nNotice the pattern — the last decade added far more than the first. That is why starting early matters more than starting big, and why investors say **time in the market beats timing the market**. People who wait for the \"perfect moment\" usually miss the growth; people who stay invested through ups and downs collect it.\n\nOne crucial prerequisite before you invest anything: build an **emergency fund** first — typically 3 to 6 months of living expenses in ordinary savings. Stock prices can fall sharply and stay down for years, so only invest money you will not need for a long time (think five years or more). That way a bad market year never forces you to sell at the worst moment. Markets can fall, and past performance never guarantees future results — but historically, patient long-term investors have been rewarded for taking that ride.",
+        "highlights": [
+          {
+            "term": "Inflation",
+            "definition": "The gradual rise in prices that reduces what your cash can buy over time"
+          },
+          {
+            "term": "Compound Growth",
+            "definition": "Earning returns on your previous returns, so growth accelerates over time"
+          },
+          {
+            "term": "Time in the Market",
+            "definition": "Staying invested for the long run instead of trying to guess the perfect moment to buy or sell"
+          },
+          {
+            "term": "Emergency Fund",
+            "definition": "3-6 months of living expenses kept in cash savings before you invest anything"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-basics-4",
+      "moduleId": "module-basics",
+      "title": "Risk and Return: The Fundamental Trade-off",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "The single most important rule in investing: **there is no reward without risk**. Higher potential returns always come with a higher chance of losing money, at least temporarily. Anyone who tells you otherwise is either confused or trying to sell you something.\n\nStock prices bounce around every day — that movement is called **volatility**, and it is completely normal. Even excellent companies regularly see their share price drop 10%, 20%, or more during rough markets. A falling price does not automatically mean you made a mistake; it is the price of admission for the higher long-term returns stocks have historically offered. The investors who get hurt most are usually those who panic and sell at the bottom.\n\nIt helps to picture a **risk ladder**:\n- **Cash** (savings accounts): lowest risk, but the return rarely beats inflation, so your buying power slowly shrinks.\n- **Bonds**: loans to governments or companies that pay steady interest. Moderate risk, moderate return — prices wobble less than stocks.\n- **Stocks**: highest long-term return historically, but the bumpiest ride. Individual stocks are riskier than broad index funds, which spread your money across hundreds of companies.\n\nEach step up the ladder trades safety for potential growth. There is no \"best\" rung — the right mix depends on how soon you need the money and how well you sleep when prices fall.\n\nThis trade-off also gives you a built-in scam detector. If someone promises **\"guaranteed high returns\"** — say, 20% per year with no risk — that combination does not exist in real markets. Guaranteed and high returns are opposites; offering both is the signature of a scam, from shady trading apps to \"exclusive\" investment clubs. Real investing means accepting uncertainty, managing it with diversification and time, and being deeply skeptical of anyone who claims to have removed it.",
+        "highlights": [
+          {
+            "term": "Risk/Return Trade-off",
+            "definition": "The rule that higher potential returns always come with higher risk of loss"
+          },
+          {
+            "term": "Volatility",
+            "definition": "The normal up-and-down movement of prices, especially for stocks"
+          },
+          {
+            "term": "Bond",
+            "definition": "A loan to a government or company that pays interest; less risky than stocks but with lower expected returns"
+          },
+          {
+            "term": "Guaranteed High Returns",
+            "definition": "A contradiction in real markets — any offer of high returns with no risk is a scam signal"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-basics-5",
+      "moduleId": "module-basics",
+      "title": "Foundations Quiz",
+      "type": "quiz",
+      "order": 5,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Test your grasp of the stock market foundations before moving on.",
+        "quiz": [
+          {
+            "id": "q-basics-1",
+            "question": "What does owning a share of a company actually mean?",
+            "options": [
+              { "id": "a", "text": "You have lent the company money that it must repay with interest", "isCorrect": false },
+              { "id": "b", "text": "You own a small piece of the company and its future profits", "isCorrect": true },
+              { "id": "c", "text": "You have the right to buy the company's products at a discount", "isCorrect": false },
+              { "id": "d", "text": "You hold a betting slip on the company's share price", "isCorrect": false }
+            ],
+            "explanation": "A share is a unit of real ownership: shareholders own a slice of the business, its assets, and its future profits.",
+            "correctExplanation": "Right! A stock is genuine part-ownership of a business, not a loan or a bet.",
+            "incorrectExplanation": "Not quite. A share means you own a small piece of the company itself — lending money to a company is what a bond does."
+          },
+          {
+            "id": "q-basics-2",
+            "question": "What are the two ways stock investors can earn money?",
+            "options": [
+              { "id": "a", "text": "Price appreciation and dividends", "isCorrect": true },
+              { "id": "b", "text": "Interest payments and tax refunds", "isCorrect": false },
+              { "id": "c", "text": "Salary from the company and voting rewards", "isCorrect": false },
+              { "id": "d", "text": "Guaranteed annual bonuses from the exchange", "isCorrect": false }
+            ],
+            "explanation": "Investors earn when the share price rises (price appreciation) and when the company pays out profits as dividends.",
+            "correctExplanation": "Exactly — a rising share price and dividend payments are the two sources of shareholder returns.",
+            "incorrectExplanation": "Remember: shareholders earn through price appreciation (selling for more than they paid) and dividends (cash paid from company profits)."
+          },
+          {
+            "id": "q-basics-3",
+            "question": "Who sets the price of a stock during market hours?",
+            "options": [
+              { "id": "a", "text": "The company's CEO announces it each morning", "isCorrect": false },
+              { "id": "b", "text": "The government fixes it based on company size", "isCorrect": false },
+              { "id": "c", "text": "Buyers and sellers, through their bids and asks", "isCorrect": true },
+              { "id": "d", "text": "The exchange sets one price that lasts all day", "isCorrect": false }
+            ],
+            "explanation": "Prices emerge from supply and demand: the highest bid and lowest ask meet, and each trade sets the latest price.",
+            "correctExplanation": "Correct! Nobody dictates the price — it comes from buyers and sellers agreeing on trades throughout the day.",
+            "incorrectExplanation": "Stock prices are set by supply and demand: buyers post bids, sellers post asks, and trades between them determine the price."
+          },
+          {
+            "id": "q-basics-4",
+            "question": "You invest $1,000 at 7% per year. Why is it worth roughly $7,600 after 30 years rather than $3,100 ($1,000 plus 30 years of $70)?",
+            "options": [
+              { "id": "a", "text": "Because inflation adds extra value to investments", "isCorrect": false },
+              { "id": "b", "text": "Because compound growth means your returns earn returns of their own", "isCorrect": true },
+              { "id": "c", "text": "Because brokers add loyalty bonuses over time", "isCorrect": false },
+              { "id": "d", "text": "Because stock returns are guaranteed to rise each year", "isCorrect": false }
+            ],
+            "explanation": "With compounding, each year's 7% is earned on the new, larger total — not just the original $1,000 — so growth accelerates over time.",
+            "correctExplanation": "Yes! Compounding means growth on top of growth, which is why long time horizons are so powerful.",
+            "incorrectExplanation": "The answer is compounding: each year you earn 7% on the previous total, not just the original amount, so the snowball grows faster and faster. Nothing about it is guaranteed, though."
+          },
+          {
+            "id": "q-basics-5",
+            "question": "What should you have in place before investing your first amount in stocks?",
+            "options": [
+              { "id": "a", "text": "A hot stock tip from a friend", "isCorrect": false },
+              { "id": "b", "text": "An emergency fund covering several months of expenses", "isCorrect": true },
+              { "id": "c", "text": "A loan, so you can invest a larger sum", "isCorrect": false },
+              { "id": "d", "text": "A prediction of next year's market direction", "isCorrect": false }
+            ],
+            "explanation": "An emergency fund of roughly 3-6 months of expenses ensures a market downturn never forces you to sell investments at a bad time.",
+            "correctExplanation": "Correct! Cash for emergencies comes first, so you only invest money you won't need for years.",
+            "incorrectExplanation": "Build an emergency fund (about 3-6 months of expenses) first. Investing borrowed money or money you may need soon can force you to sell during a downturn."
+          },
+          {
+            "id": "q-basics-6",
+            "question": "An online ad promises \"guaranteed 20% yearly returns with zero risk.\" What does this tell you?",
+            "options": [
+              { "id": "a", "text": "It's almost certainly a scam — high returns always involve risk", "isCorrect": true },
+              { "id": "b", "text": "It's a rare opportunity you should act on quickly", "isCorrect": false },
+              { "id": "c", "text": "It's probably a government-backed savings product", "isCorrect": false },
+              { "id": "d", "text": "It's normal — professional investors get such deals often", "isCorrect": false }
+            ],
+            "explanation": "The risk/return trade-off means high returns always come with risk. \"Guaranteed\" and \"high returns\" together are a classic scam signature.",
+            "correctExplanation": "Exactly. No legitimate investment offers high returns without risk — that promise is a scam detector going off.",
+            "incorrectExplanation": "Be careful: real markets never offer high returns without risk. Any promise of guaranteed high returns is a hallmark of fraud."
+          }
+        ]
+      }
+    }
+  ]
+}

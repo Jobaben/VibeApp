@@ -1,0 +1,259 @@
+{
+  "id": "module-7",
+  "title": "Fundamental Analysis Deep Dive",
+  "description": "Master the advanced fundamental metrics behind a company's income statement, balance sheet, cash flow and valuation.",
+  "icon": "BarChart3",
+  "level": "advanced",
+  "estimatedTime": 35,
+  "prerequisites": ["module-5"],
+  "lessons": [
+    {
+      "id": "lesson-7-1",
+      "moduleId": "module-7",
+      "title": "The Income Statement: From Revenue to Profit",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "The income statement shows how much money a company made over a period (usually a quarter or a year) and what it cost to make it. Reading it top to bottom is like watching money flow through a funnel.\n\nLet's follow a simple example. Imagine a company that sells coffee machines:\n\n- **Revenue** (also called sales, the \"top line\"): the company sells machines worth $100 million.\n- **Cost of goods sold**: parts and factory labor cost $60 million. What's left is **gross profit**: $100M - $60M = $40 million.\n- **Operating expenses**: salaries, marketing, rent and research cost $25 million. What's left is **operating profit**: $40M - $25M = $15 million.\n- **Interest and taxes**: $5 million. What's left is **net income** (the \"bottom line\"): $10 million.\n\nEach step can be turned into a **margin** — profit as a percentage of revenue — so you can compare companies of different sizes:\n\n- Gross margin: 40/100 = 40%\n- Operating margin: 15/100 = 15%\n- Net margin: 10/100 = 10%\n\nMargins tell you where a company is strong or weak. A low gross margin means the product itself is expensive to make. A big gap between gross and operating margin means overhead (marketing, admin) is eating the profits.\n\nIn the app, you can find these margins in the metric tooltips on any stock detail page, and they feed into the Quality factor of the 0-100 score. When comparing two companies, compare margins within the same industry — a 10% net margin is weak for software but excellent for a grocery chain.",
+        "highlights": [
+          {
+            "term": "Revenue",
+            "definition": "Total money a company brings in from sales before any costs are subtracted; the \"top line\""
+          },
+          {
+            "term": "Gross Profit",
+            "definition": "Revenue minus the direct cost of producing the goods or services sold"
+          },
+          {
+            "term": "Operating Profit",
+            "definition": "Gross profit minus operating expenses like salaries, marketing and rent"
+          },
+          {
+            "term": "Net Income",
+            "definition": "The final profit after all costs, interest and taxes; the \"bottom line\""
+          },
+          {
+            "term": "Margin",
+            "definition": "Profit expressed as a percentage of revenue, letting you compare companies of different sizes"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-7-2",
+      "moduleId": "module-7",
+      "title": "The Balance Sheet: What a Company Owns and Owes",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "If the income statement is a movie of the past year, the balance sheet is a photograph of a single day. It answers: what does the company own, what does it owe, and what's left over for shareholders?\n\nIt has three parts:\n\n- **Assets**: everything the company owns — cash, inventory, factories, buildings, patents.\n- **Liabilities**: everything it owes — loans, unpaid bills, bonds.\n- **Equity**: assets minus liabilities. This is the shareholders' slice.\n\nThe formula always balances: Assets = Liabilities + Equity. If a company has $500 million in assets and $300 million in liabilities, equity is $200 million.\n\nTwo ratios help you judge financial health quickly:\n\n- **Debt/equity ratio**: total debt divided by equity. Our example company with $300M debt and $200M equity has a ratio of 1.5. Lower is generally safer; what counts as \"high\" varies by industry (utilities carry more debt than software firms).\n- **Current ratio**: short-term assets divided by short-term liabilities. A ratio above 1 means the company can pay its bills due within a year without borrowing more.\n\nWhy does debt matter so much? Because debt payments are mandatory while revenue is not. In a downturn, sales can drop 30% overnight, but interest payments stay exactly the same. A heavily indebted company can be forced to sell assets cheaply, cut vital investment, or go bankrupt — even if its products are good. Many famous corporate collapses were debt problems, not product problems.\n\nIn the app, debt/equity and current ratio feed into the Health factor of the composite score, and you can see them in the metric tooltips on every stock page.",
+        "highlights": [
+          {
+            "term": "Assets",
+            "definition": "Everything a company owns, such as cash, inventory, buildings and patents"
+          },
+          {
+            "term": "Liabilities",
+            "definition": "Everything a company owes, such as loans and unpaid bills"
+          },
+          {
+            "term": "Equity",
+            "definition": "Assets minus liabilities; the portion of the company that belongs to shareholders"
+          },
+          {
+            "term": "Debt/Equity Ratio",
+            "definition": "Total debt divided by shareholder equity; a measure of how leveraged a company is"
+          },
+          {
+            "term": "Current Ratio",
+            "definition": "Short-term assets divided by short-term liabilities; above 1 means near-term bills are covered"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-7-3",
+      "moduleId": "module-7",
+      "title": "Cash Flow: The Truth Serum",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Here's a secret of accounting: reported earnings involve estimates and judgment calls. Companies choose how fast to depreciate equipment, when to recognize revenue, and how to value inventory. Within legal limits, earnings can be massaged to look better than reality. Cash is much harder to fake — money either arrived in the bank account or it didn't. That's why investors call the cash flow statement the truth serum.\n\nTwo numbers matter most:\n\n- **Operating cash flow**: the actual cash generated by running the business — collecting from customers and paying suppliers and staff.\n- **Free cash flow (FCF)**: operating cash flow minus capital expenditures (money spent on equipment, buildings and other long-term investments). This is the cash truly left over — to pay dividends, buy back shares, repay debt, or fund growth.\n\nExample: a company reports $50 million in net income. But it generated $60 million in operating cash flow and spent $20 million on new equipment. Its free cash flow is $40 million. Now divide FCF by the company's market value to get **FCF yield** — if the company is worth $800 million, the FCF yield is 40/800 = 5%. Higher yields suggest better value, like an interest rate the business \"pays\" its owners.\n\nWatch out for companies that are profitable on paper but burn cash year after year. Rapidly growing firms sometimes book sales as revenue before customers actually pay, or pile up unsold inventory. Profits rise while the bank account drains — a classic warning sign that has preceded many blow-ups.\n\nIn the app, FCF yield appears in the metric tooltips and supports the Value and Health factors. When earnings and cash flow tell different stories, trust the cash.",
+        "highlights": [
+          {
+            "term": "Operating Cash Flow",
+            "definition": "Actual cash generated by the company's day-to-day business operations"
+          },
+          {
+            "term": "Free Cash Flow (FCF)",
+            "definition": "Operating cash flow minus capital expenditures; the cash truly left over for shareholders"
+          },
+          {
+            "term": "Capital Expenditures",
+            "definition": "Money spent on long-term investments like equipment, factories and buildings"
+          },
+          {
+            "term": "FCF Yield",
+            "definition": "Free cash flow divided by market value; a higher yield suggests better value"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-7-4",
+      "moduleId": "module-7",
+      "title": "Valuation Ratios in Practice",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "You've met valuation ratios before. Now let's learn when to use which — because each one shines in a different situation.\n\n- **P/E (price/earnings)**: the classic. Best for stable, profitable companies. Useless when earnings are negative or temporarily distorted.\n- **PEG (P/E divided by earnings growth rate)**: adjusts P/E for growth. A P/E of 30 sounds expensive, but if earnings grow 30% a year, the PEG is 1.0 — reasonable for a fast grower. Use PEG when comparing companies with very different growth rates.\n- **P/B (price/book)**: price compared to equity on the balance sheet. Works best for banks and asset-heavy businesses where book value means something. Less useful for software firms whose real assets are brands and code.\n- **P/S (price/sales)**: price compared to revenue. Useful for young companies with no profits yet — sales are harder to manipulate than earnings. But remember: revenue isn't profit; a low P/S with terrible margins is no bargain.\n- **EV/EBITDA**: enterprise value (market value plus debt minus cash) compared to operating earnings before depreciation. Because it includes debt, it's the fairest way to compare companies with different amounts of borrowing, and it's the ratio professionals use in takeovers.\n\nTwo golden rules. First, **compare within a sector**: a P/E of 12 might be expensive for a steelmaker and cheap for a software firm, because their growth and stability differ. Second, growth-adjust: a higher multiple can be justified by faster, more durable growth — that's what PEG formalizes.\n\nIn the app, all five ratios appear in the metric tooltips, and the Value factor of the composite score blends them so no single ratio misleads you.",
+        "highlights": [
+          {
+            "term": "PEG Ratio",
+            "definition": "P/E divided by the earnings growth rate; adjusts valuation for how fast a company is growing"
+          },
+          {
+            "term": "P/B Ratio",
+            "definition": "Price compared to book value (equity); most useful for banks and asset-heavy businesses"
+          },
+          {
+            "term": "P/S Ratio",
+            "definition": "Price compared to revenue; useful for unprofitable companies but ignores margins"
+          },
+          {
+            "term": "EV/EBITDA",
+            "definition": "Enterprise value compared to operating earnings; accounts for debt, so it compares leveraged and unleveraged companies fairly"
+          },
+          {
+            "term": "Enterprise Value",
+            "definition": "Market value plus debt minus cash; the theoretical cost to buy the whole company"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-7-5",
+      "moduleId": "module-7",
+      "title": "Margins, Growth and Moats",
+      "type": "theory",
+      "order": 5,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "The best long-term investments usually share three traits: high stable margins, healthy growth, and a durable competitive advantage.\n\n**Margins signal pricing power.** A company that keeps a 25% net margin year after year can charge more than its costs rise — customers pay up because they want that product specifically. Compare that with an airline scraping by on 3% margins in good years: one fuel-price spike and profits vanish. Stability matters as much as the level; wildly swinging margins mean the company doesn't control its own destiny.\n\n**Revenue growth vs earnings growth.** Revenue growth shows demand is rising. Earnings growth shows the company converts that demand into profit. The best case is both together. Be cautious when earnings grow but revenue doesn't — cost-cutting can boost profits for a few years, but you can't shrink your way to greatness. And revenue growth without earnings growth may mean the company is buying sales with discounts.\n\n**Economic moats** protect all of this. A moat is anything that stops competitors from stealing customers and squeezing margins:\n\n- **Brand**: Coca-Cola and Apple charge premium prices because customers ask for them by name.\n- **Network effects**: Visa and Meta get more valuable as more people use them, making rivals nearly irrelevant.\n- **Switching costs**: businesses rarely rip out Microsoft or SAP software because retraining and migration are painful and risky.\n\nWithout a moat, high margins attract competitors like honey attracts bears, and margins get competed away.\n\nIn the app, the Quality factor rewards high, stable margins and returns like ROE and ROIC — a rough numeric fingerprint of a moat. But the moat itself is a judgment call: ask yourself, \"could a well-funded competitor take these customers within five years?\"",
+        "highlights": [
+          {
+            "term": "Pricing Power",
+            "definition": "A company's ability to raise prices without losing customers, visible in high stable margins"
+          },
+          {
+            "term": "Economic Moat",
+            "definition": "A durable competitive advantage that protects a company's profits from competitors"
+          },
+          {
+            "term": "Network Effects",
+            "definition": "When a product becomes more valuable as more people use it, like payment networks or social platforms"
+          },
+          {
+            "term": "Switching Costs",
+            "definition": "The pain and expense customers face when changing to a competitor, which keeps them loyal"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-7-6",
+      "moduleId": "module-7",
+      "title": "Fundamentals Quiz",
+      "type": "quiz",
+      "order": 6,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Test your understanding of income statements, balance sheets, cash flow, valuation and moats.",
+        "quiz": [
+          {
+            "id": "q-7-1",
+            "question": "A company has $100M revenue, $60M cost of goods sold, and $25M operating expenses. What is its operating profit?",
+            "options": [
+              { "id": "a", "text": "$40 million", "isCorrect": false },
+              { "id": "b", "text": "$15 million", "isCorrect": true },
+              { "id": "c", "text": "$60 million", "isCorrect": false },
+              { "id": "d", "text": "$25 million", "isCorrect": false }
+            ],
+            "explanation": "Operating profit = revenue - cost of goods sold - operating expenses = $100M - $60M - $25M = $15M.",
+            "correctExplanation": "Correct! Gross profit is $40M ($100M - $60M), and subtracting $25M of operating expenses leaves $15M of operating profit.",
+            "incorrectExplanation": "Not quite. First subtract cost of goods sold ($100M - $60M = $40M gross profit), then subtract operating expenses ($40M - $25M = $15M operating profit)."
+          },
+          {
+            "id": "q-7-2",
+            "question": "Why is too much debt especially dangerous during an economic downturn?",
+            "options": [
+              { "id": "a", "text": "Debt automatically increases when the economy weakens", "isCorrect": false },
+              { "id": "b", "text": "Interest payments stay mandatory even when revenue falls sharply", "isCorrect": true },
+              { "id": "c", "text": "Banks always cancel loans during recessions", "isCorrect": false },
+              { "id": "d", "text": "Debt lowers a company's revenue", "isCorrect": false }
+            ],
+            "explanation": "Debt payments are fixed obligations. When sales drop in a downturn, a heavily indebted company must still pay interest, which can force asset sales or bankruptcy.",
+            "correctExplanation": "Exactly. Revenue is flexible but debt payments are not — that mismatch is what breaks over-leveraged companies in recessions.",
+            "incorrectExplanation": "The danger is that interest payments are mandatory and fixed, while revenue can fall 30% overnight. A leveraged company can go bankrupt even with a good product."
+          },
+          {
+            "id": "q-7-3",
+            "question": "Why do investors call the cash flow statement the \"truth serum\"?",
+            "options": [
+              { "id": "a", "text": "It is audited more strictly than other statements", "isCorrect": false },
+              { "id": "b", "text": "It predicts future stock prices", "isCorrect": false },
+              { "id": "c", "text": "Cash movements are much harder to massage than reported earnings", "isCorrect": true },
+              { "id": "d", "text": "It is the only statement companies must publish", "isCorrect": false }
+            ],
+            "explanation": "Earnings involve estimates and accounting choices that can be massaged, but cash either arrived in the bank or it didn't.",
+            "correctExplanation": "Right! When earnings and cash flow tell different stories, trust the cash.",
+            "incorrectExplanation": "The reason is that earnings rely on estimates and judgment calls that can be massaged, while actual cash movements are much harder to fake."
+          },
+          {
+            "id": "q-7-4",
+            "question": "A company has $60M operating cash flow and spends $20M on capital expenditures. Its market value is $800M. What is its FCF yield?",
+            "options": [
+              { "id": "a", "text": "7.5%", "isCorrect": false },
+              { "id": "b", "text": "2.5%", "isCorrect": false },
+              { "id": "c", "text": "10%", "isCorrect": false },
+              { "id": "d", "text": "5%", "isCorrect": true }
+            ],
+            "explanation": "Free cash flow = $60M - $20M = $40M. FCF yield = $40M / $800M = 5%.",
+            "correctExplanation": "Correct! Free cash flow is $40M ($60M - $20M), and $40M divided by an $800M market value gives a 5% FCF yield.",
+            "incorrectExplanation": "First compute free cash flow: $60M - $20M = $40M. Then divide by market value: $40M / $800M = 5%."
+          },
+          {
+            "id": "q-7-5",
+            "question": "Which valuation ratio is most appropriate for comparing two companies that carry very different amounts of debt?",
+            "options": [
+              { "id": "a", "text": "EV/EBITDA", "isCorrect": true },
+              { "id": "b", "text": "P/E", "isCorrect": false },
+              { "id": "c", "text": "P/S", "isCorrect": false },
+              { "id": "d", "text": "Dividend yield", "isCorrect": false }
+            ],
+            "explanation": "EV/EBITDA uses enterprise value, which includes debt, so it compares leveraged and unleveraged companies on equal footing.",
+            "correctExplanation": "Exactly. Because enterprise value adds debt and subtracts cash, EV/EBITDA is the fairest comparison across different capital structures.",
+            "incorrectExplanation": "EV/EBITDA is the best choice here — enterprise value includes debt, so companies with different borrowing levels can be compared fairly."
+          },
+          {
+            "id": "q-7-6",
+            "question": "A software company keeps customers because migrating to a competitor would require expensive retraining and risky data transfers. Which type of moat is this?",
+            "options": [
+              { "id": "a", "text": "Brand", "isCorrect": false },
+              { "id": "b", "text": "Network effects", "isCorrect": false },
+              { "id": "c", "text": "Switching costs", "isCorrect": true },
+              { "id": "d", "text": "Low-cost production", "isCorrect": false }
+            ],
+            "explanation": "When leaving a product is painful and expensive, customers stay even if alternatives exist — that is a switching-cost moat.",
+            "correctExplanation": "Right! Switching costs keep customers locked in because changing providers is painful, risky and expensive.",
+            "incorrectExplanation": "This is a switching-cost moat: customers stay because migrating away would be painful and expensive, not because of brand loyalty or network effects."
+          }
+        ]
+      }
+    }
+  ]
+}

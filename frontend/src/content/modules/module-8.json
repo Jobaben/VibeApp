@@ -1,0 +1,160 @@
+{
+  "id": "module-8",
+  "title": "Building a Watchlist",
+  "description": "Learn how to build and manage an effective watchlist so you research first and buy only when analysis and price align.",
+  "icon": "Star",
+  "level": "intermediate",
+  "estimatedTime": 20,
+  "prerequisites": ["module-2"],
+  "lessons": [
+    {
+      "id": "lesson-8-1",
+      "moduleId": "module-8",
+      "title": "Why Watchlists Beat Impulse Buys",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "The most expensive button in investing is \"Buy\" pressed on impulse. You see a stock up 8% today, a friend mentions it, adrenaline kicks in, and money moves before your brain does. A **watchlist** breaks that reflex by inserting one simple rule: research first, buy later — maybe.\n\nA watchlist is a list of stocks you find interesting but do not own yet. Instead of buying the moment something catches your eye, you add it to the list and let it prove itself. Watch how the company reports earnings. Watch whether its score holds up. Watch how the price behaves over weeks, not minutes. Most \"exciting\" stocks look a lot less exciting after two weeks of calm observation — and that is the point. The watchlist is a cooling-off chamber for your FOMO.\n\nIt also lets you **wait for your price**. Suppose you research a company and decide it is a great business, but at $120 per share it looks expensive; you would happily buy at $95. Without a watchlist you either overpay today or forget the stock entirely. With one, you simply wait. Markets are volatile, and quality companies regularly dip to reasonable prices for reasons that have nothing to do with the business.\n\nThis app is built for exactly this workflow. The **Watchlists** feature lets you create named lists (for example \"Dividend ideas\" or \"Waiting for a dip\") and tracks each stock's composite 0-100 score and its signal for you. When a score moves or a signal changes — say a HOLD upgrades to BUY — you will see it, without staring at prices all day.\n\nOwning fewer, better-researched stocks beats owning every shiny thing you noticed. The watchlist is where \"interesting\" goes to become \"researched.\"",
+        "highlights": [
+          {
+            "term": "Watchlist",
+            "definition": "A list of stocks you are monitoring and researching but have not bought yet"
+          },
+          {
+            "term": "Impulse buy",
+            "definition": "Purchasing a stock on excitement or a tip, before doing any real research"
+          },
+          {
+            "term": "Waiting for your price",
+            "definition": "Deciding what a stock is worth to you, then patiently waiting until the market offers it at or below that level"
+          },
+          {
+            "term": "Signal",
+            "definition": "The app's rating derived from a stock's 0-100 score: STRONG_BUY (80+), BUY (65+), HOLD (45+), SELL (30+), STRONG_SELL"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-8-2",
+      "moduleId": "module-8",
+      "title": "What to Track and When to Act",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "A watchlist only works if you know what you are watching for. Random glancing at prices teaches you nothing. Track four specific things for each stock on your list:\n\n- **Score changes**: the app's composite 0-100 score blends Value, Quality, Momentum, and Health. A stock drifting from 58 to 67 over a month is telling you its fundamentals or momentum are improving. A slide from 70 to 55 is a warning worth investigating.\n- **Signal upgrades and downgrades**: when a stock crosses a threshold — say from HOLD to BUY at 65 — that is a meaningful event, not noise. The \"What Changed\" page shows each week's biggest score movers so you catch these without checking daily.\n- **Price versus your target valuation**: from your research, write down the price at which the stock becomes attractive to you. Example: \"Great company, but I want it under $95, which is about 18x earnings.\" Then the only price question is: has it reached my target?\n- **Earnings dates**: quarterly reports are when the facts update. Note when each watchlist company reports, and reread your notes afterward. Did the results support your thesis or damage it?\n\nSo when do you act? Here is the rule: **buy when your analysis AND the price align — never because of green candles**. A stock jumping 5% on a Tuesday is not a reason to buy; that is chasing. The right moment is boring: the business still passes your checklist, the score and signal support it, and the price is at or below your target. Two green weeks changes none of that; neither do two red ones.\n\nIf a stock never reaches your price, you buy nothing — and that is a perfectly good outcome. Patience costs nothing; overpaying does.",
+        "highlights": [
+          {
+            "term": "Composite score",
+            "definition": "The app's 0-100 rating built from four factors: Value, Quality, Momentum, and Health"
+          },
+          {
+            "term": "Signal upgrade/downgrade",
+            "definition": "When a stock's score crosses a threshold and its rating changes, e.g. HOLD to BUY at 65"
+          },
+          {
+            "term": "Target valuation",
+            "definition": "The price you decided, from research, that a stock is worth paying — your personal 'buy below this' line"
+          },
+          {
+            "term": "Earnings date",
+            "definition": "The scheduled day a company reports quarterly results — when the facts about the business actually update"
+          },
+          {
+            "term": "Chasing",
+            "definition": "Buying only because the price is rising ('green candles'), instead of because analysis and price align"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-8-3",
+      "moduleId": "module-8",
+      "title": "Create Your Watchlist",
+      "type": "exercise",
+      "order": 3,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Time to put this into practice. You are going to build a real watchlist in the app and start a weekly monitoring habit.",
+        "exercise": {
+          "type": "stock_selection",
+          "instructions": "1. Open the Strategy Screener or the browse page and look for stocks that interest you.\n2. Find at least 3 stocks with a composite score of 60 or higher. For each one, open its detail page and skim the score breakdown — can you say in one sentence why it scores well?\n3. Create a new watchlist with a name that reflects its purpose (for example 'Quality candidates' or 'Waiting for a dip') and add your 3+ stocks to it.\n4. Make it a habit: once a week, open the 'What Changed' page and check whether any of your watchlist stocks had a score move or signal change.",
+          "successCriteria": "You have created a named watchlist containing at least 3 stocks that each score 60 or higher, and you know where to check weekly for score and signal changes.",
+          "hints": [
+            "In the screener, filter or sort by score to surface stocks at 60+ quickly, then narrow by sector or strategy to find businesses you actually understand.",
+            "Pick companies whose products or business model you can explain in one sentence — familiarity makes your later research much easier.",
+            "Aim for some variety: three stocks from three different sectors will teach you more than three near-identical ones.",
+            "The 'What Changed' page lists each week's biggest score movers — a faster weekly check than opening every stock one by one."
+          ]
+        }
+      }
+    },
+    {
+      "id": "lesson-8-4",
+      "moduleId": "module-8",
+      "title": "Watchlist Quiz",
+      "type": "quiz",
+      "order": 4,
+      "estimatedMinutes": 4,
+      "content": {
+        "text": "Check your understanding of building and using a watchlist.",
+        "quiz": [
+          {
+            "id": "q-8-1",
+            "question": "What is the core rule a watchlist enforces?",
+            "options": [
+              { "id": "a", "text": "Buy every stock the moment it looks interesting", "isCorrect": false },
+              { "id": "b", "text": "Research first, buy later — let candidates prove themselves before money moves", "isCorrect": true },
+              { "id": "c", "text": "Only follow stocks you already own", "isCorrect": false },
+              { "id": "d", "text": "Check prices as many times a day as possible", "isCorrect": false }
+            ],
+            "explanation": "A watchlist is a cooling-off chamber: interesting stocks go on the list to be researched and observed before any purchase, which prevents impulse buys.",
+            "correctExplanation": "Right. The watchlist inserts research and patience between 'this looks interesting' and 'I own it' — killing the impulse buy.",
+            "incorrectExplanation": "The core rule is research first, buy later. A watchlist holds stocks you do NOT own yet, so they can prove themselves before you commit money — the opposite of buying on first sight."
+          },
+          {
+            "id": "q-8-2",
+            "question": "Which of these is NOT one of the four things this module says to track for each watchlist stock?",
+            "options": [
+              { "id": "a", "text": "Score changes", "isCorrect": false },
+              { "id": "b", "text": "Price versus your target valuation", "isCorrect": false },
+              { "id": "c", "text": "Daily social media mentions of the stock", "isCorrect": true },
+              { "id": "d", "text": "Earnings dates", "isCorrect": false }
+            ],
+            "explanation": "The four things to track are score changes, signal upgrades/downgrades, price versus your target valuation, and earnings dates. Social media buzz is noise, not analysis.",
+            "correctExplanation": "Correct. Social media hype is exactly the noise a watchlist protects you from. Track scores, signals, price versus your target, and earnings dates instead.",
+            "incorrectExplanation": "The module's four tracking items are score changes, signal upgrades/downgrades, price versus your target valuation, and earnings dates. Social media mentions are noise — not something to act on."
+          },
+          {
+            "id": "q-8-3",
+            "question": "A stock on your watchlist jumps 5% today on no news. According to this module, what should you do?",
+            "options": [
+              { "id": "a", "text": "Buy immediately before it rises further", "isCorrect": false },
+              { "id": "b", "text": "Nothing special — you act when your analysis and your target price align, not on green candles", "isCorrect": true },
+              { "id": "c", "text": "Remove it from the watchlist since you missed the move", "isCorrect": false },
+              { "id": "d", "text": "Double your target price to match the market", "isCorrect": false }
+            ],
+            "explanation": "A short-term price pop is not a buy signal — buying because of it is chasing. The trigger to act is your checklist passing AND the price being at or below your researched target.",
+            "correctExplanation": "Exactly. Green candles are not a reason to buy. The buy trigger is boring: analysis intact, score supportive, and price at or below your target.",
+            "incorrectExplanation": "Buying on a 5% pop is chasing. The module's rule: act only when analysis AND price align — the business passes your checklist and trades at or below your target valuation. A single green day changes neither."
+          },
+          {
+            "id": "q-8-4",
+            "question": "What is the app's 'What Changed' page most useful for in a watchlist routine?",
+            "options": [
+              { "id": "a", "text": "Guaranteeing which stocks will rise next week", "isCorrect": false },
+              { "id": "b", "text": "Executing buy and sell orders automatically", "isCorrect": false },
+              { "id": "c", "text": "A weekly check of the biggest score movers, so you catch score and signal changes without watching daily", "isCorrect": true },
+              { "id": "d", "text": "Replacing the need to ever research a company", "isCorrect": false }
+            ],
+            "explanation": "'What Changed' surfaces each week's biggest score movers, making it the natural once-a-week checkpoint for spotting score moves and signal upgrades or downgrades on your watchlist. It predicts nothing and trades nothing.",
+            "correctExplanation": "Right. It turns monitoring into a five-minute weekly habit: open 'What Changed', see which watchlist stocks moved in score or signal, and investigate only those.",
+            "incorrectExplanation": "'What Changed' is a weekly monitoring tool: it shows the biggest score movers so you catch signal upgrades and downgrades without daily checking. It cannot predict prices, place orders, or replace your own research."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -7,8 +7,8 @@ import {
   LearningPreferences,
 } from '../types/learning';
 
-// Import learning modules data
-import modulesData from '../content/modules.json';
+// Import learning modules data (assembled from per-module JSON files)
+import modulesData from '../content/modules';
 
 const LearningModeContext = createContext<LearningModeContextType | undefined>(undefined);
 

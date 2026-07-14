@@ -1,0 +1,177 @@
+{
+  "id": "module-portfolio",
+  "title": "Building Your Portfolio",
+  "description": "Put the pieces together: diversify sensibly, choose an asset allocation, use funds and ETFs as your core, and keep it on track with rebalancing.",
+  "icon": "PieChart",
+  "level": "intermediate",
+  "estimatedTime": 30,
+  "prerequisites": ["module-risk"],
+  "lessons": [
+    {
+      "id": "lesson-port-1",
+      "moduleId": "module-portfolio",
+      "title": "Diversification: The Only Free Lunch",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Economists like to say there's no free lunch in investing — except one: **diversification**. Spreading your money across many investments reduces risk without necessarily reducing your expected return.\n\nDiversifying means spreading across three dimensions:\n- **Companies**: own many stocks, not one or two.\n- **Sectors**: mix industries — technology, healthcare, banks, consumer goods — so one industry's crisis doesn't sink you.\n- **Geographies**: don't keep everything in your home country; regional economies stumble at different times.\n\nA numeric example makes it concrete. Suppose you have $1,000. Scenario one: you put it all in one company, and that company hits a scandal and falls 80%. You're left with $200 — and remember from the risk module, you'd need a 400% gain to recover. Scenario two: you spread the same $1,000 across 20 stocks, $50 each, and the SAME company blows up. You lose 80% of $50, which is $40 — your portfolio drops from $1,000 to $960, a 4% dent. Same disaster, completely different outcome.\n\nHow many stocks is enough? Research suggests **15–25 stocks across different sectors** captures most of the benefit; each additional stock beyond that reduces risk less and less. There's also such a thing as **over-diversification**: holding 60 stocks you can't keep track of means you own the market anyway — but with more effort and often more cost than simply buying an index fund (next lessons).\n\nOne caution: diversification tames company and sector risk, not market risk. In a crash, nearly everything falls together. And a reminder — markets can fall, and none of this guarantees profits; it just makes survivable outcomes far more likely.\n\nIn the app, the Portfolio tracker and Compare tool make it easy to see whether your holdings are actually spread out or secretly all the same bet.",
+        "highlights": [
+          { "term": "Diversification", "definition": "Spreading money across many companies, sectors and countries so no single failure can seriously damage your portfolio." },
+          { "term": "Sector", "definition": "A group of companies in the same industry, such as technology, healthcare or energy. Stocks in one sector often rise and fall together." },
+          { "term": "Concentration", "definition": "The opposite of diversification — having a large share of your money in one stock or one theme, so a single event can cause severe losses." },
+          { "term": "Over-diversification", "definition": "Owning so many stocks that you can't follow them and gain little extra safety — at that point a simple index fund does the job better." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-port-2",
+      "moduleId": "module-portfolio",
+      "title": "Asset Allocation: Stocks, Bonds and Cash",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Before choosing individual stocks, there's a bigger decision: how to split your money between **asset classes** — mainly stocks, bonds, and cash. This split is called your **asset allocation**, and research consistently finds it drives most of the difference in outcomes between portfolios over time. Which stocks you pick matters less than how much you have in stocks at all.\n\nQuick definitions: stocks are ownership in companies — higher expected long-term returns, big swings along the way. **Bonds** are loans to governments or companies that pay interest — usually steadier, with lower expected returns. Cash is stable but slowly loses buying power to inflation.\n\nYour right mix depends on two things:\n- **Risk tolerance**: how much of a fall you can endure without panic-selling. If a 30% drop would make you sell everything, a 100% stock portfolio is wrong for you regardless of the math.\n- **Time horizon**: when you'll need the money. Money needed within a few years shouldn't be in stocks at all; money for 10+ years away can ride out crashes.\n\nA classic **rule of thumb**: hold roughly \"110 minus your age\" percent in stocks. A 30-year-old would hold about 80% stocks, 20% bonds. Treat this as a starting point, not a law — a nervous 30-year-old might prefer 60/40, and that's fine if it keeps them invested.\n\nOne essential piece sits OUTSIDE the portfolio: an **emergency fund** of roughly 3–6 months of living costs in cash. It exists so that a broken car or lost job never forces you to sell stocks in a downturn. Only invest money you won't need for years.\n\nThis is education, not financial advice — your situation and local rules are your own. But get the allocation roughly right, and you've made the single most important portfolio decision.",
+        "highlights": [
+          { "term": "Asset allocation", "definition": "How your money is divided between asset classes such as stocks, bonds and cash — the decision that drives most of your portfolio's behavior." },
+          { "term": "Bond", "definition": "A loan to a government or company that pays interest. Generally steadier than stocks but with lower expected long-term returns." },
+          { "term": "Risk tolerance", "definition": "How large a temporary loss you can endure without abandoning your plan." },
+          { "term": "Time horizon", "definition": "How long until you need the money. Longer horizons can carry more stocks because there's time to recover from crashes." },
+          { "term": "Emergency fund", "definition": "Cash covering roughly 3–6 months of living costs, kept outside your investments so surprises never force you to sell at a bad time." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-port-3",
+      "moduleId": "module-portfolio",
+      "title": "Funds and ETFs: Instant Diversification",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "What if you could buy hundreds of stocks in a single purchase? That's exactly what funds do. A **mutual fund** pools money from many investors and buys a basket of investments; you own a slice of the whole basket. An **ETF** (exchange-traded fund) does the same, but its shares trade on the stock exchange like a regular stock — you can buy one share of a global ETF and instantly own a tiny piece of thousands of companies.\n\nThe more important split is **index vs active**. An **index fund** (mutual fund or ETF) simply copies a market index — a list like the S&P 500 or a world index — no manager making bets, so fees are tiny. An **active fund** employs managers who try to beat the market and charge more for trying. The uncomfortable evidence: after fees, the large majority of active funds underperform their index over 10–15 years.\n\nWhy do fees matter so much? Because costs compound just like returns. Say you invest $10,000 for 30 years at 7% annual growth. With a 0.2% **expense ratio** (the fund's yearly fee), you end with roughly $72,000. With a 1.5% fee, roughly $50,000. Same market, same money — the \"small\" fee difference quietly consumed about $22,000.\n\nHere's a liberating fact: one broad, low-cost global index ETF is a legitimate, complete starting portfolio. Thousands of companies, all sectors, all major countries, one purchase, minimal fees. Many experienced investors never need more.\n\nSo why learn stock-picking at all? Because this app teaches it as something you build ON TOP of that foundation — the next lesson shows how. Two reminders: past performance doesn't guarantee future results, and many countries offer tax-advantaged accounts for funds and stocks alike — ISK in Sweden, IRA/401(k) in the US, ISA in the UK — check your local rules.",
+        "highlights": [
+          { "term": "Mutual fund", "definition": "A pool of money from many investors, managed as one basket of investments. You buy and sell units directly with the fund, usually once per day." },
+          { "term": "ETF (exchange-traded fund)", "definition": "A fund whose shares trade on the stock exchange like a regular stock, letting you buy a whole basket of companies in one trade." },
+          { "term": "Index fund", "definition": "A fund that simply copies a market index instead of trying to beat it, which keeps fees very low." },
+          { "term": "Active fund", "definition": "A fund where managers pick investments trying to beat the market — most fail to do so after fees over long periods." },
+          { "term": "Expense ratio", "definition": "The fund's annual fee as a percentage of your money. Small differences compound into large amounts over decades." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-port-4",
+      "moduleId": "module-portfolio",
+      "title": "A Starter Portfolio: Core and Satellite",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "How do you combine everything from this course — index funds AND the stock-picking skills you're learning? A popular answer is the **core-satellite** approach.\n\nThe **core** is the boring, reliable engine: a broad low-cost index fund or ETF making up roughly **70–90%** of your stock portfolio. It guarantees you always capture the market's return with instant diversification and minimal fees, no matter how your stock picks go.\n\nThe **satellite** is the remaining 10–30%: a handful of individual stocks you've researched yourself. This is where your skills — and this app — come in:\n- Use the **Strategy Screener** and Leaderboard to generate candidates, and the composite 0–100 score (Value, Quality, Momentum, Health) to filter them.\n- Put candidates on a **Watchlist** and follow them for a few weeks before buying; check \"What Changed\" to see how scores move.\n- Dig into the stock detail page — P/E, ROE, debt/equity, margins — and write down your thesis, as you learned in the risk module.\n- Track everything in the **Portfolio tracker**, applying position sizing: even within the satellite, no single stock should dominate.\n\nA worked example: with $5,000, an 80/20 split means $4,000 in one global index ETF and $1,000 spread across, say, 3–5 researched picks of $200–$350 each.\n\nThe beauty of this structure is that it caps the damage of being wrong. If your satellite picks are terrible, most of your money still earned the market return. If they're great, they lift your results. Either way, you're learning with real but limited stakes — and you can rehearse first with the Learning Lab's paper trading before committing anything.\n\nStart small, keep the core dominant, and let the satellite grow only as your skill and track record do. No structure guarantees profits — but this one makes beginner mistakes survivable.",
+        "highlights": [
+          { "term": "Core-satellite", "definition": "A portfolio structure with a large index-fund core (e.g., 70–90%) for reliable market returns, plus a small satellite of individual stock picks." },
+          { "term": "Core", "definition": "The dominant, low-cost, broadly diversified part of the portfolio — typically one or a few index funds or ETFs." },
+          { "term": "Satellite", "definition": "The small portion (e.g., 10–30%) used for researched individual stock picks, where mistakes are affordable and skills can grow." },
+          { "term": "Watchlist", "definition": "A list of stocks you follow before deciding to buy — in this app, watchlists track scores and changes over time." },
+          { "term": "Paper trading", "definition": "Practicing buying and selling with fake money — available in the app's Learning Lab — to test your process without financial risk." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-port-5",
+      "moduleId": "module-portfolio",
+      "title": "Rebalancing and Dollar-Cost Averaging",
+      "type": "theory",
+      "order": 5,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "You've designed a portfolio. Two simple habits keep it healthy for decades — and both work by removing emotion from your decisions.\n\n**Dollar-cost averaging (DCA)** means investing a fixed amount at regular intervals — say $200 every month — regardless of what the market is doing. The math quietly works in your favor: when prices are high, your $200 buys fewer shares; when prices fall, the same $200 buys more. Example: month one, the fund costs $50, so you get 4 shares. Month two it drops to $40 — you get 5 shares. Month three it's $25 in a slump — you get 8 shares. You now own 17 shares for $600, an average cost of about $35.30, below the average price of the three months. You automatically bought most when things were cheapest — the exact opposite of panic behavior, with zero willpower required. DCA also solves the beginner's fear of \"investing right before a crash\": you never invest everything at any single moment.\n\n**Rebalancing** means restoring your target allocation after markets move. Suppose your target is 80% stocks / 20% bonds. After a strong year, stocks have grown to 88% of the portfolio. Rebalancing — selling some stocks and buying bonds back to 80/20 — forces you to systematically sell what has become expensive and buy what has lagged. It also keeps your risk level from silently creeping up. Two common approaches:\n- **Annual rebalancing**: pick a date, once a year, done.\n- **Threshold rebalancing**: act only when an allocation drifts more than, say, 5 percentage points from target.\n\nThe same logic applies inside your portfolio: if one satellite stock triples and becomes 25% of everything, trim it — the position sizing rules from the risk module still apply.\n\nThe theme of both habits: automate good behavior. Set up a monthly transfer, put a yearly reminder in your calendar, and let the system be disciplined so you don't have to be.",
+        "highlights": [
+          { "term": "Dollar-cost averaging (DCA)", "definition": "Investing a fixed amount at regular intervals, which automatically buys more shares when prices are low and fewer when they're high." },
+          { "term": "Rebalancing", "definition": "Periodically restoring your portfolio to its target allocation, which systematically trims what has grown expensive and tops up what has lagged." },
+          { "term": "Target allocation", "definition": "The mix you've decided on — e.g., 80% stocks / 20% bonds — that rebalancing keeps you close to." },
+          { "term": "Threshold rebalancing", "definition": "Rebalancing only when an allocation drifts more than a set amount (e.g., 5 percentage points) from its target, instead of on a fixed schedule." }
+        ]
+      }
+    },
+    {
+      "id": "lesson-port-6",
+      "moduleId": "module-portfolio",
+      "title": "Portfolio Quiz",
+      "type": "quiz",
+      "order": 6,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Test what you've learned about diversification, allocation, funds and portfolio maintenance.",
+        "quiz": [
+          {
+            "id": "q-port-1",
+            "question": "You have $1,000 spread equally across 20 stocks ($50 each). One company collapses and its stock falls 80%. How much does your total portfolio fall?",
+            "options": [
+              { "id": "a", "text": "80%", "isCorrect": false },
+              { "id": "b", "text": "20%", "isCorrect": false },
+              { "id": "c", "text": "About 4%", "isCorrect": true },
+              { "id": "d", "text": "It depends on the market that day, so it can't be estimated", "isCorrect": false }
+            ],
+            "explanation": "The collapsing stock is only $50 of the portfolio. An 80% fall on $50 is a $40 loss, and $40 of $1,000 is 4%. Diversification turns a catastrophe into a dent.",
+            "correctExplanation": "Correct. You lose 80% of one $50 position — $40 — so the portfolio drops from $1,000 to $960, about 4%. That's the power of spreading your bets.",
+            "incorrectExplanation": "Only the one $50 position takes the 80% hit: 0.80 × $50 = $40 lost, which is 4% of the $1,000 portfolio. The same disaster in a one-stock portfolio would have cost you 80% of everything."
+          },
+          {
+            "id": "q-port-2",
+            "question": "According to research cited in this module, roughly how many stocks (across different sectors) capture most of diversification's benefits?",
+            "options": [
+              { "id": "a", "text": "2–3 stocks", "isCorrect": false },
+              { "id": "b", "text": "15–25 stocks", "isCorrect": true },
+              { "id": "c", "text": "At least 100 stocks", "isCorrect": false },
+              { "id": "d", "text": "There is no benefit until you own every stock in the market", "isCorrect": false }
+            ],
+            "explanation": "Around 15–25 stocks spread across sectors removes most company-specific risk; each additional stock beyond that helps less and less. Market risk remains regardless.",
+            "correctExplanation": "Right. Roughly 15–25 well-spread stocks captures most of the benefit. Beyond that you approach owning the market — at which point a low-cost index fund is usually the simpler tool.",
+            "incorrectExplanation": "The research guideline is roughly 15–25 stocks across different sectors. A couple of stocks leaves you heavily exposed to single companies, while owning very many mostly recreates an index fund with extra effort."
+          },
+          {
+            "id": "q-port-3",
+            "question": "Which decision does research suggest drives MOST of the difference in portfolio outcomes over time?",
+            "options": [
+              { "id": "a", "text": "Picking exactly the right individual stocks", "isCorrect": false },
+              { "id": "b", "text": "Timing your buys to avoid market dips", "isCorrect": false },
+              { "id": "c", "text": "Your asset allocation — the split between stocks, bonds and cash", "isCorrect": true },
+              { "id": "d", "text": "Choosing the broker with the best app", "isCorrect": false }
+            ],
+            "explanation": "The split between asset classes determines most of a portfolio's risk and return behavior. Individual stock selection and timing matter far less than how much you hold in stocks at all.",
+            "correctExplanation": "Correct. Asset allocation is the single most consequential portfolio decision — which is why this module puts it before any talk of picking stocks.",
+            "incorrectExplanation": "It's the asset allocation. How your money is split between stocks, bonds and cash drives most of the outcome variance between portfolios; stock selection and timing play smaller roles."
+          },
+          {
+            "id": "q-port-4",
+            "question": "Two funds track the same market, which grows 7% per year. Fund A charges a 0.2% expense ratio, Fund B charges 1.5%. Over 30 years with $10,000 invested, what does this module say happens?",
+            "options": [
+              { "id": "a", "text": "The difference is trivial — about the price of a coffee", "isCorrect": false },
+              { "id": "b", "text": "Fund B ends up worth tens of thousands less, because fees compound over time", "isCorrect": true },
+              { "id": "c", "text": "Fund B performs better, because higher fees mean better management", "isCorrect": false },
+              { "id": "d", "text": "Fees only matter in years when the market falls", "isCorrect": false }
+            ],
+            "explanation": "Fees compound just like returns: in the module's example, the 0.2% fund grows to roughly $72,000 and the 1.5% fund to roughly $50,000 — about $22,000 lost to the fee difference.",
+            "correctExplanation": "Exactly. A seemingly small annual fee compounds into a huge difference over decades — roughly $22,000 in this example. It's why low-cost index funds are the sensible default core.",
+            "incorrectExplanation": "Small fees compound into big money: the example ends around $72,000 at a 0.2% fee versus about $50,000 at 1.5%. Higher fees don't buy better results — after costs, most expensive active funds underperform their index."
+          },
+          {
+            "id": "q-port-5",
+            "question": "You invest $200 every month into a fund. Prices per share are $50 in month one, $40 in month two, and $25 in month three. What does this dollar-cost averaging achieve?",
+            "options": [
+              { "id": "a", "text": "You buy the same number of shares each month", "isCorrect": false },
+              { "id": "b", "text": "You automatically buy more shares when prices are low, lowering your average cost", "isCorrect": true },
+              { "id": "c", "text": "You are guaranteed a profit regardless of what the market does", "isCorrect": false },
+              { "id": "d", "text": "You avoid all market risk", "isCorrect": false }
+            ],
+            "explanation": "A fixed amount buys more shares when prices fall: 4 shares at $50, 5 at $40, 8 at $25 — 17 shares for $600, an average cost of about $35.30. DCA automates buying more when things are cheap, but it guarantees nothing and doesn't remove market risk.",
+            "correctExplanation": "Correct. The fixed $200 buys 4, then 5, then 8 shares as the price falls — an average cost around $35.30. DCA automates good behavior, though it never guarantees profits.",
+            "incorrectExplanation": "With a fixed amount, the share count varies with price: 4 shares at $50, 5 at $40, 8 at $25. You end up buying most when prices are lowest, which lowers your average cost — but DCA doesn't guarantee profits or eliminate market risk."
+          }
+        ]
+      }
+    }
+  ]
+}

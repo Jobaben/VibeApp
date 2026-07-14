@@ -1,0 +1,205 @@
+{
+  "id": "module-getting-started",
+  "title": "Getting Started: Brokers, Orders and Fees",
+  "description": "Learn how to open a brokerage account, place your first orders, and avoid the fees and tax traps that eat returns.",
+  "icon": "Wallet",
+  "level": "beginner",
+  "estimatedTime": 25,
+  "prerequisites": ["module-basics"],
+  "lessons": [
+    {
+      "id": "lesson-gs-1",
+      "moduleId": "module-getting-started",
+      "title": "Brokerage Accounts: Your Gateway to the Market",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "You cannot walk up to a stock exchange and buy shares yourself. You need a **broker** — a regulated company that takes your orders, sends them to the exchange, holds your shares safely, and reports your transactions. Today most brokers are apps or websites, and opening an account is usually free.\n\nHow do you choose a broker? Three things matter most:\n- **Regulation**: pick a broker licensed by the financial authority in your country. Regulated brokers keep your assets separate from their own, so your shares are protected even if the broker fails.\n- **Fees**: compare commissions per trade, currency exchange fees, and any monthly account charges. For small portfolios, low fixed fees matter a lot.\n- **Ease of use**: as a beginner you want a clear interface, good search, and understandable reports — not a professional trading terminal.\n\nOpening an account typically takes four steps: prove your identity (passport or national e-ID), answer some questions about your experience and finances (regulators require this), connect your bank account, and transfer money in. Many brokers approve you within a day.\n\nOne decision deserves extra attention: the **account type**. Many countries offer **tax-advantaged accounts** that dramatically reduce the tax on your investments — ISK in Sweden, IRA and 401(k) in the US, ISA in the UK, and similar wrappers elsewhere. The names differ, but the idea is the same: the government encourages long-term saving by taxing these accounts more gently than a standard account. Check your local rules before you open anything, because choosing the right wrapper on day one can save you real money for decades.\n\nOnce your account is funded, you are ready to place your first order — which is exactly what the next lesson covers. If you want to rehearse first, the Learning Lab in this app lets you paper-trade with fake money.",
+        "highlights": [
+          {
+            "term": "Broker",
+            "definition": "A regulated company that executes your stock orders and holds your shares safely"
+          },
+          {
+            "term": "Regulation",
+            "definition": "Government oversight that protects investors by keeping your assets separate from the broker's own money"
+          },
+          {
+            "term": "Tax-Advantaged Account",
+            "definition": "A special account type (ISK in Sweden, IRA/401(k) in the US, ISA in the UK) with lower tax on investments"
+          },
+          {
+            "term": "Paper Trading",
+            "definition": "Practicing buying and selling with fake money — available in this app's Learning Lab"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-gs-2",
+      "moduleId": "module-getting-started",
+      "title": "Order Types: Market, Limit and Stop",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "When you buy or sell a stock, your broker asks what kind of order you want. The two essentials are market and limit orders.\n\nA **market order** says \"buy (or sell) right now at whatever the current price is.\" It executes almost instantly, but you accept whatever price the market gives you. A **limit order** says \"buy only at this price or better.\" It gives you control over the price, but it may never execute if the stock doesn't reach your limit.\n\nHere's a numeric example. A stock's best ask (lowest seller price) is $50.20 and the best bid is $50.00. A market buy order fills immediately at about $50.20. A limit buy order at $49.50 sits and waits — it only fills if someone becomes willing to sell at $49.50 or lower. For a big, heavily traded stock the difference is pennies. For a small, thinly traded stock, a market order can fill at a surprisingly bad price because there are few sellers near the last quoted price.\n\nTwo more types help manage downside:\n- A **stop-loss order** becomes a market sell order once the price falls to your stop level. Example: you own shares at $50 and set a stop at $45; if the price touches $45, your shares are sold at the next available price — which in a fast drop could be below $45.\n- A **stop-limit order** works the same way but becomes a limit order instead, so you control the sale price — at the risk of not selling at all if the price keeps falling past your limit.\n\nWhich should a beginner use? Usually a **limit order**. It costs nothing extra, protects you from paying more than intended, and forces you to think about the price you actually want. Practice placing both kinds risk-free in the Learning Lab's paper-trading exercises before using real money.",
+        "highlights": [
+          {
+            "term": "Market Order",
+            "definition": "An order that executes immediately at the best available current price"
+          },
+          {
+            "term": "Limit Order",
+            "definition": "An order that only executes at your chosen price or better — the beginner's default"
+          },
+          {
+            "term": "Stop-Loss Order",
+            "definition": "An order that triggers a market sell once the price falls to a level you set"
+          },
+          {
+            "term": "Stop-Limit Order",
+            "definition": "Like a stop-loss, but it triggers a limit order so you control the minimum sale price"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-gs-3",
+      "moduleId": "module-getting-started",
+      "title": "Fees, Spreads and Currency Effects",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Fees are the one part of investing you fully control, and small percentages matter far more than they look.\n\n**Commissions** are what your broker charges per trade — often a small fixed amount or a fraction of a percent. Trading rarely keeps commissions low; trading constantly makes them add up fast.\n\nThe **bid/ask spread** is a hidden cost: you buy at the slightly higher ask and sell at the slightly lower bid. On large stocks it's tiny; on small ones it can be a full percent or more per round trip.\n\n**Currency exchange fees** appear when you buy foreign stocks. If your account is in Swedish kronor and you buy a US stock, your broker converts SEK to dollars and typically charges around 0.25%-0.5% each way. Buying and later selling means paying it twice — worth knowing, not a reason to avoid foreign stocks entirely.\n\nFor funds, the key number is the **expense ratio** (also called TER, total expense ratio): the yearly percentage the fund quietly deducts for managing your money. Broad index funds charge around 0.1%-0.3%; actively managed funds often charge 1%-2%.\n\nWhy obsess over 1%? Because fees compound just like returns do. Invest $10,000 for 30 years at 7% per year and you end with about $76,000. The same investment returning 6% after a 1% annual fee grows to only about $57,000. That single percentage point silently consumed roughly $19,000 — about a quarter of your potential wealth — without you ever seeing a bill.\n\nThe practical rules: prefer low-cost index funds or ETFs as your core, compare brokers' commission and FX fees before opening an account, and always check a fund's expense ratio before buying. Cheap and boring usually wins.",
+        "highlights": [
+          {
+            "term": "Commission",
+            "definition": "The fee your broker charges each time you buy or sell"
+          },
+          {
+            "term": "Currency Exchange Fee",
+            "definition": "A charge (often 0.25%-0.5%) for converting your money when trading foreign stocks"
+          },
+          {
+            "term": "Expense Ratio (TER)",
+            "definition": "The yearly percentage a fund deducts from your money to cover its costs"
+          },
+          {
+            "term": "Fee Compounding",
+            "definition": "The way a small annual fee, like 1%, snowballs into a huge total cost over decades"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-gs-4",
+      "moduleId": "module-getting-started",
+      "title": "Taxes in Plain Language",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Taxes are the least exciting part of investing, but understanding three basic ideas will save you money and stress. First, the important disclaimer: **this is education, not tax advice** — rules differ by country and change over time, so check your local tax authority or a professional for your situation.\n\nThe first idea is **capital gains tax**. When you sell a stock for more than you paid, the profit is called a capital gain, and most countries tax it. Buy at $500, sell at $800, and the $300 gain is typically taxable — usually only when you actually sell, not while the stock just sits and grows. Selling at a loss can often be used to offset gains, reducing your tax bill.\n\nThe second is **dividend tax**. Cash dividends usually count as taxable income in the year you receive them, even if you immediately reinvest the money. Foreign dividends often have tax withheld at the source, which your local rules may let you credit back.\n\nThe third is the **tax-advantaged wrapper** from the first lesson. Inside accounts like Sweden's ISK, a US IRA/401(k), or a UK ISA, the normal gain-by-gain taxation is replaced by something simpler or gentler — a small flat yearly tax, deferred tax, or no tax at all on gains. For long-term investors these wrappers can be worth a great deal, which is why choosing the right account type matters from day one.\n\nWhatever account you use, **keep records**: dates, amounts, and prices for every buy, sell, and dividend. Brokers provide annual reports, but saving your own copies makes tax season painless — especially if you switch brokers later. A tidy spreadsheet today beats a panicked reconstruction in five years.",
+        "highlights": [
+          {
+            "term": "Capital Gains Tax",
+            "definition": "Tax on the profit when you sell an investment for more than you paid"
+          },
+          {
+            "term": "Dividend Tax",
+            "definition": "Tax on cash dividends, usually owed in the year you receive them"
+          },
+          {
+            "term": "Tax Wrapper",
+            "definition": "A special account (ISK, IRA/401(k), ISA) that replaces normal investment taxes with gentler rules"
+          },
+          {
+            "term": "Record Keeping",
+            "definition": "Saving dates, amounts, and prices of all trades and dividends to make tax reporting easy"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-gs-5",
+      "moduleId": "module-getting-started",
+      "title": "Getting Started Quiz",
+      "type": "quiz",
+      "order": 5,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Check your understanding of brokers, orders, fees, and taxes.",
+        "quiz": [
+          {
+            "id": "q-gs-1",
+            "question": "What matters most when choosing a broker as a beginner?",
+            "options": [
+              { "id": "a", "text": "That it promises to beat the market for you", "isCorrect": false },
+              { "id": "b", "text": "Regulation, low fees, and an easy-to-use interface", "isCorrect": true },
+              { "id": "c", "text": "That it offers the most complex professional tools", "isCorrect": false },
+              { "id": "d", "text": "That it advertises the most on social media", "isCorrect": false }
+            ],
+            "explanation": "A good beginner broker is properly regulated (so your assets are protected), charges low fees, and is easy to use.",
+            "correctExplanation": "Correct! Regulation protects your assets, low fees protect your returns, and ease of use helps you avoid mistakes.",
+            "incorrectExplanation": "The three things to check are regulation (asset protection), fees (commissions, FX, account charges), and ease of use. No legitimate broker promises to beat the market."
+          },
+          {
+            "id": "q-gs-2",
+            "question": "A stock's best ask is $50.20. You place a limit buy order at $49.50. What happens?",
+            "options": [
+              { "id": "a", "text": "It executes immediately at $50.20", "isCorrect": false },
+              { "id": "b", "text": "It executes immediately at $49.50", "isCorrect": false },
+              { "id": "c", "text": "It waits, and only fills if the price comes down to $49.50 or lower", "isCorrect": true },
+              { "id": "d", "text": "It is rejected because it is below the current price", "isCorrect": false }
+            ],
+            "explanation": "A limit buy order only executes at your limit price or better, so it waits until a seller is willing to sell at $49.50 or less.",
+            "correctExplanation": "Exactly — a limit order gives you price control, at the cost of possibly never executing.",
+            "incorrectExplanation": "A limit buy at $49.50 sits in the order book and only fills if the price falls to $49.50 or below. Immediate execution at the ask is what a market order does."
+          },
+          {
+            "id": "q-gs-3",
+            "question": "Which order type is usually the best default for beginners?",
+            "options": [
+              { "id": "a", "text": "Market order, because it always gets the best price", "isCorrect": false },
+              { "id": "b", "text": "Limit order, because you control the price you pay", "isCorrect": true },
+              { "id": "c", "text": "Stop-loss order, for every purchase", "isCorrect": false },
+              { "id": "d", "text": "No order type — buy over the phone instead", "isCorrect": false }
+            ],
+            "explanation": "Limit orders protect you from paying more than intended, which matters especially for smaller, thinly traded stocks.",
+            "correctExplanation": "Right! A limit order costs nothing extra and prevents unpleasant price surprises.",
+            "incorrectExplanation": "Beginners are usually best served by limit orders: they guarantee you never pay more than your chosen price. Market orders guarantee execution, not a good price."
+          },
+          {
+            "id": "q-gs-4",
+            "question": "Why does a 1% annual fund fee matter so much over 30 years?",
+            "options": [
+              { "id": "a", "text": "It doesn't — 1% is too small to affect results", "isCorrect": false },
+              { "id": "b", "text": "Because fees compound, it can consume a quarter or more of your final wealth", "isCorrect": true },
+              { "id": "c", "text": "Because brokers double the fee every year", "isCorrect": false },
+              { "id": "d", "text": "Because the fee is only charged in profitable years", "isCorrect": false }
+            ],
+            "explanation": "Fees reduce every year's return, and that lost growth compounds. Over 30 years, a 1% fee can shrink a $76,000 outcome to about $57,000.",
+            "correctExplanation": "Correct! Like returns, fees compound — a small yearly percentage becomes a huge total cost over decades.",
+            "incorrectExplanation": "Small annual fees compound just like returns. In the lesson's example, 1% per year turned $76,000 of potential wealth into about $57,000 over 30 years."
+          },
+          {
+            "id": "q-gs-5",
+            "question": "You buy shares for $500 and later sell them for $800 in a standard (non-wrapper) account. What is typically taxed?",
+            "options": [
+              { "id": "a", "text": "The full $800 you received", "isCorrect": false },
+              { "id": "b", "text": "The $300 capital gain, usually when you sell", "isCorrect": true },
+              { "id": "c", "text": "Nothing — stock profits are tax-free everywhere", "isCorrect": false },
+              { "id": "d", "text": "The original $500 you invested", "isCorrect": false }
+            ],
+            "explanation": "Capital gains tax applies to the profit (sale price minus purchase price), and in most countries only when you actually sell. Exact rules vary by country.",
+            "correctExplanation": "Exactly — the $300 profit is the capital gain, typically taxed when realized. Remember that local rules vary and tax-advantaged wrappers change the picture.",
+            "incorrectExplanation": "Capital gains tax is charged on the profit — here $800 minus $500 = $300 — and usually only when you sell. Rules differ by country, so check your local ones."
+          }
+        ]
+      }
+    }
+  ]
+}

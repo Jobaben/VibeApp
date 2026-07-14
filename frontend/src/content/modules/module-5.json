@@ -1,0 +1,211 @@
+{
+  "id": "module-5",
+  "title": "The Scoring System",
+  "description": "A deep dive into how the app's four-factor score (Value, Quality, Momentum, Health) is built and how to use it wisely.",
+  "icon": "Target",
+  "level": "intermediate",
+  "estimatedTime": 25,
+  "prerequisites": ["module-2"],
+  "lessons": [
+    {
+      "id": "lesson-5-1",
+      "moduleId": "module-5",
+      "title": "Why a Four-Factor Score?",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Imagine judging a used car by its price alone. A car listed at $2,000 sounds like a bargain — until you learn the engine is failing. Stocks work the same way: a single number almost never tells the whole story.\n\nA stock with a very low price compared to its earnings might look cheap, but it can be **cheap for a reason** — shrinking sales, heavy debt, or a dying industry. A stock with fast-rising prices might look like a winner, but it could be wildly overpriced. Any single metric can mislead you.\n\nThat is why Avanza Stock Finder combines four different perspectives into one **composite score** from 0 to 100:\n\n- **Value** — is the price fair for what you get?\n- **Quality** — is this actually a good business?\n- **Momentum** — is the market moving in the stock's favor?\n- **Health** — can the company survive tough times?\n\nA stock that scores well on all four factors is cheap, well-run, trending upward, and financially solid — a much stronger case than being good at just one thing. A stock that scores 85 on Value but 20 on Health is telling you something important: the low price may be compensation for real danger.\n\nOne crucial point: the score **compares stocks against each other** — it does not predict prices. A score of 90 means the stock looks attractive relative to other stocks on these measures today. It is not a promise the price will rise. Markets can fall, and even great-scoring stocks can lose money. Think of the score as a well-organized starting point for your own research, never a guarantee.",
+        "highlights": [
+          {
+            "term": "Composite score",
+            "definition": "A single 0-100 number that blends several different measurements — here Value, Quality, Momentum, and Health — into one balanced view of a stock."
+          },
+          {
+            "term": "Metric",
+            "definition": "A single measurement about a company or its stock, such as its price compared to its earnings. One metric alone can easily mislead."
+          },
+          {
+            "term": "Cheap for a reason",
+            "definition": "When a stock's low price reflects real problems (falling sales, heavy debt) rather than a bargain. A low price is not automatically a good deal."
+          },
+          {
+            "term": "Relative comparison",
+            "definition": "Scores rank stocks against each other, not against a crystal ball. A high score means 'attractive compared to other stocks today', not 'the price will go up'."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-5-2",
+      "moduleId": "module-5",
+      "title": "The Value and Quality Scores",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "The first two factors answer two different questions: **is the price fair?** and **is the business good?**\n\n**The Value score** asks whether you are overpaying. It blends several price-versus-fundamentals ratios you can see on any stock's detail page:\n\n- **P/E (price-to-earnings)** — the share price divided by profit per share. Paying $100 for $5 of yearly earnings means a P/E of 20.\n- **P/B (price-to-book)** — price compared to the company's net assets.\n- **P/S (price-to-sales)** — price compared to revenue, useful when profits are small or lumpy.\n- **EV/EBITDA** — a valuation measure that also accounts for the company's debt.\n- **FCF yield** — how much free cash the business generates each year relative to its price.\n\nLower ratios and higher cash yields generally mean better value, so they raise the Value score.\n\n**The Quality score** asks whether the business itself is excellent, regardless of price. It looks at:\n\n- **ROE (return on equity)** — how much profit the company earns on shareholders' money.\n- **ROIC (return on invested capital)** — how efficiently it turns all its capital into profit.\n- **Margins** — how much of each dollar of sales survives as profit.\n\nWhy separate them? Because a mediocre business can look cheap forever, while a great business earns its keep year after year. As Warren Buffett famously put it, a great business at a fair price beats a mediocre one that merely looks cheap. When Value and Quality are **both** high, you may have found a genuinely good company at a genuinely fair price — the combination investors dream about.",
+        "highlights": [
+          {
+            "term": "P/E ratio",
+            "definition": "Price-to-earnings: the share price divided by annual profit per share. A P/E of 20 means you pay $20 for every $1 of yearly earnings."
+          },
+          {
+            "term": "EV/EBITDA",
+            "definition": "A valuation ratio that compares a company's total value (including its debt) to its core operating earnings — handy for comparing companies with different debt levels."
+          },
+          {
+            "term": "FCF yield",
+            "definition": "Free-cash-flow yield: the spare cash a business generates each year as a percentage of its price. Higher means more real cash for your money."
+          },
+          {
+            "term": "ROE",
+            "definition": "Return on equity: annual profit divided by shareholders' money in the business. A steady 20% ROE signals a business that uses its owners' capital very well."
+          },
+          {
+            "term": "Margin",
+            "definition": "The share of each dollar of sales that ends up as profit. If a company sells $100 of goods and keeps $15 as profit, its margin is 15%."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-5-3",
+      "moduleId": "module-5",
+      "title": "The Momentum and Health Scores",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "The last two factors add a market check and a safety check.\n\n**The Momentum score** asks: is the market agreeing with you? You might believe a stock is cheap and high-quality, but if its price keeps falling, other investors clearly disagree — and they may know something you don't. Momentum measures the direction and strength of the price trend using:\n\n- **Price trend** — has the stock been rising or falling over recent months?\n- **RSI (relative strength index)** — a 0-100 gauge of how fast the price has moved recently; very high readings suggest an overheated stock, very low readings a beaten-down one.\n- **SMA position** — where the price sits relative to its **simple moving averages** (the SMA50 and SMA200 lines you see on the price chart). Trading above a rising average is a healthy sign; trading below it is a warning.\n\nMomentum keeps you from catching a falling knife — buying a 'cheap' stock that keeps getting cheaper.\n\n**The Health score** asks the bluntest question of all: can this company survive bad times? Recessions, price wars, and pandemics happen. Health checks the balance sheet with:\n\n- **Debt-to-equity** — how much the company owes compared to what shareholders own. Less debt means more room to absorb shocks.\n- **Current ratio** — short-term assets versus short-term bills. Above 1 means it can pay what is due this year.\n- **Interest coverage** — how many times over yearly profits cover the interest on its debt. If profits cover interest 10 times, one bad year won't sink the ship.\n\nA fragile company can be wiped out by a downturn a healthy rival simply shrugs off. Health is your margin of survival.",
+        "highlights": [
+          {
+            "term": "Momentum",
+            "definition": "The tendency of a stock's price to keep moving in its recent direction. The Momentum score checks whether the market's behavior supports your thesis."
+          },
+          {
+            "term": "RSI",
+            "definition": "Relative strength index: a 0-100 indicator of recent price speed. Readings above about 70 suggest a stock may be overheated; below about 30, oversold."
+          },
+          {
+            "term": "SMA",
+            "definition": "Simple moving average: the average price over a period, like 50 or 200 days, drawn as a smooth line on the chart. Price above a rising SMA signals an uptrend."
+          },
+          {
+            "term": "Debt-to-equity",
+            "definition": "Total debt divided by shareholders' equity. A ratio of 0.5 means 50 cents of debt for every dollar owners have in the business — the lower, the sturdier."
+          },
+          {
+            "term": "Interest coverage",
+            "definition": "How many times a company's yearly operating profit could pay its interest bill. Higher coverage means debt payments are comfortably affordable."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-5-4",
+      "moduleId": "module-5",
+      "title": "Signals: From Score to Action (and Their Limits)",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "To make the 0-100 score easier to read at a glance, the app translates it into a **signal** using fixed thresholds:\n\n- **STRONG_BUY** — score 80 or above\n- **BUY** — score 65 to 79\n- **HOLD** — score 45 to 64\n- **SELL** — score 30 to 44\n- **STRONG_SELL** — score below 30\n\nSo a stock scoring 72 shows BUY, and one scoring 41 shows SELL. Simple — but here is the most important sentence in this whole module: **signals are a starting shortlist, not commands.**\n\nA STRONG_BUY signal means 'this stock looks attractive across Value, Quality, Momentum, and Health — it deserves your attention.' It does not mean 'buy this now.' The score cannot know things that matter enormously: a lawsuit announced this morning, a genius competitor, an accounting question the numbers haven't caught up with, or whether the stock even fits your goals and risk tolerance. Always do your own research: read about what the company actually does, check the metric tooltips on its detail page, compare it with rivals using the Compare feature, and only then decide.\n\nScores are also not carved in stone. They **update as new data arrives** — earnings reports, price moves, and balance-sheet changes all shift the four factors. A stock can drift from BUY to HOLD without you touching anything. The **What Changed** page shows each week's biggest score movers, which is a great habit to check: it tells you where the picture is shifting and which of your watchlist stocks deserve a fresh look.\n\nUsed this way — as a disciplined filter feeding your own judgment — the scoring system saves you hours. Used as an autopilot, it will eventually steer you wrong. This is education, not financial advice.",
+        "highlights": [
+          {
+            "term": "Signal",
+            "definition": "The label (STRONG_BUY, BUY, HOLD, SELL, STRONG_SELL) the app derives from a stock's composite score using fixed thresholds like 80+ for STRONG_BUY."
+          },
+          {
+            "term": "Threshold",
+            "definition": "The score boundary between signals: 80+ is STRONG_BUY, 65+ BUY, 45+ HOLD, 30+ SELL, and anything lower STRONG_SELL."
+          },
+          {
+            "term": "Shortlist",
+            "definition": "A narrowed-down set of candidates worth researching further. Signals build your shortlist; your own research makes the decision."
+          },
+          {
+            "term": "What Changed",
+            "definition": "The app page listing the week's biggest score movers — a quick way to spot stocks whose Value, Quality, Momentum, or Health picture is shifting."
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-5-5",
+      "moduleId": "module-5",
+      "title": "Scoring Quiz",
+      "type": "quiz",
+      "order": 5,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Check your understanding of the four-factor scoring system and its signals.",
+        "quiz": [
+          {
+            "id": "q-5-1",
+            "question": "Why does the app combine four factors instead of ranking stocks by a single metric like P/E?",
+            "options": [
+              { "id": "a", "text": "Because four numbers look more impressive than one", "isCorrect": false },
+              { "id": "b", "text": "Because any single metric can mislead — a stock can look cheap for a reason — while four perspectives give a balanced view", "isCorrect": true },
+              { "id": "c", "text": "Because P/E is illegal to use on its own in most countries", "isCorrect": false },
+              { "id": "d", "text": "Because four factors guarantee the score predicts future prices", "isCorrect": false }
+            ],
+            "explanation": "A single metric can be deceptive — a low P/E may reflect real problems. Blending Value, Quality, Momentum, and Health gives a balanced picture, though it still cannot predict prices.",
+            "correctExplanation": "Exactly. One number alone can mislead — 'cheap' stocks are sometimes cheap for a reason — so the composite score balances four different perspectives.",
+            "incorrectExplanation": "Not quite. The reason is balance: any single metric (like a low P/E) can mislead, since cheapness sometimes signals real problems. Four factors together give a fuller, fairer picture — but still no price predictions."
+          },
+          {
+            "id": "q-5-2",
+            "question": "Which pair of questions do the Value and Quality scores answer, respectively?",
+            "options": [
+              { "id": "a", "text": "Value: is the price fair? Quality: is the business good?", "isCorrect": true },
+              { "id": "b", "text": "Value: is the trend up? Quality: can it pay its debts?", "isCorrect": false },
+              { "id": "c", "text": "Value: is the business good? Quality: is the price fair?", "isCorrect": false },
+              { "id": "d", "text": "Value: how big is the company? Quality: how old is the company?", "isCorrect": false }
+            ],
+            "explanation": "Value uses ratios like P/E, P/B, P/S, EV/EBITDA, and FCF yield to judge whether the price is fair. Quality uses ROE, ROIC, and margins to judge whether the business itself is good.",
+            "correctExplanation": "Right. Value checks the price tag (P/E, P/B, P/S, EV/EBITDA, FCF yield); Quality checks the business itself (ROE, ROIC, margins).",
+            "incorrectExplanation": "Remember the split: Value asks 'is the price fair?' using ratios like P/E and FCF yield, while Quality asks 'is the business good?' using ROE, ROIC, and margins. Trend and debt questions belong to Momentum and Health."
+          },
+          {
+            "id": "q-5-3",
+            "question": "A company has very high debt-to-equity, a current ratio below 1, and barely covers its interest payments. Which score will this hurt most?",
+            "options": [
+              { "id": "a", "text": "Momentum", "isCorrect": false },
+              { "id": "b", "text": "Value", "isCorrect": false },
+              { "id": "c", "text": "Health", "isCorrect": true },
+              { "id": "d", "text": "Quality", "isCorrect": false }
+            ],
+            "explanation": "Debt-to-equity, current ratio, and interest coverage are the balance-sheet measures behind the Health score, which asks whether the company can survive bad times.",
+            "correctExplanation": "Correct. Those three metrics — debt/equity, current ratio, interest coverage — are exactly what the Health score measures: the company's ability to survive tough periods.",
+            "incorrectExplanation": "Those metrics all describe the balance sheet's sturdiness, so they feed the Health score — the factor asking whether the company can survive bad times."
+          },
+          {
+            "id": "q-5-4",
+            "question": "A stock's composite score is 72. What signal does the app show?",
+            "options": [
+              { "id": "a", "text": "STRONG_BUY", "isCorrect": false },
+              { "id": "b", "text": "BUY", "isCorrect": true },
+              { "id": "c", "text": "HOLD", "isCorrect": false },
+              { "id": "d", "text": "SELL", "isCorrect": false }
+            ],
+            "explanation": "The thresholds are STRONG_BUY at 80+, BUY at 65+, HOLD at 45+, SELL at 30+, and STRONG_SELL below that. A score of 72 falls in the BUY band (65-79).",
+            "correctExplanation": "Right. 72 sits between 65 and 79, which is the BUY band. STRONG_BUY needs 80 or more.",
+            "incorrectExplanation": "Check the thresholds: 80+ is STRONG_BUY, 65+ is BUY, 45+ is HOLD, 30+ is SELL. A 72 lands in the BUY band."
+          },
+          {
+            "id": "q-5-5",
+            "question": "True or false: a STRONG_BUY signal means you should buy the stock without further research.",
+            "options": [
+              { "id": "a", "text": "True", "isCorrect": false },
+              { "id": "b", "text": "False", "isCorrect": true }
+            ],
+            "explanation": "Signals are a starting shortlist, not commands. The score cannot know about breaking news, competition, or your personal goals — and it updates as data changes. Always do your own research before acting.",
+            "correctExplanation": "Exactly. A STRONG_BUY means 'worth a close look', not 'buy now'. Your own research — and your own goals — make the final call.",
+            "incorrectExplanation": "Signals are a shortlist, never commands. A STRONG_BUY flags a stock as worth researching; it cannot account for news, competition, or your personal situation. Always investigate before you invest."
+          }
+        ]
+      }
+    }
+  ]
+}

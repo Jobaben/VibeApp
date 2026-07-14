@@ -1,0 +1,307 @@
+{
+  "id": "module-10",
+  "title": "Putting It All Together",
+  "description": "Apply everything you have learned — analysis, psychology, and planning — to make your first real investment responsibly.",
+  "icon": "Award",
+  "level": "mastery",
+  "estimatedTime": 35,
+  "prerequisites": ["module-7", "module-8", "module-9", "module-portfolio", "module-psychology"],
+  "lessons": [
+    {
+      "id": "lesson-10-1",
+      "moduleId": "module-10",
+      "title": "Case Study: Analyzing a Stock End-to-End",
+      "type": "theory",
+      "order": 1,
+      "estimatedMinutes": 6,
+      "content": {
+        "text": "Let's analyze a fictional company, **Nordic Tools AB**, from first look to final decision — the full workflow you will use on real stocks.\n\n**The business.** Nordic Tools makes professional power tools sold across Europe. You can explain it in one sentence, which passes the first test: never buy what you cannot explain.\n\n**The score.** The app gives it 72/100 — a BUY signal (65+). The factor breakdown: Value 65, Quality 80, Momentum 68, Health 75. Translation: a high-quality, financially sound business at a fair-but-not-cheap price with decent momentum.\n\n**Valuation.** The stock trades at $84 with earnings of $4.00 per share, so the **P/E ratio** is 21. The industrial sector average is 18, so you are paying a modest premium — arguably justified by its 20% return on equity and 12% revenue growth.\n\n**Debt check.** Debt-to-equity is 0.4 and interest coverage is 9x — earnings cover interest payments nine times over. This company will not be strangled by its loans in a downturn.\n\n**The chart.** Price is above both the SMA50 and SMA200, and the RSI sits at 58 — an uptrend, and not overbought.\n\n**The thesis**, written in one paragraph: \"Quality toolmaker growing ~12% a year, strong balance sheet, fair price at 21x earnings. I expect earnings growth to drive the stock over 3-5 years. Thesis breaks if revenue growth falls below 5% or debt rises sharply.\"\n\n**Position size.** Your plan caps single stocks at 5% of your $10,000 portfolio, so you buy $500 — about 6 shares at $84.\n\n**Exit plan.** Sell if the thesis breaks, trim if it grows beyond 10% of the portfolio, and otherwise hold and review quarterly.\n\nThat is a complete, professional-grade decision — score, valuation, debt, trend, thesis, size, exit. Every real purchase should clear the same bar.",
+        "highlights": [
+          {
+            "term": "Investment thesis",
+            "definition": "A short written paragraph stating why you are buying, what you expect, and what would prove you wrong"
+          },
+          {
+            "term": "P/E ratio",
+            "definition": "Price divided by earnings per share — Nordic Tools at $84 with $4.00 earnings has a P/E of 21, versus a sector average of 18"
+          },
+          {
+            "term": "Interest coverage",
+            "definition": "How many times operating earnings cover interest payments; 9x means debt costs are easily affordable"
+          },
+          {
+            "term": "Position size",
+            "definition": "How much money you put into one stock — here 5% of a $10,000 portfolio, or $500"
+          },
+          {
+            "term": "Exit plan",
+            "definition": "Pre-decided conditions for selling or trimming, written before you buy, so the decision is never made in panic"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-10-2",
+      "moduleId": "module-10",
+      "title": "Practice Before You Pay: The Learning Lab",
+      "type": "theory",
+      "order": 2,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Pilots train in simulators before flying passengers. You should do the same with money — and the app's **Learning Lab** is your simulator. It offers guided **paper trading**: buying and selling stocks with fake money at real market prices. The prices, scores, and charts are real; only the risk is fake.\n\nHere is how to use it properly. Do not treat it as a game where you throw pretend money at random tickers — that teaches you nothing. Instead, run your full real-money process on every paper trade:\n\n- Pick a stock from your watchlist that has reached your target price\n- Run the complete buy checklist: score and signal, valuation versus sector, debt check, chart trend\n- Write a one-paragraph thesis and an exit plan\n- Size the position exactly as your written plan dictates (for example, max 5% per stock)\n- Then, and only then, place the paper trade\n\nThe most valuable part comes later: **reviewing your sells**. When you close a paper position, write down why. Was it your exit plan speaking, or your emotions? Did you panic on a red week? Did you hold a broken thesis out of stubbornness? Paper trading is the only place these expensive lessons are free.\n\nGive yourself at least a few complete cycles — buy, hold, review, sell — before real money enters the picture. That usually means a couple of months, not an afternoon. If your paper decisions are impulsive, your real ones will be too, and the market charges full price for impulsive.\n\nOne honest caveat: paper trading cannot fully simulate the fear of losing real money. That is exactly why the written plan and checklist matter — they are the habits that carry over when the emotions get real.",
+        "highlights": [
+          {
+            "term": "Paper trading",
+            "definition": "Practicing buys and sells with fake money at real market prices — all of the learning, none of the risk"
+          },
+          {
+            "term": "Learning Lab",
+            "definition": "The app's guided practice environment for paper trading with fake money"
+          },
+          {
+            "term": "Buy checklist",
+            "definition": "The fixed set of checks every purchase must pass: score, valuation versus sector, debt, trend, written thesis, position size"
+          },
+          {
+            "term": "Trade review",
+            "definition": "Writing down why you sold and whether the decision followed your plan or your emotions — where the real learning happens"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-10-3",
+      "moduleId": "module-10",
+      "title": "Your First Real Investment: A Step-by-Step Playbook",
+      "type": "theory",
+      "order": 3,
+      "estimatedMinutes": 7,
+      "content": {
+        "text": "Here is the honest, unglamorous playbook for starting with real money. This is how people actually build wealth; get-rich-quick is how they lose it.\n\n**Step 1 — Emergency fund first.** Before a single dollar goes into stocks, save 3-6 months of living expenses in cash. This guarantees a job loss or a broken car never forces you to sell investments at the worst moment. Only invest money you will not need for at least 5 years.\n\n**Step 2 — Open the right account.** Open a brokerage account, and check whether your country offers a tax-advantaged version — ISK in Sweden, IRA/401(k) in the US, ISA in the UK, and similar elsewhere. The tax savings compound for decades; check your local rules.\n\n**Step 3 — Build a core with a global index ETF.** Start with a broad, low-cost global index fund or ETF. One purchase gives you a slice of thousands of companies worldwide — instant diversification that most professional stock-pickers fail to beat over long periods.\n\n**Step 4 — Automate monthly investing.** Set up an automatic monthly purchase — say $200 on the 25th. This is **dollar-cost averaging**: you buy more shares when prices are low, fewer when high, and remove emotion and timing from the equation entirely.\n\n**Step 5 — Only then add single stocks, kept small.** Once the core is running, apply everything this app taught you to pick individual stocks — full checklist, thesis, exit plan. Keep them a minority of your portfolio (many investors cap the stock-picking portion at 10-20%) and each position small, per your plan's limit.\n\n**Step 6 — Review quarterly.** Check the portfolio against your written plan four times a year. Rebalance if needed. Ignore it otherwise.\n\nRemember: markets can and will fall, past performance never guarantees future results, and this is education, not personal financial advice. But this sequence — safety net, tax efficiency, index core, automation, researched picks, scheduled reviews — is the responsible way in.",
+        "highlights": [
+          {
+            "term": "Emergency fund",
+            "definition": "3-6 months of expenses in cash, saved before investing, so you are never forced to sell stocks in a crisis"
+          },
+          {
+            "term": "Tax-advantaged account",
+            "definition": "Special accounts that reduce tax on investments — ISK in Sweden, IRA/401(k) in the US, ISA in the UK; check your local rules"
+          },
+          {
+            "term": "Index ETF",
+            "definition": "A low-cost fund that owns a whole market index — thousands of companies in one purchase, the sensible core for beginners"
+          },
+          {
+            "term": "Dollar-cost averaging (DCA)",
+            "definition": "Investing a fixed amount on a fixed schedule, buying more shares when prices are low and fewer when high"
+          },
+          {
+            "term": "Core and satellite",
+            "definition": "A portfolio built on a broad index core, with a small researched stock-picking portion (often 10-20%) on top"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-10-4",
+      "moduleId": "module-10",
+      "title": "Spotting Scams and Hype",
+      "type": "theory",
+      "order": 4,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "The moment you start investing, you become a target. Scammers specifically hunt beginners, and their tricks share a fingerprint. Learn these red flags cold:\n\n- **Guaranteed returns.** \"12% per month, guaranteed, zero risk.\" No legitimate investment guarantees returns — real markets fluctuate, and anyone promising otherwise is lying. This single red flag identifies most scams.\n- **Pump-and-dump.** Promoters quietly buy a cheap, thinly traded stock or coin, hype it in forums and chats (\"the next big thing, act now!\"), and sell into the wave of buying they created. The price collapses, and the latecomers — you — hold the loss.\n- **Finfluencer signal groups.** Social media personalities selling access to \"exclusive trade signals\" or VIP groups. Ask yourself: someone with a genuinely money-printing strategy does not need your $99 monthly subscription. They profit from fees and often from dumping on their own followers.\n- **Unsolicited opportunities.** A stranger messages you about an amazing investment — on WhatsApp, Instagram, or after \"accidentally\" texting the wrong number and becoming friendly. Legitimate opportunities are never distributed by strangers via direct message. Ever.\n- **Crypto and forex \"bots\".** Automated systems that supposedly trade profitably while you sleep, usually with screenshots of implausible gains and withdrawal problems once your money is in.\n- **Pressure and urgency.** \"Only 3 spots left.\" \"Price doubles at midnight.\" Real investments do not expire in hours. Urgency exists to stop you from thinking, checking, or asking anyone.\n\nYour defenses are boring and effective: if it sounds too good to be true, it is. Never invest in anything you cannot verify through a regulated broker. Take your time — any opportunity that cannot wait a week is not an opportunity. And nothing in this app or its scores will ever promise you profits; anyone who does is selling something.",
+        "highlights": [
+          {
+            "term": "Pump-and-dump",
+            "definition": "A scheme where promoters hype an asset they already own, then sell into the buying frenzy, leaving late buyers with the crash"
+          },
+          {
+            "term": "Guaranteed returns",
+            "definition": "The number one scam red flag — no legitimate investment can guarantee returns, because real markets fluctuate"
+          },
+          {
+            "term": "Signal group",
+            "definition": "A paid group selling 'exclusive' trade tips — the seller profits from fees and often from dumping on the followers"
+          },
+          {
+            "term": "Urgency pressure",
+            "definition": "Artificial deadlines ('3 spots left', 'act by midnight') designed to prevent you from thinking or verifying"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-10-5",
+      "moduleId": "module-10",
+      "title": "Habits of Successful Investors",
+      "type": "theory",
+      "order": 5,
+      "estimatedMinutes": 5,
+      "content": {
+        "text": "Long-term investing success looks nothing like the movies. It is not frantic screens and split-second calls — it is a small set of boring habits, repeated for decades. Here are the ones that matter:\n\n- **Invest on schedule, no matter what.** The same amount, every month, automatically. Rain or shine, boom or crash. Time in the market beats timing the market, and automation makes discipline effortless.\n- **Keep learning.** Markets, industries, and companies evolve. Read an annual report now and then, revisit these modules, follow how your watchlist companies actually perform against your expectations. Every earnings season is a free class.\n- **Journal your decisions.** For every buy and sell, write one paragraph: what you did, why, and what you expected. Six months later, reread it. This is the single fastest way to see your own biases — overconfidence, chasing, panic — in your own handwriting.\n- **Ignore the daily noise.** The market commentary industry produces urgent-sounding content every single day; almost none of it matters to a long-term plan. Checking your portfolio daily only feeds anxiety. Weekly or monthly is plenty — the 'What Changed' page exists precisely so a five-minute weekly check covers what matters.\n- **Measure against your plan, not your neighbor.** Someone in your feed will always be up 300% on something. Irrelevant. The only meaningful question is: am I on track for MY goals, per MY written plan? Envy is a strategy for buying tops.\n- **Practice patience — it is the real edge.** You will rarely out-analyze professional fund managers, but you can out-wait them; ordinary investors have no quarterly performance reviews and can genuinely think in decades. Compounding does its dramatic work in the later years — the boring first ones are the price of admission.\n\nNone of this guarantees results — nothing does. But these habits stack the odds the right way, and they are all fully within your control.",
+        "highlights": [
+          {
+            "term": "Time in the market",
+            "definition": "Staying invested continuously for years — historically far more reliable than trying to time entries and exits"
+          },
+          {
+            "term": "Investment journal",
+            "definition": "A written log of every buy and sell with your reasoning — the fastest way to spot your own biases later"
+          },
+          {
+            "term": "Noise",
+            "definition": "Daily market commentary and price wiggles that feel urgent but rarely matter to a long-term plan"
+          },
+          {
+            "term": "Patience edge",
+            "definition": "The ordinary investor's real advantage: no quarterly pressure, so you can hold good decisions for decades while compounding works"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lesson-10-6",
+      "moduleId": "module-10",
+      "title": "Final Mastery Exam",
+      "type": "quiz",
+      "order": 6,
+      "estimatedMinutes": 7,
+      "content": {
+        "text": "The final exam — ten questions spanning the entire curriculum. Take your time.",
+        "quiz": [
+          {
+            "id": "q-10-1",
+            "question": "You invest $1,000 at 7% annual growth and reinvest all gains. Why is the gain in year 20 much larger than the gain in year 1?",
+            "options": [
+              { "id": "a", "text": "Because markets always grow faster over time", "isCorrect": false },
+              { "id": "b", "text": "Because of compounding — each year's growth is earned on an ever-larger amount, including all previous gains", "isCorrect": true },
+              { "id": "c", "text": "Because taxes decrease the longer you invest", "isCorrect": false },
+              { "id": "d", "text": "Because brokers reward loyal customers with higher returns", "isCorrect": false }
+            ],
+            "explanation": "Compounding means returns are earned on previous returns. Year 1 earns 7% of $1,000 ($70); year 20 earns 7% of roughly $3,600 (about $250) — same rate, much bigger base.",
+            "correctExplanation": "Correct. Growth on top of growth: by year 20 the 7% applies to nearly four times the original amount, which is why the later years do the heavy lifting.",
+            "incorrectExplanation": "The answer is compounding: each year's 7% is earned on the original money PLUS all previous gains, so the base keeps growing. Markets do not reliably accelerate, and neither taxes nor broker loyalty explain it."
+          },
+          {
+            "id": "q-10-2",
+            "question": "What is the key difference between a market order and a limit order?",
+            "options": [
+              { "id": "a", "text": "A market order executes immediately at the best available price; a limit order only executes at your specified price or better", "isCorrect": true },
+              { "id": "b", "text": "A limit order is only for selling; a market order is only for buying", "isCorrect": false },
+              { "id": "c", "text": "A market order is free; a limit order always costs extra", "isCorrect": false },
+              { "id": "d", "text": "A limit order guarantees execution; a market order might never execute", "isCorrect": false }
+            ],
+            "explanation": "Market orders prioritize speed (immediate execution, price not guaranteed); limit orders prioritize price (your price or better, execution not guaranteed).",
+            "correctExplanation": "Right. Market = immediate but price can slip; limit = your price or better, but it may never fill if the market does not reach it.",
+            "incorrectExplanation": "A market order executes immediately at whatever the best available price is, while a limit order executes only at your chosen price or better — which means the limit order might never fill. Both types work for buying and selling."
+          },
+          {
+            "id": "q-10-3",
+            "question": "Why does diversification reduce risk?",
+            "options": [
+              { "id": "a", "text": "It guarantees your portfolio can never lose money", "isCorrect": false },
+              { "id": "b", "text": "Owning many stocks always produces higher returns than owning few", "isCorrect": false },
+              { "id": "c", "text": "Spreading money across many companies, sectors, and regions means no single failure can sink your portfolio", "isCorrect": true },
+              { "id": "d", "text": "Brokers charge lower fees on diversified portfolios", "isCorrect": false }
+            ],
+            "explanation": "Diversification limits the damage any single company, sector, or country can do. It cannot prevent market-wide falls, but it removes the catastrophic single-point-of-failure risk.",
+            "correctExplanation": "Correct. If one company of thirty goes to zero you lose a few percent, not everything. Diversification cannot stop market-wide drops, but it kills single-stock catastrophe risk.",
+            "incorrectExplanation": "Diversification works by spreading: with money across many companies, sectors, and regions, no single failure can devastate you. It does not guarantee gains or prevent market-wide declines — nothing does."
+          },
+          {
+            "id": "q-10-4",
+            "question": "Your written plan caps any single stock at 5% of your $10,000 portfolio. You are very excited about one stock. How much may you invest in it?",
+            "options": [
+              { "id": "a", "text": "$2,000 — excitement justifies a bigger bet", "isCorrect": false },
+              { "id": "b", "text": "$500 — the plan's limit applies precisely when you are most excited", "isCorrect": true },
+              { "id": "c", "text": "$5,000 — half the portfolio is fine for high conviction", "isCorrect": false },
+              { "id": "d", "text": "Whatever feels right in the moment", "isCorrect": false }
+            ],
+            "explanation": "5% of $10,000 is $500. Position limits exist to contain the damage when a confident pick goes wrong — and confidence is exactly when the limit matters most.",
+            "correctExplanation": "Exactly. 5% of $10,000 is $500, and the rule exists precisely for moments of high excitement — that is overconfidence's favorite entrance.",
+            "incorrectExplanation": "The plan says maximum 5% of $10,000 = $500. Excitement is not a reason to override the limit — it is the reason the limit exists. If the pick goes wrong, a $500 loss stings; a $5,000 loss changes your life."
+          },
+          {
+            "id": "q-10-5",
+            "question": "A stock trades at $84 with earnings per share of $4.00. Its P/E is 21 versus a sector average of 18. What does this tell you?",
+            "options": [
+              { "id": "a", "text": "The stock is guaranteed to fall until its P/E is 18", "isCorrect": false },
+              { "id": "b", "text": "You are paying 21 times annual earnings — a modest premium to the sector, which may or may not be justified by superior quality or growth", "isCorrect": true },
+              { "id": "c", "text": "The company earns a 21% profit margin", "isCorrect": false },
+              { "id": "d", "text": "The stock pays a 21% dividend", "isCorrect": false }
+            ],
+            "explanation": "P/E is price divided by earnings per share ($84 / $4 = 21): the price you pay per dollar of annual earnings. Above-sector P/E means a premium price, justified only if quality or growth is superior.",
+            "correctExplanation": "Right. P/E of 21 means paying $21 for each $1 of yearly earnings — a premium versus the sector's 18 that must be earned by better quality or growth.",
+            "incorrectExplanation": "P/E = price / earnings per share = $84 / $4.00 = 21. It measures how much you pay per dollar of annual earnings, nothing about margins or dividends. Above the sector average means a premium — sometimes justified, sometimes not — never a guaranteed prediction."
+          },
+          {
+            "id": "q-10-6",
+            "question": "A stock's RSI reading is 78. What does this typically indicate?",
+            "options": [
+              { "id": "a", "text": "The stock is overbought after strong recent gains — momentum may be stretched and a pullback would not be surprising", "isCorrect": true },
+              { "id": "b", "text": "The stock is oversold and due for a bounce", "isCorrect": false },
+              { "id": "c", "text": "The company's revenue grew 78% this year", "isCorrect": false },
+              { "id": "d", "text": "The stock will certainly crash within a week", "isCorrect": false }
+            ],
+            "explanation": "RSI (Relative Strength Index) measures recent price momentum on a 0-100 scale. Readings above 70 are conventionally 'overbought', below 30 'oversold'. It is a caution flag, not a prediction.",
+            "correctExplanation": "Correct. RSI above 70 flags stretched upward momentum. It does not guarantee a fall — strong stocks can stay overbought — but it argues against chasing at that moment.",
+            "incorrectExplanation": "RSI above 70 conventionally means overbought — recent gains have been unusually strong and momentum may be stretched. It says nothing about revenue, and it is a caution signal, never a certainty. Below 30 would be oversold."
+          },
+          {
+            "id": "q-10-7",
+            "question": "Which of these is a valid reason to sell a stock, according to the curriculum?",
+            "options": [
+              { "id": "a", "text": "The price fell 15% in a red week and you feel anxious", "isCorrect": false },
+              { "id": "b", "text": "A finfluencer said it is time to rotate", "isCorrect": false },
+              { "id": "c", "text": "Your original thesis broke — the fundamentals that justified buying have genuinely deteriorated", "isCorrect": true },
+              { "id": "d", "text": "It has not moved in three weeks and you are bored", "isCorrect": false }
+            ],
+            "explanation": "Valid sell reasons are pre-written in your plan: broken thesis, deteriorated fundamentals, or rebalancing. Price dips, boredom, and influencer opinions are emotions and noise, not reasons.",
+            "correctExplanation": "Right. You sell when the reasons you bought no longer hold — or to rebalance per your plan. Fear, boredom, and other people's opinions are not in the plan.",
+            "incorrectExplanation": "The curriculum's sell rules: sell when the thesis breaks or fundamentals deteriorate, or to rebalance — decisions written in your plan in advance. A falling price alone, boredom, or an influencer's call are exactly the emotional triggers the plan exists to override."
+          },
+          {
+            "id": "q-10-8",
+            "question": "What is the main benefit of dollar-cost averaging (investing a fixed amount monthly)?",
+            "options": [
+              { "id": "a", "text": "It guarantees you always buy at the lowest price", "isCorrect": false },
+              { "id": "b", "text": "It removes timing and emotion — you automatically buy more shares when prices are low and fewer when they are high", "isCorrect": true },
+              { "id": "c", "text": "It eliminates all investment risk", "isCorrect": false },
+              { "id": "d", "text": "It only works in rising markets", "isCorrect": false }
+            ],
+            "explanation": "DCA means a fixed amount on a fixed schedule. The fixed sum buys more shares at low prices and fewer at high ones, and automation removes the temptation to time the market or act on emotion.",
+            "correctExplanation": "Correct. The fixed monthly amount mechanically buys more when cheap and less when expensive, and the automation makes discipline effortless — no forecasts, no feelings.",
+            "incorrectExplanation": "DCA's benefit is removing timing and emotion: a fixed amount each month automatically buys more shares when prices are low and fewer when high. It guarantees nothing and eliminates no market risk — it just makes discipline automatic."
+          },
+          {
+            "id": "q-10-9",
+            "question": "You receive a WhatsApp message from a stranger offering a trading system with 'guaranteed 10% monthly returns — only 3 spots left'. How many scam red flags does this contain?",
+            "options": [
+              { "id": "a", "text": "None — 10% monthly is realistic for good traders", "isCorrect": false },
+              { "id": "b", "text": "One — the unsolicited contact is odd but the offer may be genuine", "isCorrect": false },
+              { "id": "c", "text": "At least three: guaranteed returns, unsolicited contact from a stranger, and artificial urgency", "isCorrect": true },
+              { "id": "d", "text": "It depends on whether they show screenshots of past profits", "isCorrect": false }
+            ],
+            "explanation": "Guaranteed returns are impossible in real markets, legitimate opportunities are never distributed by strangers via direct message, and fake urgency exists to stop you from thinking. Screenshots prove nothing — they are trivially faked.",
+            "correctExplanation": "Exactly. Guarantees, unsolicited DMs, and countdown pressure are three textbook red flags in one message. Delete and block — and note that profit screenshots are trivially faked.",
+            "incorrectExplanation": "This message is a scam trifecta: (1) no legitimate investment guarantees returns, (2) real opportunities never arrive via stranger DMs, (3) 'only 3 spots left' is manufactured urgency to prevent thinking. Screenshots of profits are easily faked and prove nothing."
+          },
+          {
+            "id": "q-10-10",
+            "question": "According to the first-investment playbook, what role should a global index ETF play in a beginner's portfolio?",
+            "options": [
+              { "id": "a", "text": "None — index funds are only for people who cannot analyze stocks", "isCorrect": false },
+              { "id": "b", "text": "The core: a broad, low-cost foundation of instant diversification, with researched single stocks added later as a smaller portion on top", "isCorrect": true },
+              { "id": "c", "text": "A temporary parking spot until you find one perfect stock to go all-in on", "isCorrect": false },
+              { "id": "d", "text": "At most 5% of the portfolio, like any single position", "isCorrect": false }
+            ],
+            "explanation": "The playbook builds the portfolio core from a broad global index ETF — thousands of companies, low cost, instant diversification — and adds individually researched stocks later as a smaller satellite portion (often 10-20%).",
+            "correctExplanation": "Correct. Index core first, automated monthly; stock-picking comes later, kept to a minority of the portfolio. That order is how the skills from this app get applied responsibly.",
+            "incorrectExplanation": "The playbook is core-and-satellite: a broad global index ETF forms the diversified foundation, and researched single stocks are added afterward as the smaller portion (often 10-20% total). Going all-in on one stock is the opposite of the plan, and the 5% cap applies to single stocks, not the diversified core."
+          }
+        ]
+      }
+    }
+  ]
+}

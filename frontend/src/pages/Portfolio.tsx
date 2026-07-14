@@ -140,8 +140,10 @@ export default function Portfolio() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        {/* Add position */}
-        <div className="glass-card p-6">
+        {/* Add position — relative z-20 keeps the StockPicker dropdown above
+            the sibling glass-cards below (backdrop-blur gives each card its
+            own stacking context, so the dropdown's z-index can't escape) */}
+        <div className="glass-card relative z-20 p-6">
           <h2 className="text-lg font-semibold text-white mb-4">Add a position</h2>
           <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-start">
             <div className="md:col-span-6">

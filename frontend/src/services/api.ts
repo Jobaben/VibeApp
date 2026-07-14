@@ -67,8 +67,10 @@ export const stockApi = {
 
   // Search stocks by ticker or name
   searchStocks: async (query: StockSearchQuery): Promise<Stock[]> => {
-    const response = await apiClient.get<Stock[]>('/stocks/search', { params: query });
-    return response.data;
+    // Backend wraps matches in a `results` envelope; unwrap to the bare
+    // Stock[] the UI (StockPicker, Compare) consumes.
+    const response = await apiClient.get<{ results: Stock[] }>('/stocks/search', { params: query });
+    return response.data.results;
   },
 
   // Get stock by ticker
@@ -214,18 +216,68 @@ export const stockApi = {
 
   // Weekly Changes Dashboard - Get top movers (gainers or losers)
   getScoreMovers: async (direction: 'up' | 'down', days: number = 7, limit: number = 10): Promise<MoversResponse> => {
-    const response = await apiClient.get<MoversResponse>('/stocks/score-changes/movers', {
+    // Backend field names (score_change, historical_*) differ from the
+    // ScoreMover type the UI consumes; map them here.
+    const response = await apiClient.get<{
+      period_days: number;
+      direction: 'up' | 'down';
+      count: number;
+      movers: Array<{
+        ticker: string; name: string; sector: string;
+        current_score: number; historical_score: number;
+        score_change: number; percent_change: number;
+        current_signal: string; historical_signal: string;
+      }>;
+    }>('/stocks/score-changes/movers', {
       params: { direction, days, limit }
     });
-    return response.data;
+    return {
+      direction: response.data.direction,
+      days: response.data.period_days,
+      movers: response.data.movers.map((m) => ({
+        ticker: m.ticker,
+        name: m.name,
+        sector: m.sector,
+        current_score: m.current_score,
+        previous_score: m.historical_score,
+        change: m.score_change,
+        percent_change: m.percent_change,
+        current_signal: m.current_signal,
+        previous_signal: m.historical_signal,
+        days: response.data.period_days,
+      })),
+    };
   },
 
   // Weekly Changes Dashboard - Get stocks with signal changes
   getSignalChanges: async (days: number = 7, limit?: number): Promise<SignalChangesResponse> => {
-    const response = await apiClient.get<SignalChangesResponse>('/stocks/score-changes/signals', {
+    // Backend returns the list under `signal_changes` with different field
+    // names than the SignalChangeStock type the UI consumes; map them here.
+    const response = await apiClient.get<{
+      period_days: number;
+      count: number;
+      signal_changes: Array<{
+        ticker: string; name: string; sector: string;
+        previous_signal: string; current_signal: string;
+        score_change: number; current_score: number;
+        historical_score: number; change_date: string;
+      }>;
+    }>('/stocks/score-changes/signals', {
       params: { days, limit }
     });
-    return response.data;
+    return {
+      days: response.data.period_days,
+      changes: response.data.signal_changes.map((c) => ({
+        ticker: c.ticker,
+        name: c.name,
+        sector: c.sector,
+        current_score: c.current_score,
+        current_signal: c.current_signal,
+        previous_signal: c.previous_signal,
+        signal_change_date: c.change_date,
+        days_ago: response.data.period_days,
+      })),
+    };
   },
 };
 

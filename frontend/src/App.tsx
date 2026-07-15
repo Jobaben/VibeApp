@@ -26,14 +26,16 @@ function App() {
       <LearningModeProvider>
         <WatchlistProvider>
           <PortfolioProvider>
-            <Routes>
-              <Route path="/stock/:ticker" element={<StockDetail />} />
-              <Route path="/leaderboard" element={<Leaderboard />} />
-              <Route path="/watchlists" element={<Watchlists />} />
-              <Route path="/weekly-changes" element={<WeeklyChanges />} />
-              <Route path="/compare" element={<Compare />} />
-              <Route path="/portfolio" element={<Portfolio />} />
-            </Routes>
+            <PageShell>
+              <Routes>
+                <Route path="/stock/:ticker" element={<StockDetail />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/watchlists" element={<Watchlists />} />
+                <Route path="/weekly-changes" element={<WeeklyChanges />} />
+                <Route path="/compare" element={<Compare />} />
+                <Route path="/portfolio" element={<Portfolio />} />
+              </Routes>
+            </PageShell>
             {/* Learning Mode Components */}
             <LessonSidebar />
             <LessonContent />

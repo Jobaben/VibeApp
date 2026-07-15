@@ -25,6 +25,14 @@ A data-driven stock screening and analysis tool that helps investors find promis
 
 ---
 
+## 📸 App Tour
+
+Want to see what the app looks like before running it? **[docs/APP_GUIDE.md](docs/APP_GUIDE.md)** walks through every screen with screenshots — from the stock browser and strategy screener to the Learning Lab and portfolio tracker.
+
+[![Browse Stocks home page](docs/screenshots/01-home-browse-stocks.png)](docs/APP_GUIDE.md)
+
+---
+
 ## 🌟 Key Features
 
 ### Stock Screening & Strategies

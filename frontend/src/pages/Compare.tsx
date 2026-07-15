@@ -202,7 +202,10 @@ export default function Compare() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Add bar */}
-        <div className="glass-card p-4 mb-6 flex flex-col sm:flex-row gap-3 sm:items-center">
+        {/* relative z-20 keeps the StockPicker dropdown above the sibling
+            glass-cards below (backdrop-blur gives each card its own stacking
+            context, so the dropdown's z-index alone can't escape this card) */}
+        <div className="glass-card relative z-20 p-4 mb-6 flex flex-col sm:flex-row gap-3 sm:items-center">
           <div className="flex-1">
             {entries.length < MAX_COMPARE ? (
               <StockPicker

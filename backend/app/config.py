@@ -27,6 +27,11 @@ class Settings(BaseSettings):
     # AI Features
     ENABLE_AI_ENDPOINTS: bool = True
 
+    # Admin endpoints (stock import, score recalculation, cache flush).
+    # When set, these require a matching X-Admin-Token header. When empty:
+    # open in development, disabled (503) in production.
+    ADMIN_API_KEY: str = ""
+
     # JWT Authentication (for future use)
     SECRET_KEY: str = "your-secret-key-change-in-production"
     ALGORITHM: str = "HS256"

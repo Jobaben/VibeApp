@@ -346,6 +346,7 @@ automatically. These can be overridden via a root `.env` file or the shell:
 | `ENVIRONMENT` | `development` | Set to `production` to enable strict startup validation |
 | `DEBUG` | `false` | FastAPI debug mode (must stay `false` in production) |
 | `SECRET_KEY` | _(empty)_ | JWT signing key — **required** when `ENVIRONMENT=production` |
+| `ADMIN_API_KEY` | _(empty)_ | `X-Admin-Token` for admin endpoints (import, score recalc, cache flush); empty = open in dev, disabled in production |
 | `LLM_ENABLED` | `false` (in compose) | Enables AI insight endpoints |
 | `ANTHROPIC_API_KEY` | _(empty)_ | Required when `LLM_ENABLED=true` |
 | `VITE_API_URL` | `http://localhost:8000/api` | API URL baked into the frontend build |

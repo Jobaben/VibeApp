@@ -41,6 +41,7 @@ services:
       - DEBUG=${DEBUG:-false}
       - ENVIRONMENT=${ENVIRONMENT:-development}
       - SECRET_KEY=${SECRET_KEY:-}
+      - ADMIN_API_KEY=${ADMIN_API_KEY:-}
       - ENABLE_AI_ENDPOINTS=true
       - LLM_ENABLED=${LLM_ENABLED:-false}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}

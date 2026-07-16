@@ -306,12 +306,15 @@ docker exec -it avanza-stock-finder-frontend sh
 docker exec -it avanza-stock-finder-db psql -U stockfinder -d stockfinder_db
 ```
 
-### Hot Reload
+### Production Builds
 
-Code changes are automatically reflected without restarting containers:
+The Docker images are production-grade: the frontend is compiled to static
+assets and served by nginx, and the backend runs uvicorn without auto-reload.
+After changing code, rebuild with `docker-compose up --build`.
 
-- **Backend:** Changes in `backend/` trigger uvicorn auto-reload
-- **Frontend:** Changes in `frontend/src/` trigger Vite HMR (Hot Module Replacement)
+For hot reload during development, run the dev servers natively instead
+(see [Getting Started (Manual Setup)](#getting-started) above):
+`npm run dev` in `frontend/` and `uvicorn main:app --reload` in `backend/`.
 
 ### Adding Dependencies
 
@@ -334,15 +337,24 @@ docker-compose up --build
 
 ### Environment Variables
 
-Docker Compose automatically sets these environment variables:
+Docker Compose wires up `DATABASE_URL`, `CORS_ORIGINS`, and Redis
+automatically. These can be overridden via a root `.env` file or the shell:
 
-**Backend:**
-- `DATABASE_URL` - PostgreSQL connection string
-- `CORS_ORIGINS` - Allowed frontend origins
-- `DEBUG` - Debug mode enabled
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `POSTGRES_PASSWORD` | `stockfinder123` | Database password (change for real deployments) |
+| `ENVIRONMENT` | `development` | Set to `production` to enable strict startup validation |
+| `DEBUG` | `false` | FastAPI debug mode (must stay `false` in production) |
+| `SECRET_KEY` | _(empty)_ | JWT signing key — **required** when `ENVIRONMENT=production` |
+| `LLM_ENABLED` | `false` (in compose) | Enables AI insight endpoints |
+| `ANTHROPIC_API_KEY` | _(empty)_ | Required when `LLM_ENABLED=true` |
+| `VITE_API_URL` | `http://localhost:8000/api` | API URL baked into the frontend build |
 
-**Frontend:**
-- `VITE_API_URL` - Backend API URL
+Generate a production `SECRET_KEY` with:
+
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(64))"
+```
 
 ---
 

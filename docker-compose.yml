@@ -1,4 +1,11 @@
-version: '3.8'
+# Environment overrides (set in a root .env file or the shell):
+#   POSTGRES_PASSWORD  – database password        (default: stockfinder123)
+#   ENVIRONMENT        – development | production (default: development)
+#   DEBUG              – FastAPI debug mode       (default: false)
+#   SECRET_KEY         – JWT signing key          (required when ENVIRONMENT=production)
+#   ANTHROPIC_API_KEY  – enables AI insights      (required when LLM_ENABLED=true)
+#   LLM_ENABLED        – AI insight endpoints     (default: false)
+#   VITE_API_URL       – API URL baked into the frontend build
 
 services:
   # PostgreSQL Database
@@ -7,7 +14,7 @@ services:
     container_name: avanza-stock-finder-db
     environment:
       - POSTGRES_USER=stockfinder
-      - POSTGRES_PASSWORD=stockfinder123
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-stockfinder123}
       - POSTGRES_DB=stockfinder_db
     ports:
       - "5432:5432"
@@ -30,10 +37,13 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://stockfinder:stockfinder123@db:5432/stockfinder_db
-      - DEBUG=True
-      - ENVIRONMENT=development
+      - DATABASE_URL=postgresql://stockfinder:${POSTGRES_PASSWORD:-stockfinder123}@db:5432/stockfinder_db
+      - DEBUG=${DEBUG:-false}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - SECRET_KEY=${SECRET_KEY:-}
       - ENABLE_AI_ENDPOINTS=true
+      - LLM_ENABLED=${LLM_ENABLED:-false}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
       - CORS_ORIGINS=["http://localhost:3000"]
       - REDIS_URL=redis://redis:6379/0
       - REDIS_ENABLED=true
@@ -43,7 +53,6 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./backend:/app
       - ./data:/app/data
     networks:
       - stock-finder-network
@@ -76,9 +85,10 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     container_name: vibeapp-celery-worker
+    entrypoint: []
     command: celery -A app.tasks worker --loglevel=info
     environment:
-      - DATABASE_URL=postgresql://stockfinder:stockfinder123@db:5432/stockfinder_db
+      - DATABASE_URL=postgresql://stockfinder:${POSTGRES_PASSWORD:-stockfinder123}@db:5432/stockfinder_db
       - REDIS_URL=redis://redis:6379/0
       - REDIS_ENABLED=true
     depends_on:
@@ -87,7 +97,6 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./backend:/app
       - ./data:/app/data
     networks:
       - stock-finder-network
@@ -98,14 +107,13 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     container_name: vibeapp-celery-beat
+    entrypoint: []
     command: celery -A app.tasks beat --loglevel=info
     environment:
       - REDIS_URL=redis://redis:6379/0
     depends_on:
       redis:
         condition: service_healthy
-    volumes:
-      - ./backend:/app
     networks:
       - stock-finder-network
 
@@ -123,21 +131,18 @@ services:
     profiles:
       - monitoring
 
-  # Frontend
+  # Frontend (static production build served by nginx)
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+      args:
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:8000/api}
     container_name: avanza-stock-finder-frontend
     ports:
-      - "3000:3000"
-    environment:
-      - VITE_API_URL=http://localhost:8000/api
+      - "3000:80"
     depends_on:
       - backend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     networks:
       - stock-finder-network
 

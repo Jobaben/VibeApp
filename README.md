@@ -43,7 +43,16 @@ Want to see what the app looks like before running it? **[docs/APP_GUIDE.md](doc
   - 🔍 Deep Value (Low P/B + Positive FCF)
   - ⚡ Explosive Growth (High Revenue Growth + Low PEG)
 - **Custom Screener:** Filter stocks by any fundamental metric
-- **15 Mock Stocks:** Comprehensive test dataset with real fundamentals
+- **Real Market Data:** Yahoo Finance by default, with automatic mock-data fallback (15 realistic stocks) when offline
+
+### Top Picks by Investment Period
+- Pick how long you plan to invest — **short (≤3 months), medium (3-12 months), or long (1+ years)**
+- Factor scores are re-weighted per horizon (momentum-heavy for short holds, fundamentals-heavy for long holds)
+- Ranked candidates with a 0-100 **horizon fit** score, factor mini-bars, and a plain-language "why"
+
+### Buy/Sell Signals on Charts
+- Price charts overlay **▲ buy / ▼ sell markers** from golden/death crosses (SMA-50 vs SMA-200) and RSI oversold/overbought exits
+- A signal timeline explains each event, plus a current BULLISH/NEUTRAL/BEARISH technical outlook
 
 ### Multi-Factor Scoring System (0-100 Points)
 - **Value Score (0-25):** Valuation metrics (P/E, EV/EBITDA, PEG, P/B) vs sector
@@ -103,8 +112,8 @@ Every stock score includes:
 - **React Query** - Data fetching & caching
 
 **Data Sources:**
-- **Yahoo Finance API** - Real stock data (for human users)
-- **Mock Data** - 15 realistic stocks for development/testing
+- **Yahoo Finance API** - Real stock data (default, with automatic fallback)
+- **Mock Data** - 15 realistic stocks for CI/offline development
 
 ### Project Structure
 
@@ -368,6 +377,12 @@ Once the backend is running, interactive API documentation is available at:
 - `GET /api/stocks/leaderboard/by-signal/{signal}` - Stocks by signal (STRONG_BUY, BUY, HOLD, SELL, STRONG_SELL)
 - `GET /api/stocks/leaderboard/sectors` - Top stocks per sector
 
+#### Investment Horizon Recommendations & Trade Signals
+- `GET /api/stocks/recommendations/horizons` - Available investment period profiles and their factor weights
+- `GET /api/stocks/recommendations/top?horizon={short|medium|long}` - Top candidates for an investment period
+- `GET /api/stocks/{ticker}/trade-signals?period=1y` - Historical buy/sell signal events + current technical outlook
+- `GET /api/stocks/{ticker}/prices/historical?period=1y` - OHLCV price history with technical indicators
+
 ### Example API Usage
 
 **Get top 10 stocks:**
@@ -516,7 +531,8 @@ DATABASE_URL=sqlite:///./test.db  # Development
 # DATABASE_URL=postgresql://user:pass@localhost/dbname  # Production
 
 # Stock Data
-USE_REAL_STOCK_API=false  # Use mock data (recommended for development)
+USE_REAL_STOCK_API=true  # Default: real Yahoo Finance data with automatic mock fallback
+                         # Set to false for fully offline/deterministic development
 
 # API
 CORS_ORIGINS=http://localhost:3000

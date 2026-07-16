@@ -4,59 +4,70 @@
 
 The Avanza Stock Finder supports two modes for fetching stock data:
 
-1. **Mock Data Mode** (Default) - Uses realistic, curated stock data
-2. **Yahoo Finance Mode** - Attempts to fetch live data from Yahoo Finance
+1. **Yahoo Finance Mode** (Default) - Fetches live market data, with automatic fallback to mock data
+2. **Mock Data Mode** - Uses realistic, curated stock data only
 
-## Why Mock Data by Default?
+## How the Default Works
 
-Yahoo Finance actively blocks automated requests with 403 Forbidden errors. This is especially problematic for:
-- Automated testing
-- CI/CD pipelines
-- AI-assisted development
-- Docker containers
+By default the app tries to fetch **real data from Yahoo Finance** (quotes via the
+public quote API, historical prices via `yfinance`). If a request is blocked,
+rate-limited, or the machine is offline, the app **automatically falls back to
+mock data** for that request — the UI keeps working either way.
 
-Mock data provides:
-- ✅ **Reliability** - Always works, no rate limiting
-- ✅ **Speed** - Instant responses
-- ✅ **Consistency** - Same data across environments
-- ✅ **Realistic** - 15 major stocks with accurate information
+Real data powers:
+
+- Stock quotes and fundamentals used for import and scoring
+- Historical OHLCV prices behind the price/RSI/volume charts
+- Technical indicators (SMA-50/200, RSI-14, volume trend), the momentum score,
+  and the buy/sell trade signals drawn on the charts
 
 ## Configuration
 
-### For AI/Automated Use (Default)
+### Default (Real Data with Fallback)
 
-No configuration needed! The app uses mock data automatically.
+No configuration needed:
 
 ```bash
-# Default behavior - uses mock data
-npm run dev
+# Default behavior - tries Yahoo Finance, falls back to mock data on failure
+./run_backend.sh
 ```
 
-### For Human Users (Yahoo Finance)
+### Mock-Only Mode (CI, Offline, Deterministic Tests)
 
-To try fetching live data from Yahoo Finance, set the environment variable:
+To skip the network entirely and always use mock data:
 
 **Option 1: Environment Variable**
 ```bash
-export USE_REAL_STOCK_API=true
-npm run dev
+export USE_REAL_STOCK_API=false
+./run_backend.sh
 ```
 
 **Option 2: .env File**
 ```bash
 # backend/.env
-USE_REAL_STOCK_API=true
+USE_REAL_STOCK_API=false
 ```
-
-**Note:** Yahoo Finance may still block requests. The app will automatically fall back to mock data if blocked.
 
 ### Force Mock Data (Testing)
 
-To always use mock data (overrides USE_REAL_STOCK_API):
+To always use mock data regardless of `USE_REAL_STOCK_API`:
 
 ```bash
-FORCE_MOCK_DATA=true npm run dev
+FORCE_MOCK_DATA=true ./run_backend.sh
 ```
+
+CI runs with `USE_REAL_STOCK_API=false` and `FORCE_MOCK_DATA=true` so tests are
+deterministic and never hit the network.
+
+## Why Keep Mock Data?
+
+Yahoo Finance sometimes blocks automated requests with 403 Forbidden errors,
+especially from CI pipelines and containers. Mock data provides:
+
+- ✅ **Reliability** - Always works, no rate limiting
+- ✅ **Speed** - Instant responses
+- ✅ **Consistency** - Same data across environments
+- ✅ **Realistic** - 15 major stocks with accurate information
 
 ## Mock Stock Data
 
@@ -91,9 +102,13 @@ Each stock includes:
 - Proper exchange information
 - Currency (USD)
 
+Mock **historical prices** are generated with seeded geometric Brownian motion,
+so a given ticker always produces the same chart (and therefore the same
+indicators and trade signals) across restarts.
+
 ## For Production
 
-For production use with real data, consider these paid API services:
+For heavier production use, consider these paid API services:
 
 | Service | Free Tier | Pricing | Reliability |
 |---------|-----------|---------|-------------|
@@ -106,18 +121,14 @@ For production use with real data, consider these paid API services:
 
 ### Yahoo Finance Returns 403 Error
 
-This is expected for automated requests. The app automatically falls back to mock data.
-
-### Want Real Data for Development?
-
-Use a paid API service (recommended) or:
-1. Run the app on your local machine (not in Docker/CI)
-2. Set `USE_REAL_STOCK_API=true`
-3. Use sparingly to avoid rate limiting
+This happens for automated requests. The app automatically falls back to mock
+data for that request; nothing breaks. Retrying later usually works.
 
 ### All Stocks Show Same Data
 
-You're likely in mock data mode. This is intentional for development and works well for building features.
+You're likely seeing mock data (either `USE_REAL_STOCK_API=false` or every
+Yahoo request is being blocked). Check the backend logs — each fallback is
+logged with a warning.
 
 ## Technical Details
 
@@ -125,13 +136,15 @@ The stock data mode is controlled by:
 
 **File:** `backend/app/config.py`
 ```python
-USE_REAL_STOCK_API: bool = False  # Default: mock data
-FORCE_MOCK_DATA: bool = False      # Override to always use mock
+USE_REAL_STOCK_API: bool = True   # Default: real data with mock fallback
+FORCE_MOCK_DATA: bool = False     # Override to always use mock
 ```
 
-**Implementation:** `backend/app/features/integrations/yahoo_finance_client.py`
+**Implementation:**
+- `backend/app/features/integrations/yahoo_finance_client.py` (quotes/fundamentals)
+- `backend/app/features/stocks/services/price_data_service.py` (historical prices)
 
-The client checks configuration and:
+Both check configuration and:
 1. If `FORCE_MOCK_DATA=true` → Use mock data
 2. If `USE_REAL_STOCK_API=false` → Use mock data
-3. If `USE_REAL_STOCK_API=true` → Try Yahoo Finance, fallback to mock on error
+3. If `USE_REAL_STOCK_API=true` (default) → Try Yahoo Finance, fall back to mock on error

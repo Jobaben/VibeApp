@@ -2,6 +2,7 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { StockList } from './components/StockList';
 import PageShell from './components/PageShell';
 import Screener from './pages/Screener';
+import TopPicks from './pages/TopPicks';
 import StockDetail from './pages/StockDetail';
 import Leaderboard from './pages/Leaderboard';
 import Watchlists from './pages/Watchlists';
@@ -47,6 +48,7 @@ function App() {
 
   const isHomePage = location.pathname === '/';
   const isScreenerPage = location.pathname === '/screener';
+  const isTopPicksPage = location.pathname === '/top-picks';
   const isLearningLabPage = location.pathname === '/learning-lab';
   const isGlossaryPage = location.pathname === '/glossary';
 
@@ -101,6 +103,20 @@ function App() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
                 </svg>
                 Strategy Screener
+              </Link>
+              <Link
+                to="/top-picks"
+                className={`px-6 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${
+                  isTopPicksPage
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25'
+                    : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118L2.98 10.1c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                </svg>
+                Top Picks
+                <span className="px-2 py-0.5 text-xs bg-amber-400/20 rounded-full border border-amber-400/30">NEW</span>
               </Link>
               <Link
                 to="/learning-lab"
@@ -203,7 +219,8 @@ function App() {
                             <span className="text-amber-400 font-medium"> Learning Mode</span> (top right) for a complete beginner-to-investor course, practice risk-free in the
                             <span className="text-emerald-400 font-medium"> Learning Lab</span>, and look up any term in the
                             <span className="text-cyan-400 font-medium"> Glossary</span>.
-                            Then explore stocks with search and filtering, try the
+                            Then explore stocks with search and filtering, pick your investment period in
+                            <span className="text-amber-400 font-medium"> Top Picks</span> to see the best candidates with buy/sell chart signals, try the
                             <span className="text-purple-400 font-medium"> Strategy Screener</span> to find opportunities with proven investment criteria, and use
                             <span className="text-green-400 font-medium"> Watchlists</span> to track your favorite stocks with
                             <span className="text-blue-400 font-medium"> score updates</span> and
@@ -221,6 +238,7 @@ function App() {
               }
             />
             <Route path="/screener" element={<Screener />} />
+            <Route path="/top-picks" element={<TopPicks />} />
             <Route path="/learning-lab" element={<LearningLab />} />
             <Route path="/glossary" element={<Glossary />} />
           </Routes>

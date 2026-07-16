@@ -1055,6 +1055,139 @@ async def get_momentum_score(
 
 
 # ========================
+# Investment Horizon Recommendations & Trade Signals
+# ========================
+
+@router.get("/recommendations/horizons")
+async def list_investment_horizons():
+    """
+    List the available investment horizon profiles.
+
+    Each profile describes a holding period (short/medium/long), the factor
+    weights used to rank candidates for it, and a plain-language description.
+    Used by the UI to render the investment period picker.
+
+    Returns:
+        List of horizon profiles
+    """
+    from app.features.stocks.services.recommendation_service import get_horizon_profiles
+
+    return {"horizons": get_horizon_profiles()}
+
+
+@router.get("/recommendations/top")
+async def get_top_candidates(
+    horizon: str = Query(default="medium", description="Investment horizon: short, medium, or long"),
+    limit: int = Query(default=10, le=50, description="Number of candidates to return"),
+    sector: Optional[str] = Query(default=None, description="Filter by sector"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get top investment candidates for a user-selected investment period.
+
+    Re-weights each stock's component scores (value, quality, momentum,
+    financial health) according to the chosen horizon and returns the
+    highest-ranking candidates:
+
+    - short (up to 3 months): momentum-weighted
+    - medium (3-12 months): balanced
+    - long (1+ years): fundamentals-weighted
+
+    Args:
+        horizon: Investment horizon key
+        limit: Number of candidates
+        sector: Optional sector filter
+        db: Database session
+
+    Returns:
+        Horizon profile used and ranked candidate list
+
+    Raises:
+        HTTPException: 400 if the horizon is unknown
+    """
+    from app.features.stocks.services.recommendation_service import RecommendationService
+
+    # Check cache first
+    cache = get_cache_service()
+    cache_key = generate_cache_key(
+        "recommendations", "top",
+        hash_params(horizon=horizon, limit=limit, sector=sector)
+    )
+
+    cached = cache.get(cache_key)
+    if cached:
+        return cached
+
+    service = RecommendationService(db)
+    try:
+        response = service.get_top_candidates(horizon=horizon, limit=limit, sector=sector)
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+    cache.set(cache_key, response, ttl_seconds=settings.CACHE_TTL_SCORES)
+    return response
+
+
+@router.get("/{ticker}/trade-signals")
+async def get_trade_signals(
+    ticker: str,
+    period: str = Query(default="1y", description="Time period (1mo, 3mo, 6mo, 1y, 2y, 5y)"),
+    db: Session = Depends(get_db),
+    price_service: PriceDataService = Depends(get_price_data_service)
+):
+    """
+    Get historical buy/sell trade-signal events for a stock's chart.
+
+    Computes signal events from technical indicators over the requested period:
+    golden/death crosses (SMA-50 vs SMA-200) and RSI oversold/overbought exits.
+    Also returns the current technical outlook (bullish/bearish/neutral).
+
+    Args:
+        ticker: Stock ticker symbol
+        period: Time period for historical data
+        db: Database session
+        price_service: Price data service
+
+    Returns:
+        Signal events plus the current technical outlook
+
+    Raises:
+        HTTPException: 404 if stock not found, 500 if price data unavailable
+    """
+    from app.features.stocks.services.trade_signal_service import get_trade_signal_service
+
+    repo = get_stock_repository(db)
+
+    stock = repo.get_by_ticker(ticker)
+    if not stock:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Stock with ticker '{ticker}' not found"
+        )
+
+    df = price_service.fetch_historical_prices(ticker, period=period)
+    if df is None or df.empty:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Unable to fetch price data for '{ticker}'"
+        )
+
+    df = price_service.calculate_technical_indicators(df)
+
+    signal_service = get_trade_signal_service()
+    events = signal_service.compute_signals(df)
+    outlook = signal_service.current_outlook(df, events)
+
+    return {
+        "ticker": ticker,
+        "period": period,
+        "count": len(events),
+        "signals": events,
+        "outlook": outlook,
+    }
+
+
+# ========================
 # Phase 5: Score Change Tracking
 # ========================
 

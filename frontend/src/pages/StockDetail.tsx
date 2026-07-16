@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { stockApi } from '../services/api';
-import type { StockDetail as StockDetailType, ScoreBreakdownResponse, HistoricalPricesResponse } from '../types/stock';
+import type { StockDetail as StockDetailType, ScoreBreakdownResponse, HistoricalPricesResponse, TradeSignalsResponse } from '../types/stock';
 import PriceChart from '../components/PriceChart';
 import RSIChart from '../components/RSIChart';
 import VolumeChart from '../components/VolumeChart';
+import TradeSignalTimeline from '../components/TradeSignalTimeline';
 import ScoreBreakdown from '../components/ScoreBreakdown';
 import AddToWatchlistButton from '../components/AddToWatchlistButton';
 import ScoreChangeIndicator from '../components/ScoreChangeIndicator';
@@ -27,6 +28,7 @@ export default function StockDetail() {
   const [stock, setStock] = useState<StockDetailType | null>(null);
   const [scoreBreakdown, setScoreBreakdown] = useState<ScoreBreakdownResponse | null>(null);
   const [priceData, setPriceData] = useState<HistoricalPricesResponse | null>(null);
+  const [tradeSignals, setTradeSignals] = useState<TradeSignalsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,9 +44,10 @@ export default function StockDetail() {
         stockApi.getStockByTicker(ticker),
         stockApi.getScoreBreakdown(ticker, true),
         stockApi.getHistoricalPrices(ticker, '1y', true),
+        stockApi.getTradeSignals(ticker, '1y'),
       ]);
 
-      const [stockResult, scoreResult, pricesResult] = results;
+      const [stockResult, scoreResult, pricesResult, signalsResult] = results;
 
       // Stock is required - show error if it fails
       if (stockResult.status === 'fulfilled') {
@@ -70,6 +73,14 @@ export default function StockDetail() {
       } else {
         console.warn('Failed to fetch price data:', pricesResult.reason);
         // Continue rendering - prices are optional
+      }
+
+      // Trade signals are optional - log warning and continue
+      if (signalsResult.status === 'fulfilled') {
+        setTradeSignals(signalsResult.value);
+      } else {
+        console.warn('Failed to fetch trade signals:', signalsResult.reason);
+        // Continue rendering - signals are optional
       }
 
       setLoading(false);
@@ -244,7 +255,7 @@ export default function StockDetail() {
               {priceData && priceData.data.length > 0 ? (
                 <div className="glass-card p-6">
                   <h2 className="text-xl font-bold text-white mb-4">Price Chart (1 Year)</h2>
-                  <PriceChart data={priceData.data} showMovingAverages={true} height={300} />
+                  <PriceChart data={priceData.data} signals={tradeSignals?.signals} showMovingAverages={true} height={300} />
                 </div>
               ) : (
                 <div className="glass-card p-6 text-center">
@@ -262,11 +273,14 @@ export default function StockDetail() {
           {activeTab === 'charts' && (
             priceData && priceData.data.length > 0 ? (
               <div className="space-y-6">
-                {/* Price Chart */}
+                {/* Price Chart with buy/sell markers */}
                 <div className="glass-card p-6">
-                  <h2 className="text-xl font-bold text-white mb-4">Price & Moving Averages</h2>
-                  <PriceChart data={priceData.data} showMovingAverages={true} height={400} />
+                  <h2 className="text-xl font-bold text-white mb-4">Price, Moving Averages & Buy/Sell Signals</h2>
+                  <PriceChart data={priceData.data} signals={tradeSignals?.signals} showMovingAverages={true} height={400} />
                 </div>
+
+                {/* Buy/Sell Signal Timeline */}
+                {tradeSignals && <TradeSignalTimeline data={tradeSignals} />}
 
                 {/* RSI Chart */}
                 <div className="glass-card p-6">

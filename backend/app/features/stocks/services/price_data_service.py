@@ -179,8 +179,11 @@ class PriceDataService:
             }
             days = days_map.get(period, 365)
 
-            # Use ticker-based seed for consistent mock data
-            np.random.seed(hash(ticker) % 2**32)
+            # Use ticker-based seed for consistent mock data. zlib.crc32 is
+            # stable across processes, unlike hash() which is randomized per
+            # run — the same ticker must always produce the same chart.
+            import zlib
+            np.random.seed(zlib.crc32(ticker.encode("utf-8")) % 2**32)
             df = self.generate_mock_historical_prices(ticker, days=days)
             np.random.seed()  # Reset seed
             return df

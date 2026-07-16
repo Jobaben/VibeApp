@@ -17,7 +17,11 @@ import type {
   ScoreChangeData,
   ScoreHistoryResponse,
   MoversResponse,
-  SignalChangesResponse
+  SignalChangesResponse,
+  HorizonProfile,
+  InvestmentHorizon,
+  TopCandidatesResponse,
+  TradeSignalsResponse
 } from '../types/stock';
 import type { DeepAnalysisResponse } from '../types/ai';
 
@@ -193,6 +197,32 @@ export const stockApi = {
   // Calculate scores for all stocks (admin/refresh operation)
   calculateAllScores: async (): Promise<{ success: boolean; scored_count: number; message: string }> => {
     const response = await apiClient.post('/stocks/scores/calculate');
+    return response.data;
+  },
+
+  // Investment Horizon Recommendations & Trade Signals
+
+  // List available investment horizon profiles (for the period picker)
+  getInvestmentHorizons: async (): Promise<HorizonProfile[]> => {
+    const response = await apiClient.get<{ horizons: HorizonProfile[] }>('/stocks/recommendations/horizons');
+    return response.data.horizons;
+  },
+
+  // Get top investment candidates for a given investment period
+  getTopCandidates: async (horizon: InvestmentHorizon, limit: number = 10, sector?: string): Promise<TopCandidatesResponse> => {
+    const params: { horizon: InvestmentHorizon; limit: number; sector?: string } = { horizon, limit };
+    if (sector) {
+      params.sector = sector;
+    }
+    const response = await apiClient.get<TopCandidatesResponse>('/stocks/recommendations/top', { params });
+    return response.data;
+  },
+
+  // Get historical buy/sell trade-signal events for chart overlays
+  getTradeSignals: async (ticker: string, period: string = '1y'): Promise<TradeSignalsResponse> => {
+    const response = await apiClient.get<TradeSignalsResponse>(`/stocks/${ticker}/trade-signals`, {
+      params: { period }
+    });
     return response.data;
   },
 

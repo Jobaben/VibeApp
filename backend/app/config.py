@@ -46,9 +46,10 @@ class Settings(BaseSettings):
     AVANZA_TOTP_SECRET: str = ""
 
     # Stock Data API
-    # Set USE_REAL_STOCK_API=true to try Yahoo Finance (may be blocked)
-    # Default is false to use reliable mock data for development/AI usage
-    USE_REAL_STOCK_API: bool = False
+    # Real Yahoo Finance data is fetched by default; every fetch automatically
+    # falls back to mock data if Yahoo blocks or the network is unavailable.
+    # Set USE_REAL_STOCK_API=false to skip the network entirely (CI, offline dev).
+    USE_REAL_STOCK_API: bool = True
 
     # If true, uses mock data even if USE_REAL_STOCK_API is true (override for testing)
     FORCE_MOCK_DATA: bool = False

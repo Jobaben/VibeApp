@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     # Application
     APP_NAME: str = "Avanza Stock Finder"
     APP_VERSION: str = "1.0.0"
-    DEBUG: bool = True
+    DEBUG: bool = False
     ENVIRONMENT: str = "development"
 
     # Database

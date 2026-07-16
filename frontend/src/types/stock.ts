@@ -308,6 +308,82 @@ export interface ScoreHistoryResponse {
   history: ScoreHistoryPoint[];
 }
 
+// Investment Horizon Recommendations & Trade Signals
+
+export type InvestmentHorizon = 'short' | 'medium' | 'long';
+
+export interface HorizonWeights {
+  value: number;
+  quality: number;
+  momentum: number;
+  health: number;
+}
+
+export interface HorizonProfile {
+  key: InvestmentHorizon;
+  label: string;
+  period: string;
+  description: string;
+  weights: HorizonWeights;
+}
+
+export interface TopCandidate {
+  rank: number;
+  ticker: string;
+  name: string;
+  sector?: string;
+  horizon_score: number;
+  total_score: number;
+  signal: string;
+  value_score: number;
+  quality_score: number;
+  momentum_score: number;
+  health_score: number;
+  why: string;
+}
+
+export interface TopCandidatesResponse {
+  horizon: InvestmentHorizon;
+  label: string;
+  period: string;
+  description: string;
+  weights: HorizonWeights;
+  count: number;
+  candidates: TopCandidate[];
+}
+
+export type TradeSignalType = 'BUY' | 'SELL';
+
+export interface TradeSignalEvent {
+  date: string;
+  type: TradeSignalType;
+  price: number;
+  indicator: 'GOLDEN_CROSS' | 'DEATH_CROSS' | 'RSI_RECOVERY' | 'RSI_REVERSAL';
+  strength: 'STRONG' | 'MODERATE';
+  reason: string;
+}
+
+export interface TradeSignalOutlook {
+  stance: 'BULLISH' | 'BEARISH' | 'NEUTRAL';
+  summary: string;
+  as_of?: string;
+  indicators?: {
+    price: number;
+    sma_50: number;
+    sma_200: number;
+    rsi: number;
+  };
+  last_signal?: TradeSignalEvent | null;
+}
+
+export interface TradeSignalsResponse {
+  ticker: string;
+  period: string;
+  count: number;
+  signals: TradeSignalEvent[];
+  outlook: TradeSignalOutlook;
+}
+
 // Weekly Changes Dashboard Types
 export interface ScoreMover {
   ticker: string;

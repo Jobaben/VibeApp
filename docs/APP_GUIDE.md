@@ -1,6 +1,6 @@
 # Avanza Stock Finder — App Guide
 
-A visual tour of every screen in the app, with screenshots. All screenshots were captured from a local development build seeded with the bundled mock dataset (15 large-cap stocks with realistic fundamentals), so numbers shown are demo data — see [STOCK_DATA_CONFIG.md](../backend/STOCK_DATA_CONFIG.md) for how data sources are configured.
+A visual tour of every screen in the app, with screenshots. The app fetches **real market data from Yahoo Finance by default** and falls back to the bundled mock dataset automatically whenever Yahoo blocks a request or the machine is offline — see [STOCK_DATA_CONFIG.md](../backend/STOCK_DATA_CONFIG.md) for how data sources are configured. All screenshots were captured from a local development build seeded with the mock dataset (15 large-cap stocks with realistic fundamentals), so numbers shown are demo data.
 
 For setup instructions see [QUICK_START.md](../QUICK_START.md). For architecture see [docs/architecture/overview.md](architecture/overview.md), and for how scores are computed see [SCORING_METHODOLOGY.md](../backend/SCORING_METHODOLOGY.md).
 
@@ -10,15 +10,16 @@ For setup instructions see [QUICK_START.md](../QUICK_START.md). For architecture
 
 1. [Browse Stocks (Home)](#1-browse-stocks-home)
 2. [Strategy Screener](#2-strategy-screener)
-3. [Stock Detail](#3-stock-detail)
-4. [Leaderboard](#4-leaderboard)
-5. [Watchlists](#5-watchlists)
-6. [What Changed](#6-what-changed)
-7. [Compare](#7-compare)
-8. [Portfolio](#8-portfolio)
-9. [Learning Lab](#9-learning-lab)
-10. [Glossary](#10-glossary)
-11. [Learning Mode](#11-learning-mode)
+3. [Top Picks](#3-top-picks)
+4. [Stock Detail](#4-stock-detail)
+5. [Leaderboard](#5-leaderboard)
+6. [Watchlists](#6-watchlists)
+7. [What Changed](#7-what-changed)
+8. [Compare](#8-compare)
+9. [Portfolio](#9-portfolio)
+10. [Learning Lab](#10-learning-lab)
+11. [Glossary](#11-glossary)
+12. [Learning Mode](#12-learning-mode)
 
 ---
 
@@ -57,7 +58,25 @@ Clicking a strategy runs it against the stock universe and lists the matches in 
 
 ![Value Gems strategy results](screenshots/02b-screener-strategy-results.png)
 
-## 3. Stock Detail
+## 3. Top Picks
+
+**Route:** `/top-picks`
+
+Answers the question "what should I look at for *my* time frame?". Pick how long you plan to invest, and the app re-weights every stock's four factor scores to fit that horizon and ranks the universe as **top candidates**:
+
+| Horizon | Period | Weighting |
+|---|---|---|
+| Short term | Up to 3 months | Momentum-heavy (50%) — entry timing dominates short holds |
+| Medium term | 3–12 months | Balanced (25% each factor) |
+| Long term | 1 year or more | Fundamentals-heavy — Value 30% · Quality 30% · Health 25% · Momentum 15% |
+
+Each candidate card shows its rank (medals for the top three), a 0–100 **horizon fit** score with a color-coded bar, mini-bars for the four factor scores, the current buy/sell signal badge, and a one-line explanation of why it ranks where it does. The active weighting is always displayed next to the period picker, so the ranking is never a black box.
+
+Clicking a candidate opens its detail page, where the price chart carries buy/sell signal markers (next section).
+
+![Top Picks with investment period selector](screenshots/12-top-picks.png)
+
+## 4. Stock Detail
 
 **Route:** `/stock/:ticker`
 
@@ -70,7 +89,18 @@ The deep-analysis page for a single stock. Tabs across the top switch between **
 
 ![Stock detail page for AAPL](screenshots/03-stock-detail.png)
 
-## 4. Leaderboard
+### Buy/Sell Signals on the Charts
+
+The price chart (both the overview preview and the **Charts** tab) overlays **buy/sell markers**: green ▲ triangles mark buy events, red ▼ triangles mark sell events. Hovering a marker shows the reason. Events are derived from the stock's technical indicators over the charted period:
+
+- **Golden cross** (strong buy) / **death cross** (strong sell) — the 50-day moving average crossing above/below the 200-day.
+- **RSI oversold recovery** (buy) / **RSI overbought reversal** (sell) — RSI-14 exiting the 30/70 zones.
+
+Below the chart, the **Buy / Sell Signals** panel summarizes the current technical stance (BULLISH / NEUTRAL / BEARISH) in plain language and lists the most recent signal events with dates, prices, and explanations. Like everything in the app, signals are educational — not financial advice.
+
+![Stock detail chart with buy/sell signal markers](screenshots/03b-stock-detail-signals.png)
+
+## 5. Leaderboard
 
 **Route:** `/leaderboard`
 
@@ -84,7 +114,7 @@ Each row breaks the score into its Value / Quality / Momentum / Health component
 
 ![Stock leaderboard](screenshots/04-leaderboard.png)
 
-## 5. Watchlists
+## 6. Watchlists
 
 **Route:** `/watchlists`
 
@@ -92,7 +122,7 @@ Create any number of named watchlists and add stocks from the home page's star b
 
 ![Watchlists page](screenshots/05-watchlists.png)
 
-## 6. What Changed
+## 7. What Changed
 
 **Route:** `/weekly-changes`
 
@@ -104,7 +134,7 @@ A change-tracking dashboard built on daily score snapshots. Switch between 7-, 3
 
 ![What Changed dashboard](screenshots/06-weekly-changes.png)
 
-## 7. Compare
+## 8. Compare
 
 **Route:** `/compare`
 
@@ -112,7 +142,7 @@ Puts up to four stocks side by side across scores, valuation, profitability, gro
 
 ![Compare stocks side by side](screenshots/07-compare.png)
 
-## 8. Portfolio
+## 9. Portfolio
 
 **Route:** `/portfolio`
 
@@ -125,7 +155,7 @@ Track positions you actually own — ticker, share count, and average buy price 
 
 ![Portfolio tracker](screenshots/08-portfolio.png)
 
-## 9. Learning Lab
+## 10. Learning Lab
 
 **Route:** `/learning-lab`
 
@@ -133,7 +163,7 @@ A risk-free paper-trading environment with a $100,000 practice balance. A guided
 
 ![Learning Lab practice environment](screenshots/09-learning-lab.png)
 
-## 10. Glossary
+## 11. Glossary
 
 **Route:** `/glossary`
 
@@ -141,7 +171,7 @@ A risk-free paper-trading environment with a $100,000 practice balance. A guided
 
 ![Investing glossary](screenshots/10-glossary.png)
 
-## 11. Learning Mode
+## 12. Learning Mode
 
 **Toggle:** the **Learn** button in the header, available on every page.
 
@@ -158,3 +188,4 @@ The screenshots live in `docs/screenshots/`. To regenerate them:
 1. Start the backend (`./run_backend.sh`) and frontend (`./run_frontend.sh`), and seed the database (`python backend/seed_data.py`).
 2. The **What Changed** page needs score history: call `ScoreTrackingService.snapshot_all_scores()` on two different dates (in normal operation the daily snapshot task builds this history over time).
 3. Drive the app at `http://localhost:3000` with a headless browser (e.g. Playwright at 1440×1000) and screenshot each route listed above. Watchlist, Compare, and Portfolio content is populated through the UI since it lives in browser local storage.
+4. For the buy/sell markers shot (`03b`), open a stock detail page and click the **Charts** tab; for Top Picks (`12`), the `/top-picks` route with the default (medium) horizon selected.

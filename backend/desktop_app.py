@@ -112,7 +112,9 @@ def _configure_environment() -> None:
         "DEBUG": "false",
         "ENVIRONMENT": "production",
         "REDIS_ENABLED": "false",
-        "USE_REAL_STOCK_API": "false",
+        # Real data by default; the Yahoo client falls back to bundled mock
+        # data automatically when the machine is offline.
+        "USE_REAL_STOCK_API": "true",
         # AI insights require an Anthropic API key. Off by default so the app
         # never errors for users without one; enable via a user .env file.
         "LLM_ENABLED": "false",

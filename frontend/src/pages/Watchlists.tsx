@@ -44,7 +44,7 @@ export default function Watchlists() {
           try {
             const stock = await stockApi.getStockByTicker(ticker);
             newStocksData[ticker] = { ...stock, isLoading: false };
-          } catch (error) {
+          } catch {
             newStocksData[ticker] = {
               isLoading: false,
               error: 'Failed to load',

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { stockApi } from '../services/api';
 import type { Stock, StockListResponse } from '../types/stock';
@@ -23,7 +23,7 @@ export function StockList() {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Fetch stocks based on current filters and pagination
-  const fetchStocks = async () => {
+  const fetchStocks = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -45,14 +45,14 @@ export function StockList() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage, selectedSector]);
 
   // Fetch stocks when filters or pagination changes
   useEffect(() => {
     if (!searchQuery) {
       fetchStocks();
     }
-  }, [currentPage, selectedSector, searchQuery]);
+  }, [fetchStocks, searchQuery]);
 
   // Handle sector filter change
   const handleSectorChange = (sector: string) => {

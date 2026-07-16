@@ -53,9 +53,10 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized - redirect to login
+      // Token is invalid/expired — drop it so subsequent requests go out
+      // unauthenticated. (There is no /login route yet; callers surface
+      // the error to the user.)
       localStorage.removeItem('access_token');
-      window.location.href = '/login';
     }
     return Promise.reject(error);
   }

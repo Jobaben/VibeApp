@@ -15,9 +15,9 @@ export default function VolumeChart({ data, height = 200 }: VolumeChartProps) {
   }));
 
   // Custom tooltip
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ value?: number; payload: { date: string; volumeAvg?: number } }> }) => {
     if (active && payload && payload.length) {
-      const volume = payload[0].value;
+      const volume = payload[0].value ?? 0;
       const volumeAvg = payload[0].payload.volumeAvg;
       const percentDiff = volumeAvg ? ((volume - volumeAvg) / volumeAvg * 100).toFixed(1) : 0;
 

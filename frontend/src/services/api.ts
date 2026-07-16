@@ -25,7 +25,7 @@ import type {
 } from '../types/stock';
 import type { DeepAnalysisResponse } from '../types/ai';
 
-const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -53,9 +53,10 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized - redirect to login
+      // Token is invalid/expired — drop it so subsequent requests go out
+      // unauthenticated. (There is no /login route yet; callers surface
+      // the error to the user.)
       localStorage.removeItem('access_token');
-      window.location.href = '/login';
     }
     return Promise.reject(error);
   }

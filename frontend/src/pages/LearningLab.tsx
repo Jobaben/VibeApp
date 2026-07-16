@@ -97,8 +97,8 @@ export default function LearningLab() {
         const leaderboard = await stockApi.getLeaderboard(30);
         if (mounted) {
           setMarketIdeas(leaderboard);
-          if (!selectedTicker && leaderboard.length > 0) {
-            setSelectedTicker(leaderboard[0].ticker);
+          if (leaderboard.length > 0) {
+            setSelectedTicker((prev) => prev || leaderboard[0].ticker);
           }
         }
       } catch {

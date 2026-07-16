@@ -13,14 +13,17 @@ interface PriceChartProps {
 const dayKey = (date: string) => date.slice(0, 10);
 
 // Triangle markers for buy (pointing up, green) and sell (pointing down, red).
-const BuyMarker = (props: any) => {
-  const { cx, cy } = props;
+interface MarkerProps {
+  cx?: number;
+  cy?: number;
+}
+
+const BuyMarker = ({ cx, cy }: MarkerProps) => {
   if (cx == null || cy == null) return null;
   return <polygon points={`${cx},${cy - 7} ${cx - 6},${cy + 5} ${cx + 6},${cy + 5}`} fill="#10B981" stroke="#064E3B" strokeWidth={1} />;
 };
 
-const SellMarker = (props: any) => {
-  const { cx, cy } = props;
+const SellMarker = ({ cx, cy }: MarkerProps) => {
   if (cx == null || cy == null) return null;
   return <polygon points={`${cx},${cy + 7} ${cx - 6},${cy - 5} ${cx + 6},${cy - 5}`} fill="#EF4444" stroke="#7F1D1D" strokeWidth={1} />;
 };
@@ -45,10 +48,15 @@ export default function PriceChart({ data, signals, showMovingAverages = true, h
   });
 
   // Custom tooltip
-  const CustomTooltip = ({ active, payload }: any) => {
+  interface TooltipEntry {
+    dataKey?: string | number;
+    value?: number;
+    payload: (typeof chartData)[number];
+  }
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: TooltipEntry[] }) => {
     if (active && payload && payload.length) {
       const point = payload[0].payload;
-      const byKey = (key: string) => payload.find((p: any) => p.dataKey === key);
+      const byKey = (key: string) => payload.find((p) => p.dataKey === key);
       const price = byKey('price');
       const sma50 = byKey('sma_50');
       const sma200 = byKey('sma_200');

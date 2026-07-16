@@ -1,20 +1,32 @@
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { StockList } from './components/StockList';
 import PageShell from './components/PageShell';
-import Screener from './pages/Screener';
-import TopPicks from './pages/TopPicks';
-import StockDetail from './pages/StockDetail';
-import Leaderboard from './pages/Leaderboard';
-import Watchlists from './pages/Watchlists';
-import WeeklyChanges from './pages/WeeklyChanges';
-import LearningLab from './pages/LearningLab';
-import Glossary from './pages/Glossary';
-import Compare from './pages/Compare';
-import Portfolio from './pages/Portfolio';
 import { WatchlistProvider } from './contexts/WatchlistContext';
 import { PortfolioProvider } from './contexts/PortfolioContext';
 import { LearningModeProvider } from './contexts/LearningModeContext';
 import { LearningModeToggle, LessonSidebar, LessonContent } from './components/learning';
+
+// Route-level code splitting keeps the initial bundle small; each page
+// (and its chart dependencies) loads on first navigation.
+const Screener = lazy(() => import('./pages/Screener'));
+const TopPicks = lazy(() => import('./pages/TopPicks'));
+const StockDetail = lazy(() => import('./pages/StockDetail'));
+const Leaderboard = lazy(() => import('./pages/Leaderboard'));
+const Watchlists = lazy(() => import('./pages/Watchlists'));
+const WeeklyChanges = lazy(() => import('./pages/WeeklyChanges'));
+const LearningLab = lazy(() => import('./pages/LearningLab'));
+const Glossary = lazy(() => import('./pages/Glossary'));
+const Compare = lazy(() => import('./pages/Compare'));
+const Portfolio = lazy(() => import('./pages/Portfolio'));
+
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center py-24">
+      <div className="w-10 h-10 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin" aria-label="Loading page" />
+    </div>
+  );
+}
 
 function App() {
   const location = useLocation();
@@ -28,14 +40,16 @@ function App() {
         <WatchlistProvider>
           <PortfolioProvider>
             <PageShell>
-              <Routes>
-                <Route path="/stock/:ticker" element={<StockDetail />} />
-                <Route path="/leaderboard" element={<Leaderboard />} />
-                <Route path="/watchlists" element={<Watchlists />} />
-                <Route path="/weekly-changes" element={<WeeklyChanges />} />
-                <Route path="/compare" element={<Compare />} />
-                <Route path="/portfolio" element={<Portfolio />} />
-              </Routes>
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/stock/:ticker" element={<StockDetail />} />
+                  <Route path="/leaderboard" element={<Leaderboard />} />
+                  <Route path="/watchlists" element={<Watchlists />} />
+                  <Route path="/weekly-changes" element={<WeeklyChanges />} />
+                  <Route path="/compare" element={<Compare />} />
+                  <Route path="/portfolio" element={<Portfolio />} />
+                </Routes>
+              </Suspense>
             </PageShell>
             {/* Learning Mode Components */}
             <LessonSidebar />
@@ -196,6 +210,7 @@ function App() {
         </header>
 
         <main>
+          <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route
               path="/"
@@ -241,7 +256,10 @@ function App() {
             <Route path="/top-picks" element={<TopPicks />} />
             <Route path="/learning-lab" element={<LearningLab />} />
             <Route path="/glossary" element={<Glossary />} />
+            {/* Unknown routes fall back to the home page */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          </Suspense>
         </main>
 
       {/* Modern Footer */}

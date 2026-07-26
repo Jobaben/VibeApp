@@ -100,6 +100,29 @@ def _load_user_env() -> None:
             load_dotenv(env_path, override=False)
 
 
+def _persistent_secret_key(data_dir: Path) -> str:
+    """Return a per-install SECRET_KEY, generating and storing it on first run.
+
+    The backend refuses to boot in production mode without a real SECRET_KEY,
+    and a desktop install has no operator to provide one — so each install
+    gets its own random key, kept in the user's data directory.
+    """
+    import secrets
+
+    key_file = data_dir / "secret_key"
+    try:
+        if key_file.exists():
+            stored = key_file.read_text(encoding="utf-8").strip()
+            if stored:
+                return stored
+        key = secrets.token_urlsafe(64)
+        key_file.write_text(key, encoding="utf-8")
+        return key
+    except OSError:
+        # Data dir not writable — fall back to an ephemeral key for this run.
+        return secrets.token_urlsafe(64)
+
+
 def _configure_environment() -> None:
     """Apply sensible, zero-config defaults for an offline desktop user.
 
@@ -108,6 +131,7 @@ def _configure_environment() -> None:
     data_dir = _data_dir()
     db_path = (data_dir / "stockfinder.db").as_posix()
     defaults = {
+        "SECRET_KEY": _persistent_secret_key(data_dir),
         "DATABASE_URL": f"sqlite:///{db_path}",
         "DEBUG": "false",
         "ENVIRONMENT": "production",

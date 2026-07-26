@@ -14,9 +14,9 @@ export default function RSIChart({ data, height = 200 }: RSIChartProps) {
   })).filter(d => d.rsi !== undefined);
 
   // Custom tooltip
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ value?: number; payload: { date: string } }> }) => {
     if (active && payload && payload.length) {
-      const rsi = payload[0].value;
+      const rsi = payload[0].value ?? 0;
       let status = 'Neutral';
       let color = 'text-gray-300';
 

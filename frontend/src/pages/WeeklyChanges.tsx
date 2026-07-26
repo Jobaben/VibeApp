@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import { stockApi } from '../services/api';
 import type { MoversResponse, SignalChangesResponse } from '../types/stock';
@@ -30,9 +31,10 @@ export function WeeklyChanges() {
         setGainers(gainersData);
         setLosers(losersData);
         setSignalChanges(signalsData);
-      } catch (err: any) {
+      } catch (err) {
         console.error('Error fetching weekly changes:', err);
-        setError(err.response?.data?.detail || 'Failed to load data. Please try again.');
+        const detail = axios.isAxiosError(err) ? err.response?.data?.detail : undefined;
+        setError(typeof detail === 'string' ? detail : 'Failed to load data. Please try again.');
       } finally {
         setLoading(false);
       }

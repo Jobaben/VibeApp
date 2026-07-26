@@ -27,8 +27,8 @@ export default function ScreenerResults({ response, strategyName, onBack }: Scre
   // Sort results
   const sortedResults = useMemo(() => {
     const sorted = [...response.results].sort((a, b) => {
-      let aValue: any;
-      let bValue: any;
+      let aValue: string | number;
+      let bValue: string | number;
 
       switch (sortField) {
         case 'ticker':

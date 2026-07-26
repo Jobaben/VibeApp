@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { ArrowUpIcon, ArrowDownIcon, MinusIcon } from '@heroicons/react/24/solid';
 import { stockApi } from '../services/api';
 import type { ScoreChangeData } from '../types/stock';
@@ -27,9 +28,9 @@ export function ScoreChangeIndicator({
         setError(null);
         const data = await stockApi.getScoreChange(ticker, days);
         setChangeData(data);
-      } catch (err: any) {
+      } catch (err) {
         console.error('Error fetching score change:', err);
-        if (err.response?.status === 404) {
+        if (axios.isAxiosError(err) && err.response?.status === 404) {
           setError('No historical data');
         } else {
           setError('Failed to load');

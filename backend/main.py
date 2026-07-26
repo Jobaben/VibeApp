@@ -3,6 +3,7 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
@@ -36,7 +37,38 @@ def _validate_llm_config() -> None:
     logger.warning(msg)
 
 
+_INSECURE_SECRET_KEYS = {"", "your-secret-key-change-in-production"}
+
+
+def _validate_production_config() -> None:
+    """Refuse to boot a production deployment with unsafe settings.
+
+    Development keeps working with the shipped defaults, but a production
+    environment must provide a real SECRET_KEY and must not run in debug mode.
+    """
+    if settings.ENVIRONMENT != "production":
+        if settings.SECRET_KEY in _INSECURE_SECRET_KEYS:
+            logger.warning(
+                "SECRET_KEY is unset or uses the insecure default. "
+                "Set a strong SECRET_KEY before deploying to production."
+            )
+        return
+    problems = []
+    if settings.SECRET_KEY in _INSECURE_SECRET_KEYS:
+        problems.append(
+            "SECRET_KEY is unset or uses the insecure default; "
+            "generate one with: python -c \"import secrets; print(secrets.token_urlsafe(64))\""
+        )
+    if settings.DEBUG:
+        problems.append("DEBUG must be False in production")
+    if problems:
+        raise RuntimeError(
+            "Refusing to start with unsafe production settings: " + "; ".join(problems)
+        )
+
+
 _validate_llm_config()
+_validate_production_config()
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -51,6 +83,9 @@ app = FastAPI(
 
 app.state.limiter = limiter
 app.add_middleware(SlowAPIMiddleware)
+
+# Compress large JSON payloads (price history, screeners, leaderboards)
+app.add_middleware(GZipMiddleware, minimum_size=1024)
 
 
 @app.exception_handler(RateLimitExceeded)

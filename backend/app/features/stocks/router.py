@@ -11,6 +11,7 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 from app.infrastructure.repositories import get_stock_repository, StockRepository
+from app.shared.auth import require_admin
 from app.features.stocks.models import Stock, InstrumentType, StockFundamental
 from app.features.stocks.schemas import (
     StockListResponse,
@@ -277,7 +278,7 @@ async def get_stock_by_id(
     return stock
 
 
-@router.post("/import", response_model=StockImportResponse)
+@router.post("/import", response_model=StockImportResponse, dependencies=[Depends(require_admin)])
 async def import_stocks_from_yahoo_finance(
     request: StockImportRequest,
     db: Session = Depends(get_db),
@@ -558,7 +559,7 @@ async def explosive_growth_strategy(
 # Scoring & Leaderboard Endpoints
 # ========================
 
-@router.post("/scores/calculate", status_code=status.HTTP_200_OK)
+@router.post("/scores/calculate", status_code=status.HTTP_200_OK, dependencies=[Depends(require_admin)])
 async def calculate_all_scores(
     db: Session = Depends(get_db)
 ):

@@ -1,10 +1,11 @@
 """Cache management API endpoints."""
 import logging
 from typing import Optional
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 
 from app.infrastructure.cache import get_cache_service
+from app.shared.auth import require_admin
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +48,7 @@ async def get_cache_status():
     )
 
 
-@router.post("/invalidate", response_model=CacheInvalidateResponse)
+@router.post("/invalidate", response_model=CacheInvalidateResponse, dependencies=[Depends(require_admin)])
 async def invalidate_cache(
     pattern: str = Query(
         default="*",
@@ -96,7 +97,7 @@ async def invalidate_cache(
     )
 
 
-@router.delete("/key/{key}")
+@router.delete("/key/{key}", dependencies=[Depends(require_admin)])
 async def delete_cache_key(key: str):
     """
     Delete a specific cache key.

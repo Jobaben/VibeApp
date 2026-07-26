@@ -63,7 +63,7 @@ class Stock(BaseEntity):
     prices = relationship("StockPrice", back_populates="stock", cascade="all, delete-orphan")
     fundamentals = relationship("StockFundamental", back_populates="stock", uselist=False, cascade="all, delete-orphan")
     scores = relationship("StockScore", back_populates="stock", uselist=False, cascade="all, delete-orphan")
-    score_history = relationship("StockScoreHistory", foreign_keys="[StockScoreHistory.stock_id]", cascade="all, delete-orphan")
+    score_history = relationship("StockScoreHistory", back_populates="stock", foreign_keys="[StockScoreHistory.stock_id]", cascade="all, delete-orphan")
     watchlist_items = relationship("WatchlistItem", back_populates="stock", cascade="all, delete-orphan")
 
     # Indexes
@@ -207,7 +207,7 @@ class StockScoreHistory(BaseEntity):
     signal = Column(SQLEnum(Signal), nullable=False)
 
     # Relationship
-    stock = relationship("Stock", foreign_keys=[stock_id])
+    stock = relationship("Stock", back_populates="score_history", foreign_keys=[stock_id])
 
     # Indexes
     __table_args__ = (
